@@ -363,6 +363,26 @@ tfoot td.td-winner{color:var(--gold-bright)}
 </div>
 
 <script>
+
+var AUDIO_FILES = [
+  'bastardo.mp3','basura_feo.mp3','billy.mp3','choza.mp3','doblaos.mp3',
+  'frances.mp3','gij_rojbla.mp3','juego_entero.mp3','kkk.mp3','mlg_blaazu.mp3',
+  'osasuna.mp3','parche_hdp.mp3','parches_ofi.mp3','peinaguindillas.mp3',
+  'pes_verdad.mp3','porra.mp3','rasgaprepucios.mp3','september.mp3',
+  'siuuu.mp3','tiki_taka.mp3'
+];
+var _currentAudio = null;
+
+function playRandomAudio() {
+  if (_currentAudio) {
+    _currentAudio.pause();
+    _currentAudio.currentTime = 0;
+  }
+  var file = AUDIO_FILES[Math.floor(Math.random() * AUDIO_FILES.length)];
+  _currentAudio = new Audio(file);
+  _currentAudio.play().catch(function(){});
+}
+
 var PRESET=['ADRI&Aacute;N','ALEIX','ARNAU','EDU','NACHO','MARC'];
 var COLORS=['#0B1F3A','#0F6E56','#993C1D','#185FA5','#854F0B','#3B6D11','#534AB7','#993556'];
 var selected=[];
@@ -423,7 +443,7 @@ history.replaceState({screen:'s-home'},'','');
 
 function ini(n){return(n||'?').trim().split(/\s+/).map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2)||'?';}
 
-function toggleChip(name){var idx=selected.indexOf(name);if(idx>-1){selected.splice(idx,1);}else if(selected.length<8){selected.push(name);}renderChips();renderSelected();}
+function toggleChip(name){playRandomAudio();var idx=selected.indexOf(name);if(idx>-1){selected.splice(idx,1);}else if(selected.length<8){selected.push(name);}renderChips();renderSelected();}
 function renderChips(){document.getElementById('preset-chips').innerHTML=PRESET.map(function(n){return '<div class="chip '+(selected.includes(n)?'selected':'')+'" onclick="toggleChip(\''+n+'\')">'+n+'</div>';}).join('');}
 function renderSelected(){
   var customs=[document.getElementById('custom1').value.trim(),document.getElementById('custom2').value.trim()].filter(Boolean);
