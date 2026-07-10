@@ -212,13 +212,14 @@ tfoot td.td-winner{color:var(--gold-bright)}
 </div>
 
 <div class="screen" id="s-finger" style="overflow:hidden;position:relative">
-  <button class="back-btn" onclick="go('s-setup',gameMode)" aria-label="Volver" style="position:absolute;top:12px;left:12px;z-index:20;background:rgba(0,0,0,0.3);border-color:rgba(255,255,255,0.15)">&#8249;</button>
-  <div id="finger-arena" style="position:absolute;inset:0;background:var(--navy);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none">
-    <div id="finger-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:none">
-      <div id="finger-msg" style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:500;color:var(--white);text-align:center;padding:0 2rem;line-height:1.3;transition:opacity .4s">Poned los dedos</div>
-      <div id="finger-sub" style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;text-align:center;letter-spacing:1px">Todos a la vez cuando empiece la cuenta</div>
-      <button id="finger-start-btn" onclick="startFingerCountdown()" style="margin-top:2rem;padding:14px 36px;background:var(--gold);color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:500;font-family:Inter,sans-serif;cursor:pointer;letter-spacing:.5px;pointer-events:all;-webkit-tap-highlight-color:transparent">Iniciar</button>
-    </div>
+  <button class="back-btn" onclick="go('s-setup',gameMode)" aria-label="Volver" style="position:absolute;top:12px;left:12px;z-index:30;background:rgba(0,0,0,0.4);border-color:rgba(255,255,255,0.2)">&#8249;</button>
+  <div id="finger-arena" style="position:absolute;inset:0;background:var(--navy);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none"></div>
+  <div id="finger-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;pointer-events:none">
+    <div id="finger-msg" style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:500;color:var(--white);text-align:center;padding:0 2rem;line-height:1.3;transition:opacity .4s">Poned los dedos</div>
+    <div id="finger-sub" style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;text-align:center;letter-spacing:1px">Todos a la vez cuando empiece la cuenta</div>
+  </div>
+  <div id="finger-btn-wrap" style="position:absolute;bottom:15%;left:0;right:0;display:flex;justify-content:center;z-index:30">
+    <button id="finger-start-btn" onclick="startFingerCountdown()" style="padding:16px 48px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:500;font-family:Inter,sans-serif;cursor:pointer;letter-spacing:.5px;-webkit-tap-highlight-color:transparent;touch-action:manipulation">Iniciar</button>
   </div>
 </div>
 
@@ -598,7 +599,8 @@ function goFinger(){
   fingerTouches={};fingerPhase='idle';clearInterval(fingerCountdown);clearTimeout(fingerTimer);fingerWinner=null;
   document.getElementById('finger-msg').textContent='Poned los dedos';
   document.getElementById('finger-sub').textContent='Todos a la vez cuando empiece la cuenta';
-  var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;btn.style.display='inline-block';btn.style.pointerEvents='all';
+  var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;
+  document.getElementById('finger-btn-wrap').style.display='flex';
   document.getElementById('finger-overlay').style.pointerEvents='none';
   renderFingerDots();
   go('s-finger');
@@ -626,7 +628,7 @@ function renderFingerDots(){
 }
 
 function startFingerCountdown(){
-  document.getElementById('finger-start-btn').style.display='none';
+  document.getElementById('finger-btn-wrap').style.display='none';
   fingerPhase='countdown';var count=3;
   document.getElementById('finger-msg').textContent=count;
   document.getElementById('finger-sub').textContent='preparaos...';
@@ -650,9 +652,10 @@ function pickFingerWinner(){
   renderFingerDots();
   document.getElementById('finger-msg').innerHTML='&#161;Empieza!';
   document.getElementById('finger-sub').textContent='HIC LUDUS ERROREM PUNIT';
-  document.getElementById('finger-overlay').style.pointerEvents='all';
+  document.getElementById('finger-overlay').style.pointerEvents='none';
   var btn=document.getElementById('finger-start-btn');
-  btn.textContent='Continuar a la partida';btn.style.display='inline-block';btn.style.pointerEvents='all';
+  btn.textContent='Continuar a la partida';
+  document.getElementById('finger-btn-wrap').style.display='flex';
   btn.onclick=function(){
     var arena=document.getElementById('finger-arena');
     arena.removeEventListener('touchstart',onFingerTouch);arena.removeEventListener('touchmove',onFingerMove);arena.removeEventListener('touchend',onFingerEnd);arena.removeEventListener('touchcancel',onFingerEnd);
@@ -660,7 +663,7 @@ function pickFingerWinner(){
   };
 }
 
-function resetFinger(){fingerTouches={};fingerPhase='idle';document.getElementById('finger-msg').textContent='Poned los dedos';document.getElementById('finger-sub').textContent='Todos a la vez';var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;btn.style.display='inline-block';renderFingerDots();}
+function resetFinger(){fingerTouches={};fingerPhase='idle';document.getElementById('finger-msg').textContent='Poned los dedos';document.getElementById('finger-sub').textContent='Todos a la vez';var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;document.getElementById('finger-btn-wrap').style.display='flex';renderFingerDots();}
 
 renderChips();
 </script>
