@@ -6,8 +6,8 @@
   "scope": "/Talmut/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0E2546",
-  "theme_color": "#0E2546",
+  "background_color": "#0B1F3A",
+  "theme_color": "#0B1F3A",
   "icons": [
     {
       "src": "icon-192.png",
