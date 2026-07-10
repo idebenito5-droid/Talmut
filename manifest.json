@@ -1,13 +1,13 @@
 {
-  "name": "La Maltesa · Talmut",
+  "name": "La Maltesa \u00b7 Talmut",
   "short_name": "Talmut",
-  "description": "Marcador oficial y constitución del juego de cartas Talmut",
+  "description": "Marcador oficial y constituci\u00f3n del juego de cartas Talmut",
   "start_url": "/Talmut/",
   "scope": "/Talmut/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#1A1A2E",
-  "theme_color": "#1A1A2E",
+  "background_color": "#0E2546",
+  "theme_color": "#0E2546",
   "icons": [
     {
       "src": "icon-192.png",

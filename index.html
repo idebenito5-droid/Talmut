@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="theme-color" content="#1A1A2E">
+<meta name="theme-color" content="#0E2546">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,9 +16,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #1A1A2E;
-  --navy-light: #252545;
-  --navy-mid: #1e2040;
+  --navy: #0E2546;
+  --navy-light: #152D56;
+  --navy-mid: #102B4E;
   --gold: #B8860B;
   --gold-bright: #D4A017;
   --gold-light: rgba(184,134,11,0.12);
@@ -223,7 +223,7 @@ body { min-height: 100vh; }
   color: var(--white-30); margin-bottom: 1rem;
   font-family: 'Cormorant Garamond', serif;
   line-height: 1.6; min-height: 44px;
-  transition: opacity 0.4s;
+  transition: opacity 0.6s;
 }
 .table-outer {
   border: 1px solid var(--gold-border-strong);
@@ -668,10 +668,10 @@ function startQuoteRotation() {
   const el = document.getElementById('game-quote');
   if (el) { el.textContent = QUOTES[_qi]; el.style.opacity = '1'; }
   clearInterval(window._quoteTimer);
-  window._quoteTimer = setInterval(rotateQuote, 5000);
+  window._quoteTimer = setInterval(rotateQuote, 10000);
 }
 const PRESET = ['ADRIÁN','ALEIX','ARNAU','EDU','NACHO','MARC'];
-const COLORS = ['#1A1A2E','#0F6E56','#993C1D','#185FA5','#854F0B','#3B6D11','#534AB7','#993556'];
+const COLORS = ['#0E2546','#0F6E56','#993C1D','#185FA5','#854F0B','#3B6D11','#534AB7','#993556'];
 let selected = [];
 let gameMode = 'talmut';
 let totalRounds = 10;
