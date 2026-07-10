@@ -122,7 +122,8 @@ body { min-height: 100vh; }
 .badge-gold { background: rgba(184,134,11,0.2); color: var(--gold-bright); border: 0.5px solid var(--gold-border-strong); }
 .badge-blue { background: rgba(24,95,165,0.3); color: #85B7EB; border: 0.5px solid rgba(24,95,165,0.5); }
 
-.content { flex: 1; padding: 1.25rem; max-width: 600px; width: 100%; margin: 0 auto; overflow-y: auto; padding-bottom: 3rem; -webkit-overflow-scrolling: touch; }
+.content { flex: 1; padding: 1.25rem; max-width: 600px; width: 100%; margin: 0 auto; overflow-y: auto; padding-bottom: 3rem; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; justify-content: center; }
+.content-scroll { justify-content: flex-start; }
 
 /* SETUP */
 .section-label {
@@ -517,7 +518,7 @@ tfoot td.td-winner { color: var(--gold-bright); }
 </div>
 
 <!-- CONSTITUTION -->
-<div class="screen" id="s-constitution">
+<div class="screen" id="s-constitution" data-scroll="true">
   <div class="page-header">
     <button class="back-btn" onclick="go('s-home')" aria-label="Volver">‹</button>
     <div class="page-header-title">La Maltesa</div>
@@ -682,6 +683,14 @@ function go(id, mode) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
+  var contentEl = document.querySelector('#' + id + ' .content');
+  if (contentEl) {
+    if (id === 's-constitution' || id === 's-history' || id === 's-stats') {
+      contentEl.classList.add('content-scroll');
+    } else {
+      contentEl.classList.remove('content-scroll');
+    }
+  }
   if (id === 's-setup') {
     gameMode = mode || 'talmut';
     document.getElementById('setup-title').textContent = mode === 'blue' ? 'Blue Lagoon' : 'Nueva partida';
