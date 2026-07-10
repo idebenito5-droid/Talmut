@@ -453,6 +453,23 @@ tfoot td.td-winner { color: var(--gold-bright); }
   </div>
 </div>
 
+
+<!-- FINGER GAME -->
+<div class="screen" id="s-finger">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('s-setup', gameMode)" aria-label="Volver">&#8249;</button>
+    <div class="page-header-title" id="finger-title">¿Quién empieza?</div>
+  </div>
+  <div class="content" id="finger-content" style="padding:0;position:relative;touch-action:none;user-select:none;-webkit-user-select:none;justify-content:flex-start;">
+    <div id="finger-arena" style="width:100%;flex:1;position:relative;min-height:calc(100vh - 56px);background:var(--navy);overflow:hidden;">
+      <div id="finger-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:none">
+        <div id="finger-msg" style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;color:var(--white);text-align:center;padding:0 2rem;line-height:1.3;opacity:1;transition:opacity 0.4s"></div>
+        <div id="finger-sub" style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;text-align:center;letter-spacing:1px"></div>
+        <button id="finger-start-btn" onclick="startFingerCountdown()" style="margin-top:2rem;padding:12px 32px;background:var(--gold);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:500;font-family:Inter,sans-serif;cursor:pointer;letter-spacing:0.5px;pointer-events:all">Iniciar</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- GAME -->
 <div class="screen" id="s-game">
   <div class="page-header">
@@ -671,6 +688,156 @@ function startQuoteRotation() {
   clearInterval(window._quoteTimer);
   window._quoteTimer = setInterval(rotateQuote, 10000);
 }
+
+const FINGER_COLORS = ['#E24B4A','#1D9E75','#D4A017','#185FA5','#993C1D','#534AB7','#0F6E56','#D4537E'];
+let fingerTouches = {};
+let fingerPhase = 'idle'; // idle, countdown, active, result
+let fingerCountdown = null;
+let fingerTimer = null;
+let fingerWinner = null;
+
+function goFinger() {
+  fingerTouches = {};
+  fingerPhase = 'idle';
+  clearInterval(fingerCountdown);
+  clearTimeout(fingerTimer);
+  fingerWinner = null;
+  document.getElementById('finger-msg').textContent = 'Poned los dedos';
+  document.getElementById('finger-sub').textContent = 'Todos a la vez cuando empiece la cuenta';
+  document.getElementById('finger-start-btn').style.display = 'inline-block';
+  document.getElementById('finger-overlay').style.pointerEvents = 'none';
+  document.getElementById('finger-start-btn').style.pointerEvents = 'all';
+  renderFingerDots();
+  go('s-finger');
+  var arena = document.getElementById('finger-arena');
+  arena.addEventListener('touchstart', onFingerTouch, {passive:false});
+  arena.addEventListener('touchmove', onFingerMove, {passive:false});
+  arena.addEventListener('touchend', onFingerEnd, {passive:false});
+  arena.addEventListener('touchcancel', onFingerEnd, {passive:false});
+}
+
+function onFingerTouch(e) {
+  e.preventDefault();
+  if (fingerPhase !== 'active') return;
+  for (var i=0; i<e.changedTouches.length; i++) {
+    var t = e.changedTouches[i];
+    if (!fingerTouches[t.identifier]) {
+      var colorIdx = Object.keys(fingerTouches).length % FINGER_COLORS.length;
+      fingerTouches[t.identifier] = {x: t.clientX, y: t.clientY, color: FINGER_COLORS[colorIdx], id: t.identifier};
+    }
+  }
+  renderFingerDots();
+}
+
+function onFingerMove(e) {
+  e.preventDefault();
+  if (fingerPhase !== 'active') return;
+  for (var i=0; i<e.changedTouches.length; i++) {
+    var t = e.changedTouches[i];
+    if (fingerTouches[t.identifier]) {
+      fingerTouches[t.identifier].x = t.clientX;
+      fingerTouches[t.identifier].y = t.clientY;
+    }
+  }
+  renderFingerDots();
+}
+
+function onFingerEnd(e) {
+  e.preventDefault();
+  if (fingerPhase !== 'active') return;
+  for (var i=0; i<e.changedTouches.length; i++) {
+    delete fingerTouches[e.changedTouches[i].identifier];
+  }
+  renderFingerDots();
+}
+
+function renderFingerDots() {
+  var arena = document.getElementById('finger-arena');
+  var existing = arena.querySelectorAll('.fdot');
+  existing.forEach(function(d){d.remove();});
+  var keys = Object.keys(fingerTouches);
+  keys.forEach(function(k) {
+    var t = fingerTouches[k];
+    var dot = document.createElement('div');
+    dot.className = 'fdot';
+    var isWinner = fingerPhase === 'result' && k == fingerWinner;
+    var size = isWinner ? 110 : 80;
+    dot.style.cssText = 'position:absolute;border-radius:50%;pointer-events:none;transition:all 0.3s;display:flex;align-items:center;justify-content:center;' +
+      'width:' + size + 'px;height:' + size + 'px;' +
+      'left:' + (t.x - size/2) + 'px;top:' + (t.y - size/2) + 'px;' +
+      'background:' + t.color + ';' +
+      'box-shadow:0 0 0 ' + (isWinner?'6px':'3px') + ' rgba(255,255,255,' + (isWinner?'0.9':'0.3') + ');' +
+      'opacity:' + (fingerPhase==='result' && !isWinner ? '0.2' : '1') + ';' +
+      'z-index:' + (isWinner?'5':'2') + ';';
+    if (isWinner) {
+      dot.innerHTML = '<span style="font-size:28px;color:#fff;">★</span>';
+    }
+    arena.appendChild(dot);
+  });
+}
+
+function startFingerCountdown() {
+  document.getElementById('finger-start-btn').style.display = 'none';
+  fingerPhase = 'countdown';
+  var count = 3;
+  document.getElementById('finger-msg').textContent = count;
+  document.getElementById('finger-sub').textContent = 'preparaos...';
+  fingerCountdown = setInterval(function() {
+    count--;
+    if (count > 0) {
+      document.getElementById('finger-msg').textContent = count;
+    } else {
+      clearInterval(fingerCountdown);
+      document.getElementById('finger-msg').textContent = '¡YA!';
+      document.getElementById('finger-sub').textContent = 'poned los dedos';
+      fingerPhase = 'active';
+      fingerTimer = setTimeout(pickFingerWinner, 5000);
+    }
+  }, 1000);
+}
+
+function pickFingerWinner() {
+  fingerPhase = 'result';
+  var keys = Object.keys(fingerTouches);
+  if (keys.length === 0) {
+    document.getElementById('finger-msg').textContent = '¡Nadie puso el dedo!';
+    document.getElementById('finger-sub').textContent = '';
+    setTimeout(resetFinger, 2000);
+    return;
+  }
+  fingerWinner = keys[Math.floor(Math.random() * keys.length)];
+  renderFingerDots();
+  document.getElementById('finger-msg').textContent = '¡Empieza!';
+  document.getElementById('finger-sub').textContent = 'HIC LUDUS ERROREM PUNIT';
+  document.getElementById('finger-overlay').style.pointerEvents = 'all';
+  // Show continue button
+  var btn = document.getElementById('finger-start-btn');
+  btn.textContent = 'Continuar a la partida';
+  btn.style.display = 'inline-block';
+  btn.style.pointerEvents = 'all';
+  btn.onclick = function() {
+    var arena = document.getElementById('finger-arena');
+    arena.removeEventListener('touchstart', onFingerTouch);
+    arena.removeEventListener('touchmove', onFingerMove);
+    arena.removeEventListener('touchend', onFingerEnd);
+    arena.removeEventListener('touchcancel', onFingerEnd);
+    go('s-game');
+    setTimeout(startQuoteRotation, 100);
+  };
+}
+
+function resetFinger() {
+  fingerTouches = {};
+  fingerPhase = 'idle';
+  document.getElementById('finger-msg').textContent = 'Poned los dedos';
+  document.getElementById('finger-sub').textContent = 'Todos a la vez cuando empiece la cuenta';
+  var btn = document.getElementById('finger-start-btn');
+  btn.textContent = 'Iniciar';
+  btn.onclick = startFingerCountdown;
+  btn.style.display = 'inline-block';
+  renderFingerDots();
+}
+
 const PRESET = ['ADRIÁN','ALEIX','ARNAU','EDU','NACHO','MARC'];
 const COLORS = ['#0B1F3A','#0F6E56','#993C1D','#185FA5','#854F0B','#3B6D11','#534AB7','#993556'];
 let selected = [];
@@ -757,8 +924,7 @@ function startGame() {
     : 10;
   scores = window._players.map(() => Array(totalRounds).fill(''));
   buildTable();
-  go('s-game');
-  setTimeout(startQuoteRotation, 100);
+  goFinger();
 }
 
 function buildTable() {
