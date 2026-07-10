@@ -373,6 +373,11 @@ tfoot td.td-winner { color: var(--gold-bright); }
   td.td-score input { font-size: 13px; padding: 6px 2px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity:0; }
+}
 </style>
 </head>
 <body>
@@ -838,6 +843,87 @@ function resetFinger() {
   renderFingerDots();
 }
 
+
+function showWinner(totals) {
+  var players = window._players;
+  var ranked = players.map(function(pl,p){ return {name:pl.name,c:pl.c,tot:totals[p]}; })
+    .sort(function(a,b){ return a.tot-b.tot; });
+  var min = ranked[0].tot;
+  var winners = ranked.filter(function(p){ return p.tot===min; });
+
+  if (winners.length > 1) {
+    // Tie — ask tiebreak round
+    showTiebreak(winners, ranked);
+    return;
+  }
+  showCelebration(ranked[0], ranked);
+}
+
+function showTiebreak(tied, ranked) {
+  var names = tied.map(function(p){ return p.name; }).join(' y ');
+  document.getElementById('cel-title').textContent = '¡EMPATE!';
+  document.getElementById('cel-name').textContent = names;
+  document.getElementById('cel-sub').textContent = 'Se jugará una ronda de desempate';
+  document.getElementById('cel-ranking').innerHTML = ranked.map(function(p,i){
+    return '<div class="total-row ' + (i===0?'leader':'') + '">' +
+      '<div class="total-name">' + (i===0?'<span class="star">★</span> ':'') + p.name + '</div>' +
+      '<div class="total-pts ' + (i===0?'leader-pts':'') + '">' + p.tot + ' pts</div></div>';
+  }).join('');
+  document.getElementById('cel-confetti').innerHTML = '';
+  document.getElementById('cel-btn').textContent = 'Jugar ronda extra';
+  document.getElementById('cel-btn').onclick = function() {
+    totalRounds++;
+    scores = window._players.map(function(_,p){ return scores[p].concat(['']); });
+    buildTable();
+    go('s-game');
+    setTimeout(startQuoteRotation, 100);
+  };
+  go('s-celebration');
+}
+
+function showCelebration(winner, ranked) {
+  document.getElementById('cel-title').textContent = '¡ENHORABUENA!';
+  document.getElementById('cel-name').textContent = winner.name;
+  document.getElementById('cel-sub').textContent = 'HIC LUDUS ERROREM PUNIT';
+  document.getElementById('cel-ranking').innerHTML = ranked.map(function(p,i){
+    return '<div class="total-row ' + (i===0?'leader':'') + '">' +
+      '<div class="total-name">' + (i===0?'<span class="star">★</span> ':'') + p.name + '</div>' +
+      '<div class="total-pts ' + (i===0?'leader-pts':'') + '">' + p.tot + ' pts</div></div>';
+  }).join('');
+  document.getElementById('cel-btn').textContent = 'Nueva partida';
+  document.getElementById('cel-btn').onclick = function() { go('s-home'); };
+
+  // Save to history
+  if (gameMode === 'talmut') {
+    history.push({
+      date: new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
+      players: ranked.map(function(t){ return {name:t.name,tot:t.tot}; }),
+      rounds: totalRounds
+    });
+    localStorage.setItem('tm_v3_hist', JSON.stringify(history));
+  }
+
+  launchConfetti();
+  go('s-celebration');
+}
+
+function launchConfetti() {
+  var container = document.getElementById('cel-confetti');
+  container.innerHTML = '';
+  var colors = ['#B8860B','#D4A017','#ffffff','#85B7EB','#E8C96A','#fff8e7','#0E2546'];
+  for (var i=0; i<80; i++) {
+    var piece = document.createElement('div');
+    var color = colors[Math.floor(Math.random()*colors.length)];
+    var left = Math.random()*100;
+    var delay = Math.random()*2;
+    var duration = 2.5 + Math.random()*2;
+    var size = 6 + Math.random()*8;
+    var rotate = Math.random()*360;
+    piece.style.cssText = 'position:absolute;top:-20px;left:'+left+'%;width:'+size+'px;height:'+size+'px;background:'+color+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation:confettiFall '+duration+'s '+delay+'s ease-in forwards;transform:rotate('+rotate+'deg);';
+    container.appendChild(piece);
+  }
+}
+
 const PRESET = ['ADRIÁN','ALEIX','ARNAU','EDU','NACHO','MARC'];
 const COLORS = ['#0B1F3A','#0F6E56','#993C1D','#185FA5','#854F0B','#3B6D11','#534AB7','#993556'];
 let selected = [];
@@ -980,6 +1066,13 @@ function highlightRows() {
   }
 }
 
+function allFilled() {
+  for (var r=0; r<totalRounds; r++) {
+    if (window._players.some(function(_,p){ return scores[p][r]===''; })) return false;
+  }
+  return true;
+}
+
 function updateTotals() {
   const players = window._players;
   const totals = players.map((_,p)=>scores[p].reduce((a,v)=>a+(v===''?0:parseInt(v)||0),0));
@@ -989,6 +1082,9 @@ function updateTotals() {
     if (el) { el.textContent = totals[p]; el.className = totals[p]===min ? 'td-winner' : ''; }
   });
   renderTotalsBar(totals);
+  if (allFilled()) {
+    setTimeout(function(){ showWinner(totals); }, 600);
+  }
 }
 
 function renderTotalsBar(totals) {
@@ -1077,5 +1173,18 @@ function renderStats() {
   }).join('') + '</div>';
 }
 </script>
+
+<!-- CELEBRATION -->
+<div class="screen" id="s-celebration">
+  <div id="cel-confetti" style="position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0"></div>
+  <div class="content" style="align-items:center;text-align:center;position:relative;z-index:1">
+    <div style="font-size:52px;margin-bottom:0.5rem">❤️</div>
+    <div id="cel-title" style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--gold-bright);letter-spacing:2px;margin-bottom:0.5rem"></div>
+    <div id="cel-name" style="font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:500;color:var(--white);line-height:1.1;margin-bottom:0.5rem"></div>
+    <div id="cel-sub" style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:1.5rem"></div>
+    <div id="cel-ranking" class="totals-bar" style="width:100%;max-width:340px;margin-bottom:1.5rem"></div>
+    <button id="cel-btn" class="btn-gold" style="font-size:15px;padding:12px 28px"></button>
+  </div>
+</div>
 </body>
 </html>
