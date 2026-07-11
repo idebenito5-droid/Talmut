@@ -163,7 +163,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <div class="screen active" id="s-home">
   <div class="home-wrap">
-    <img src="icon.png" alt="Talmut" style="width:90px;height:90px;object-fit:contain;border-radius:20px;margin-bottom:1.25rem">
+    <img src="icon.png" alt="Talmut" id="home-logo" onclick="logoClick()" style="width:90px;height:90px;object-fit:contain;border-radius:20px;margin-bottom:1.25rem;cursor:pointer;transition:transform 0.1s" title="">
     <div class="home-title">TALMUT</div>
     <div class="home-motto">Hic ludus errorem punit</div>
     <div class="home-divider"></div>
@@ -197,6 +197,12 @@ tfoot td.td-winner{color:var(--gold-bright)}
           <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:28px">&#128214;</div>
           <div><div class="menu-label">La Maltesa</div><div class="menu-desc">Constituci&oacute;n oficial del juego</div></div>
         </div><span class="menu-arrow">&#8250;</span>
+      </div>
+      <div class="menu-item" id="dr-driving-item" onclick="go('s-driving-menu')" style="display:none;border-color:rgba(255,50,50,0.4);background:rgba(255,30,30,0.06)">
+        <div class="menu-left">
+          <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px">&#127950;</div>
+          <div><div class="menu-label" style="color:#ff6b6b">Dr. Driving</div><div class="menu-desc" style="color:rgba(255,107,107,0.6)">Easter egg desbloqueado &#128373;</div></div>
+        </div><span class="menu-arrow" style="color:rgba(255,107,107,0.5)">&#8250;</span>
       </div>
     </div>
     <div id="home-odometer" style="margin-top:1.75rem;text-align:center"><span id="odo-text" style="font-family:'Courier New',monospace;font-size:28px;letter-spacing:8px;color:var(--gold-bright)">00000</span></div>
@@ -447,6 +453,7 @@ function _renderScreen(id,mode){
   if(id==='s-history')renderHistory();
   
   if(id==='s-stats-table')renderStatsTable();
+  if(id==='s-driving-menu'){renderDrivingMenu();if(_drivingUnlocked){var item=document.getElementById('dr-driving-item');if(item)item.style.display='flex';}}
   if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
   if(id!=='s-game'){var gs=document.getElementById('s-game');if(gs){gs.classList.remove('bl-theme');var bw=document.getElementById('bl-wave');if(bw)bw.remove();}}
@@ -1063,6 +1070,368 @@ function startVoiceInput(){
   voiceRecognition.start();
 }
 
+
+// ===================== DR DRIVING =====================
+var _logoClicks = 0;
+var _logoTimer = null;
+var _drivingUnlocked = localStorage.getItem('drv_unlocked') === '1';
+var _drivingPlayer = 'Nacho';
+var _drvGame = null;
+var _drvKeys = {};
+
+if(_drivingUnlocked){
+  document.addEventListener('DOMContentLoaded', function(){
+    var item = document.getElementById('dr-driving-item');
+    if(item) item.style.display = 'flex';
+  });
+}
+
+function logoClick(){
+  var logo = document.getElementById('home-logo');
+  logo.style.transform = 'scale(0.9)';
+  setTimeout(function(){ logo.style.transform = 'scale(1)'; }, 100);
+  _logoClicks++;
+  clearTimeout(_logoTimer);
+  if(_logoClicks >= 42){
+    _logoClicks = 0;
+    unlockDriving();
+    return;
+  }
+  // Show faint counter near logo
+  var existing = document.getElementById('logo-click-count');
+  if(!existing){
+    existing = document.createElement('div');
+    existing.id = 'logo-click-count';
+    existing.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Courier New,monospace;font-size:48px;color:rgba(184,134,11,0.15);pointer-events:none;z-index:999;transition:opacity 0.3s';
+    document.body.appendChild(existing);
+  }
+  existing.textContent = _logoClicks;
+  existing.style.opacity = '1';
+  _logoTimer = setTimeout(function(){
+    _logoClicks = 0;
+    if(existing) existing.style.opacity = '0';
+  }, 2000);
+}
+
+function unlockDriving(){
+  localStorage.setItem('drv_unlocked','1');
+  _drivingUnlocked = true;
+  var item = document.getElementById('dr-driving-item');
+  if(item){
+    item.style.display = 'flex';
+    item.style.animation = 'none';
+    item.style.borderColor = 'rgba(255,50,50,0.8)';
+    setTimeout(function(){ item.style.borderColor = 'rgba(255,50,50,0.4)'; }, 1000);
+  }
+  var cnt = document.getElementById('logo-click-count');
+  if(cnt){ cnt.textContent = '🚗'; cnt.style.opacity = '1'; setTimeout(function(){ cnt.style.opacity='0'; },2000); }
+}
+
+function renderDrivingMenu(){
+  var PLAYERS = ['Adrián','Aleix','Arnau','Edu','Nacho','Marc'];
+  var chips = document.getElementById('driving-player-chips');
+  if(!chips) return;
+  var chipWrap = chips;
+  chipWrap.innerHTML = '';
+  PLAYERS.forEach(function(n){
+    var d = document.createElement('div');
+    d.textContent = n;
+    d.setAttribute('data-player', n);
+    var sel = n===_drivingPlayer;
+    d.style.cssText = 'padding:6px 16px;border:0.5px solid rgba(255,107,107,'+(sel?'0.8':'0.25')+');border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;color:'+(sel?'#ff6b6b':'rgba(255,255,255,0.5)')+';background:'+(sel?'rgba(255,50,50,0.12)':'transparent')+';-webkit-tap-highlight-color:transparent';
+    d.addEventListener('click', function(){ selectDrivingPlayer(this, this.getAttribute('data-player')); });
+    chipWrap.appendChild(d);
+  });
+  var rec = document.getElementById('driving-records');
+  if(!rec) return;
+  var records = JSON.parse(localStorage.getItem('drv_records')||'{}');
+  rec.innerHTML = '<table style="width:100%;border-collapse:collapse;border:1px solid rgba(255,107,107,0.2);border-radius:8px;overflow:hidden">'
+    +'<thead><tr style="background:rgba(255,50,50,0.1)"><th style="padding:7px;font-size:10px;color:rgba(255,107,107,0.7);text-align:left;letter-spacing:1px">Piloto</th><th style="padding:7px;font-size:10px;color:rgba(255,107,107,0.7);text-align:center;letter-spacing:1px">Récord</th></tr></thead>'
+    +'<tbody>'+PLAYERS.map(function(n,i){
+      var bg = i%2===0?'rgba(255,255,255,0.02)':'transparent';
+      return '<tr style="border-top:0.5px solid rgba(255,107,107,0.1);background:'+bg+'"><td style="padding:7px 10px;font-size:13px;color:rgba(255,255,255,0.7)">'+n+'</td><td style="padding:7px;text-align:center;font-family:Courier New,monospace;font-size:14px;color:#ffcc00">'+(records[n]||'-')+'</td></tr>';
+    }).join('')+'</tbody></table>';
+}
+
+function selectDrivingPlayer(el, name){
+  _drivingPlayer = name;
+  renderDrivingMenu();
+}
+
+function stopDriving(){
+  if(_drvGame){ clearInterval(_drvGame.timer); clearInterval(_drvGame.loop); _drvGame = null; }
+  go('s-driving-menu');
+}
+
+// ========== GAME ENGINE ==========
+function startDrivingGame(){
+  var overlay = document.getElementById('drv-overlay');
+  overlay.style.display = 'none';
+  var canvas = document.getElementById('drv-canvas');
+  var W = canvas.offsetWidth; var H = canvas.offsetHeight;
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+
+  var car = { x:W/2, y:H*0.7, angle:0, speed:0, maxSpeed:4, acc:0.15, friction:0.92, turnSpeed:3 };
+  var score = 0; var timeLeft = 60; var level = 1; var parkCount = 0;
+  var keys = {up:false,down:false,left:false,right:false};
+  var parkZone = null; var parked = 0; var parkTimer = 0;
+  var obstacles = [];
+  var particles = [];
+  var flashMsg = null;
+
+  document.getElementById('drv-level').textContent = 'Nivel ' + level;
+
+  function newParkZone(){
+    var margin = 60; var zw = 70; var zh = 50;
+    return {
+      x: margin + Math.random()*(W - margin*2 - zw),
+      y: margin + Math.random()*(H*0.6 - margin - zh),
+      w: zw, h: zh,
+      angle: [0, 90, 180, 270][Math.floor(Math.random()*4)]
+    };
+  }
+  function newObstacle(){
+    var side = Math.floor(Math.random()*4);
+    var x,y;
+    if(side===0){x=Math.random()*W;y=-30;}
+    else if(side===1){x=W+30;y=Math.random()*H;}
+    else if(side===2){x=Math.random()*W;y=H+30;}
+    else{x=-30;y=Math.random()*H;}
+    var speed = 0.8 + Math.random()*1.2 + level*0.2;
+    var ang = Math.atan2(H/2-y, W/2-x);
+    return {x:x,y:y,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,w:36,h:22,color:['#c0392b','#2980b9','#27ae60','#8e44ad','#e67e22'][Math.floor(Math.random()*5)]};
+  }
+  function addParticles(x,y,color){
+    for(var i=0;i<12;i++){
+      var ang=Math.random()*Math.PI*2;
+      var spd=1+Math.random()*3;
+      particles.push({x:x,y:y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:30,color:color});
+    }
+  }
+
+  parkZone = newParkZone();
+  for(var i=0;i<3+level;i++) obstacles.push(newObstacle());
+
+  // Button controls
+  function setKey(k,v){keys[k]=v;}
+  var btns = {
+    'btn-up':['up'], 'btn-down':['down'],
+    'btn-left':['left'], 'btn-right':['right']
+  };
+  Object.keys(btns).forEach(function(id){
+    var el2 = document.getElementById(id);
+    if(!el2) return;
+    var k = btns[id][0];
+    el2.addEventListener('touchstart',function(e){e.preventDefault();keys[k]=true;},{passive:false});
+    el2.addEventListener('touchend',function(e){e.preventDefault();keys[k]=false;},{passive:false});
+    el2.addEventListener('mousedown',function(){keys[k]=true;});
+    el2.addEventListener('mouseup',function(){keys[k]=false;});
+  });
+  // Keyboard
+  function onKey(e,v){
+    if(e.key==='ArrowUp'||e.key==='w') keys.up=v;
+    if(e.key==='ArrowDown'||e.key==='s') keys.down=v;
+    if(e.key==='ArrowLeft'||e.key==='a') keys.left=v;
+    if(e.key==='ArrowRight'||e.key==='d') keys.right=v;
+  }
+  document.addEventListener('keydown',function(e){onKey(e,true);});
+  document.addEventListener('keyup',function(e){onKey(e,false);});
+
+  function rectCollide(ax,ay,aw,ah,bx,by,bw,bh){
+    return ax<bx+bw&&ax+aw>bx&&ay<by+bh&&ay+ah>by;
+  }
+
+  function drawCar(x,y,angle,color,w,h){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(angle*Math.PI/180);
+    // Body
+    ctx.fillStyle=color;
+    ctx.beginPath();
+    ctx.roundRect(-w/2,-h/2,w,h,4);
+    ctx.fill();
+    // Windshield
+    ctx.fillStyle='rgba(200,230,255,0.7)';
+    ctx.fillRect(-w/2+4,-h/2+3,w-8,h*0.3);
+    // Wheels
+    ctx.fillStyle='#111';
+    [[-w/2+2,-h/2+2],[w/2-8,-h/2+2],[-w/2+2,h/2-8],[w/2-8,h/2-8]].forEach(function(pos){
+      ctx.fillRect(pos[0],pos[1],6,6);
+    });
+    ctx.restore();
+  }
+
+  function drawParkZone(z){
+    ctx.save();
+    ctx.strokeStyle= parked>0 ? '#27ae60' : 'rgba(255,200,0,0.8)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6,4]);
+    ctx.strokeRect(z.x,z.y,z.w,z.h);
+    ctx.setLineDash([]);
+    // P symbol
+    ctx.fillStyle = parked>0 ? '#27ae60' : 'rgba(255,200,0,0.6)';
+    ctx.font = 'bold 18px Arial';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('P', z.x+z.w/2, z.y+z.h/2);
+    ctx.restore();
+  }
+
+  // Road markings
+  function drawRoad(){
+    ctx.fillStyle = '#2c2c2c';
+    ctx.fillRect(0,0,W,H);
+    // Lane lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([20,20]);
+    for(var x2=W/3;x2<W;x2+=W/3){
+      ctx.beginPath();ctx.moveTo(x2,0);ctx.lineTo(x2,H);ctx.stroke();
+    }
+    for(var y2=H/4;y2<H;y2+=H/4){
+      ctx.beginPath();ctx.moveTo(0,y2);ctx.lineTo(W,y2);ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    // Border
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=3;
+    ctx.strokeRect(1,1,W-2,H-2);
+  }
+
+  var gameOver = false;
+  var loopId = requestAnimationFrame(loop);
+
+  function loop(){
+    if(gameOver) return;
+    loopId = requestAnimationFrame(loop);
+
+    // Physics
+    if(keys.up) car.speed = Math.min(car.speed+car.acc, car.maxSpeed);
+    else if(keys.down) car.speed = Math.max(car.speed-car.acc, -car.maxSpeed/2);
+    else car.speed *= car.friction;
+    if(Math.abs(car.speed)>0.1){
+      if(keys.left) car.angle -= car.turnSpeed * (car.speed>0?1:-1);
+      if(keys.right) car.angle += car.turnSpeed * (car.speed>0?1:-1);
+    }
+    car.x += Math.sin(car.angle*Math.PI/180)*car.speed;
+    car.y -= Math.cos(car.angle*Math.PI/180)*car.speed;
+    // Walls
+    var cw=24,ch=16;
+    car.x=Math.max(cw,Math.min(W-cw,car.x));
+    car.y=Math.max(ch,Math.min(H-ch,car.y));
+
+    // Move obstacles
+    obstacles.forEach(function(o){
+      o.x+=o.vx; o.y+=o.vy;
+      // Bounce off walls
+      if(o.x<0||o.x>W) o.vx*=-1;
+      if(o.y<0||o.y>H) o.vy*=-1;
+    });
+
+    // Check park
+    var inZone = car.x>parkZone.x&&car.x<parkZone.x+parkZone.w&&car.y>parkZone.y&&car.y<parkZone.y+parkZone.h;
+    if(inZone&&Math.abs(car.speed)<0.3){
+      parkTimer++;
+      if(parkTimer>40){
+        parkCount++;
+        score+=100+level*50;
+        level = Math.floor(parkCount/3)+1;
+        car.maxSpeed = 4+level*0.3;
+        addParticles(car.x,car.y,'#27ae60');
+        flashMsg={text:'APARCADO! +'+( 100+level*50),color:'#27ae60',t:60};
+        parkZone=newParkZone();
+        parkTimer=0;
+        document.getElementById('drv-level').textContent='Nivel '+level;
+        if(obstacles.length < 8) obstacles.push(newObstacle());
+      }
+    } else { parkTimer=0; }
+
+    // Check collision with obstacles
+    var carBox={x:car.x-12,y:car.y-8,w:24,h:16};
+    obstacles.forEach(function(o){
+      if(rectCollide(carBox.x,carBox.y,carBox.w,carBox.h,o.x-o.w/2,o.y-o.h/2,o.w,o.h)){
+        score=Math.max(0,score-30);
+        addParticles(car.x,car.y,'#c0392b');
+        flashMsg={text:'-30',color:'#ff6b6b',t:40};
+        car.speed*=-0.5;
+      }
+    });
+
+    // Particles
+    particles=particles.filter(function(p){return p.life>0;});
+    particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.life--;});
+
+    // Draw
+    drawRoad();
+    drawParkZone(parkZone);
+    obstacles.forEach(function(o){drawCar(o.x,o.y,0,o.color,o.w,o.h);});
+    drawCar(car.x,car.y,car.angle,'#e8c56a',28,18);
+    // Player name on car
+    ctx.save();ctx.translate(car.x,car.y);
+    ctx.fillStyle='rgba(0,0,0,0.7)';ctx.font='bold 7px Arial';ctx.textAlign='center';
+    ctx.fillText(_drivingPlayer.slice(0,5),0,2);ctx.restore();
+
+    // Particles draw
+    particles.forEach(function(p){
+      ctx.globalAlpha=p.life/30;
+      ctx.fillStyle=p.color;
+      ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=1;
+    });
+
+    // Flash msg
+    if(flashMsg&&flashMsg.t>0){
+      ctx.save();
+      ctx.globalAlpha=flashMsg.t/60;
+      ctx.fillStyle=flashMsg.color;
+      ctx.font='bold 22px Arial';
+      ctx.textAlign='center';
+      ctx.fillText(flashMsg.text,W/2,H/2-40);
+      ctx.restore();
+      flashMsg.t--;
+    }
+
+    // HUD
+    document.getElementById('drv-score').textContent=score+' pts';
+  }
+
+  // Timer
+  var timer = setInterval(function(){
+    if(gameOver) return;
+    timeLeft--;
+    document.getElementById('drv-time').textContent=timeLeft+'s';
+    if(timeLeft<=0){
+      gameOver=true;
+      cancelAnimationFrame(loopId);
+      clearInterval(timer);
+      endDrivingGame(score);
+    }
+  },1000);
+
+  _drvGame={timer:timer,loop:loopId};
+}
+
+function endDrivingGame(score){
+  var records=JSON.parse(localStorage.getItem('drv_records')||'{}');
+  var prev=records[_drivingPlayer]||0;
+  var isRecord=score>prev;
+  if(isRecord){ records[_drivingPlayer]=score; localStorage.setItem('drv_records',JSON.stringify(records)); }
+  var overlay=document.getElementById('drv-overlay');
+  document.getElementById('drv-result-title').textContent=score>500?'¡CAMPEÓN!':score>200?'Bien conducido':'Mejorable...';
+  document.getElementById('drv-result-score').textContent=score+' pts';
+  document.getElementById('drv-result-record').textContent=isRecord?'🏆 NUEVO RÉCORD personal!':'Récord: '+prev+' pts';
+  overlay.style.display='flex';
+  overlay.style.flexDirection='column';
+}
+
+function startDriving(){
+  go('s-driving-game');
+  setTimeout(startDrivingGame,100);
+}
+
+// Init driving menu when entering
+var _origRenderScreen = _renderScreen;
+
 </script>
 
 <!-- MALTESA AI CHAT -->
@@ -1093,6 +1462,55 @@ function startVoiceInput(){
   </div>
   <div class="content content-scroll" style="padding:0.75rem">
     <div id="stats-table-content"></div>
+  </div>
+</div>
+
+
+<!-- DR DRIVING MENU -->
+<div class="screen" id="s-driving-menu">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
+    <div class="page-header-title" style="color:#ff6b6b">&#127950; Dr. Driving</div>
+  </div>
+  <div class="content" style="align-items:center;text-align:center">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,107,107,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem">Easter Egg · Para el rato</div>
+    <div class="section-label" style="text-align:left;width:100%">¿Quién conduce?</div>
+    <div id="driving-player-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;justify-content:center"></div>
+    <div class="section-label" style="text-align:left;width:100%">Récords</div>
+    <div id="driving-records" style="width:100%;margin-bottom:1.5rem"></div>
+    <button onclick="startDriving()" class="btn-gold" style="background:#cc2200;border-color:#cc2200;font-size:15px;padding:12px 32px">
+      &#127950; Arrancar
+    </button>
+  </div>
+</div>
+
+<!-- DR DRIVING GAME -->
+<div class="screen" id="s-driving-game" style="overflow:hidden;position:relative;background:#1a1a1a">
+  <div style="position:absolute;top:12px;left:12px;z-index:20;display:flex;gap:10px;align-items:center">
+    <button class="back-btn" onclick="stopDriving()" style="background:rgba(0,0,0,0.5);border-color:rgba(255,255,255,0.2)">&#8249;</button>
+    <div id="drv-score" style="font-family:'Courier New',monospace;font-size:16px;color:#fff;background:rgba(0,0,0,0.5);padding:4px 12px;border-radius:20px">0 pts</div>
+    <div id="drv-time" style="font-family:'Courier New',monospace;font-size:16px;color:#ffcc00;background:rgba(0,0,0,0.5);padding:4px 12px;border-radius:20px">60s</div>
+  </div>
+  <div id="drv-level" style="position:absolute;top:12px;right:12px;z-index:20;font-size:12px;color:rgba(255,255,255,0.5);background:rgba(0,0,0,0.4);padding:4px 10px;border-radius:20px"></div>
+  <canvas id="drv-canvas" style="display:block;width:100%;height:100%;touch-action:none"></canvas>
+  <div style="position:absolute;bottom:20px;left:0;right:0;z-index:20;display:flex;justify-content:space-between;padding:0 20px;pointer-events:none">
+    <div style="display:flex;flex-direction:column;gap:10px;pointer-events:all">
+      <button id="btn-left" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);font-size:24px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">&#8592;</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;pointer-events:all">
+      <button id="btn-up" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);font-size:24px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">&#8593;</button>
+      <button id="btn-down" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);font-size:24px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">&#8595;</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;pointer-events:all">
+      <button id="btn-right" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);font-size:24px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">&#8594;</button>
+    </div>
+  </div>
+  <div id="drv-overlay" style="position:absolute;inset:0;background:rgba(0,0,0,0.85);z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;display:none">
+    <div id="drv-result-title" style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;color:#ff6b6b;margin-bottom:8px"></div>
+    <div id="drv-result-score" style="font-family:'Courier New',monospace;font-size:48px;color:#ffcc00;margin-bottom:8px"></div>
+    <div id="drv-result-record" style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px"></div>
+    <button onclick="startDrivingGame()" style="padding:12px 28px;background:#cc2200;color:#fff;border:none;border-radius:8px;font-size:15px;font-family:Inter,sans-serif;cursor:pointer;margin-bottom:10px">&#127950; Otra vez</button>
+    <button onclick="stopDriving()" style="padding:8px 20px;background:none;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:13px;font-family:Inter,sans-serif;cursor:pointer">Salir</button>
   </div>
 </div>
 
