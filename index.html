@@ -1074,17 +1074,12 @@ function startVoiceInput(){
 // ===================== DR DRIVING =====================
 var _logoClicks = 0;
 var _logoTimer = null;
-var _drivingUnlocked = localStorage.getItem('drv_unlocked') === '1';
+var _drivingUnlocked = false; // resets on every app open
 var _drivingPlayer = 'Nacho';
 var _drvGame = null;
 var _drvKeys = {};
 
-if(_drivingUnlocked){
-  document.addEventListener('DOMContentLoaded', function(){
-    var item = document.getElementById('dr-driving-item');
-    if(item) item.style.display = 'flex';
-  });
-}
+// Dr Driving unlocked only for this session
 
 function logoClick(){
   var logo = document.getElementById('home-logo');
@@ -1114,7 +1109,6 @@ function logoClick(){
 }
 
 function unlockDriving(){
-  localStorage.setItem('drv_unlocked','1');
   _drivingUnlocked = true;
   var item = document.getElementById('dr-driving-item');
   if(item){
