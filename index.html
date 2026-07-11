@@ -393,6 +393,7 @@ var gameMode='talmut';
 var totalRounds=10;
 var scores=[];
 var savedHistory=JSON.parse(localStorage.getItem('tm_v3_hist')||'[]');
+if(!localStorage.getItem('tm_prueba_borrada')&&savedHistory.length>0){savedHistory.shift();localStorage.setItem('tm_v3_hist',JSON.stringify(savedHistory));localStorage.setItem('tm_prueba_borrada','1');}
 
 var QUOTES=['La velocidad es ley.','HIC LUDUS ERROREM PUNIT.','El que baraja es el que m&aacute;s ha perdido. La humillaci&oacute;n tiene su protocolo.','Una vez declarado el TALMUT, el jugador queda investido de total inmunidad.','La Tortilla debe ejecutarse con una sola mano y en un &uacute;nico movimiento continuo.','El Blue Lagoon no existe para la historia. Pero ocurri&oacute;.','Ning&uacute;n jugador podr&aacute; invocar norma alguna que no est&eacute; contemplada en La Maltesa.','En caso de empate, prevalecer&aacute; la interpretaci&oacute;n m&aacute;s perjudicial para el infractor.','El JOKER es la carta m&aacute;s poderosa y m&aacute;s peligrosa del juego.','La comunidad es el &aacute;rbitro.','El TALMUT es voluntario. La penalizaci&oacute;n, no.','Puedes mirar una a&hellip;JJJJJ&hellip;ena.'];
 var _qi=Math.floor(Math.random()*QUOTES.length);
@@ -632,7 +633,7 @@ var fingerTouches={};var fingerPhase='idle';var fingerCountdown=null;var fingerT
 
 function goFinger(){
   fingerTouches={};fingerPhase='idle';clearInterval(fingerCountdown);clearTimeout(fingerTimer);fingerWinner=null;
-  document.getElementById('finger-msg').textContent='Poned los dedos';
+  var _fmsg=document.getElementById('finger-msg');_fmsg.style.fontFamily="'Cormorant Garamond',serif";_fmsg.style.fontSize='40px';_fmsg.style.fontWeight='500';_fmsg.textContent='Poned los dedos';document.getElementById('finger-arena').style.background='var(--navy)';
   document.getElementById('finger-sub').textContent='Todos a la vez cuando empiece la cuenta';
   var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;
   document.getElementById('finger-btn-wrap').style.display='flex';
@@ -664,16 +665,26 @@ function renderFingerDots(){
 
 function startFingerCountdown(){
   document.getElementById('finger-btn-wrap').style.display='none';
-  fingerPhase='countdown';var count=3;
-  document.getElementById('finger-msg').textContent=count;
-  document.getElementById('finger-sub').textContent='preparaos...';
+  fingerPhase='countdown';
+  var count=3;
+  var msg=document.getElementById('finger-msg');
+  var sub=document.getElementById('finger-sub');
+  var arena=document.getElementById('finger-arena');
+  msg.style.fontFamily='Arial,sans-serif';
+  msg.style.fontSize='160px';
+  msg.style.fontWeight='900';
+  msg.style.color='#ffffff';
+  msg.textContent=String(count);
+  sub.textContent='preparaos...';
   fingerCountdown=setInterval(function(){
     count--;
-    if(count>0){document.getElementById('finger-msg').textContent=count;}
-    else{
+    if(count>0){
+      msg.textContent=String(count);
+    } else {
       clearInterval(fingerCountdown);
-      document.getElementById('finger-msg').textContent='¡YA!';
-      document.getElementById('finger-sub').textContent='poned los dedos';
+      arena.style.background='#000000';
+      msg.textContent='';
+      sub.textContent='';
       fingerPhase='active';
       fingerTimer=setTimeout(pickFingerWinner,5000);
     }
@@ -698,7 +709,7 @@ function pickFingerWinner(){
   };
 }
 
-function resetFinger(){fingerTouches={};fingerPhase='idle';document.getElementById('finger-msg').textContent='Poned los dedos';document.getElementById('finger-sub').textContent='Todos a la vez';var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;document.getElementById('finger-btn-wrap').style.display='flex';renderFingerDots();}
+function resetFinger(){fingerTouches={};fingerPhase='idle';document.getElementById('finger-arena').style.background='var(--navy)';var msg=document.getElementById('finger-msg');msg.style.fontFamily="'Cormorant Garamond',serif";msg.style.fontSize='40px';msg.style.fontWeight='500';msg.textContent='Poned los dedos';document.getElementById('finger-sub').textContent='Todos a la vez';var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;document.getElementById('finger-btn-wrap').style.display='flex';renderFingerDots();}
 
 renderChips();
 </script>
