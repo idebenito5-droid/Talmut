@@ -424,6 +424,7 @@ function _renderScreen(id,mode){
   }
   if(id==='s-history')renderHistory();
   if(id==='s-stats')renderStats();
+  showChatBubble(id==='s-game');
 }
 
 function go(id,mode){
@@ -712,6 +713,144 @@ function pickFingerWinner(){
 function resetFinger(){fingerTouches={};fingerPhase='idle';document.getElementById('finger-arena').style.background='var(--navy)';var msg=document.getElementById('finger-msg');msg.style.fontFamily="'Cormorant Garamond',serif";msg.style.fontSize='40px';msg.style.fontWeight='500';msg.textContent='Poned los dedos';document.getElementById('finger-sub').textContent='Todos a la vez';var btn=document.getElementById('finger-start-btn');btn.textContent='Iniciar';btn.onclick=startFingerCountdown;document.getElementById('finger-btn-wrap').style.display='flex';renderFingerDots();}
 
 renderChips();
+
+// === MALTESA AI CHAT ===
+var chatOpen = false;
+var chatHistory = [];
+var chatSpeaking = null;
+var voiceRecognition = null;
+
+function toggleChat(){
+  chatOpen = !chatOpen;
+  var panel = document.getElementById('chat-panel');
+  var bubble = document.getElementById('chat-bubble');
+  panel.style.display = chatOpen ? 'flex' : 'none';
+  bubble.style.background = chatOpen ? '#8a6408' : 'var(--gold)';
+  if(chatOpen && document.getElementById('chat-messages').children.length === 0){
+    addChatMsg('bot','Hola. Soy el árbitro de La Maltesa. Pregúntame cualquier duda sobre las reglas mientras jugáis.');
+  }
+  if(chatOpen){ setTimeout(function(){ document.getElementById('chat-input').focus(); }, 100); }
+}
+
+function showChatBubble(show){
+  document.getElementById('chat-bubble').style.display = show ? 'flex' : 'none';
+  if(!show){ chatOpen=false; document.getElementById('chat-panel').style.display='none'; }
+}
+
+function addChatMsg(role, text){
+  var el = document.createElement('div');
+  var isBot = role === 'bot';
+  el.style.cssText = 'max-width:85%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;' +
+    (isBot
+      ? 'align-self:flex-start;background:rgba(184,134,11,0.15);color:rgba(255,255,255,0.85);border:0.5px solid var(--gold-border);border-radius:4px 12px 12px 12px;font-family:Cormorant Garamond,serif;font-size:15px;'
+      : 'align-self:flex-end;background:var(--gold);color:#fff;border-radius:12px 4px 12px 12px;');
+  el.textContent = text;
+  var msgs = document.getElementById('chat-messages');
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+  if(isBot) speakText(text);
+}
+
+function addChatTyping(){
+  var el = document.createElement('div');
+  el.id = 'chat-typing';
+  el.style.cssText = 'align-self:flex-start;padding:8px 12px;background:rgba(184,134,11,0.1);border-radius:4px 12px 12px 12px;border:0.5px solid var(--gold-border);color:var(--gold);font-size:13px;';
+  el.textContent = '...';
+  document.getElementById('chat-messages').appendChild(el);
+  document.getElementById('chat-messages').scrollTop = 99999;
+}
+
+function removeChatTyping(){
+  var el = document.getElementById('chat-typing');
+  if(el) el.remove();
+}
+
+var MALTESA_SYSTEM = "Eres el árbitro oficial de La Maltesa, el reglamento supremo del juego de cartas TALMUT. Solo respondes preguntas sobre las reglas de TALMUT según La Maltesa. Responde en español, de forma breve y clara (máximo 3-4 frases). Si la pregunta no es sobre las reglas del juego, di amablemente que solo puedes resolver dudas de La Maltesa. Las reglas principales: 4 cartas boca abajo por jugador, se ven 2 al inicio durante 2 segundos. Turno: robas y guardas (descartando otra) o descartas la robada activando su efecto si es especial. Cartas especiales (solo al descartar directamente): 10=miras una propia, J=miras una ajena (¡pronunciar a...JJJJJ...jena!), Q=intercambio ciego, K=miras y puedes quedarte o transferir. JOKER: -1 si ganas la ronda, +50 si pierdes. Descarte Cruzado: si alguien descarta un valor que tienes, puedes descartarlo tú también (velocidad es ley; si tienes 2 del mismo valor puedes descartar ambas). Ley de la Tortilla: el descarte cruzado propio debe hacerse con una sola mano en un movimiento continuo. TALMUT: se declara con 5 puntos o menos, antes de robar o tras descartar. Todos tienen un turno más. El declarante mantiene derecho a Descarte Cruzado. TALMUT erróneo (más de 5 puntos): sumas los puntos de todos los demás. TALMUT automático: si te quedas sin cartas, el siguiente turno robas y descartas obligatoriamente. Intocable de Elliot Ness: tras declarar TALMUT, eres inmune a todas las cartas especiales. Puntuación: gana el de menos puntos (anota 0); A=1, 2-9=valor, 10=10, J=20, Q=30, K=40. Empate entre declarante y otro: gana quien NO declaró. 10 rondas por partida oficial. Blue Lagoon = partida con menos rondas, no computa en el histórico. Penalizaciones (carta que no puedes ver): mirar cartas propias sin permiso, Tortilla con dos manos, descarte cruzado erróneo, robar fuera de turno, juramento irrespetuoso. TALMUT erróneo = suma puntos de todos. Hic Ludus Errorem Punit.";
+
+async function sendChat(){
+  var input = document.getElementById('chat-input');
+  var text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  addChatMsg('user', text);
+  chatHistory.push({role:'user', content:text});
+  addChatTyping();
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:300,
+        system: MALTESA_SYSTEM,
+        messages: chatHistory.slice(-6)
+      })
+    });
+    var data = await resp.json();
+    removeChatTyping();
+    var reply = data.content && data.content[0] ? data.content[0].text : 'No he podido responder. Inténtalo de nuevo.';
+    chatHistory.push({role:'assistant', content:reply});
+    addChatMsg('bot', reply);
+  } catch(e) {
+    removeChatTyping();
+    addChatMsg('bot','Error de conexión. Comprueba que tienes internet.');
+  }
+}
+
+function speakText(text){
+  if(!window.speechSynthesis) return;
+  if(chatSpeaking){ window.speechSynthesis.cancel(); }
+  var utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'es-ES';
+  utter.rate = 1.0;
+  utter.pitch = 1.0;
+  chatSpeaking = utter;
+  window.speechSynthesis.speak(utter);
+}
+
+function startVoiceInput(){
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ alert('Tu navegador no soporta reconocimiento de voz.'); return; }
+  if(voiceRecognition){ voiceRecognition.stop(); voiceRecognition=null; return; }
+  var mic = document.getElementById('chat-mic-btn');
+  mic.style.background = 'rgba(228,75,74,0.3)';
+  mic.style.borderColor = '#E24B4A';
+  voiceRecognition = new SR();
+  voiceRecognition.lang = 'es-ES';
+  voiceRecognition.interimResults = false;
+  voiceRecognition.onresult = function(e){
+    document.getElementById('chat-input').value = e.results[0][0].transcript;
+    sendChat();
+  };
+  voiceRecognition.onend = function(){
+    mic.style.background = 'rgba(255,255,255,0.06)';
+    mic.style.borderColor = 'var(--gold-border)';
+    voiceRecognition = null;
+  };
+  voiceRecognition.start();
+}
+
 </script>
+
+<!-- MALTESA AI CHAT -->
+<div id="chat-bubble" onclick="toggleChat()" style="position:fixed;bottom:24px;right:20px;z-index:100;width:52px;height:52px;background:var(--gold);border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.4);font-size:22px;-webkit-tap-highlight-color:transparent;touch-action:manipulation">&#9882;</div>
+
+<div id="chat-panel" style="position:fixed;bottom:88px;right:16px;left:16px;max-width:420px;margin:0 auto;z-index:99;background:#0D2240;border:1px solid var(--gold-border-strong);border-radius:14px;display:none;flex-direction:column;max-height:60vh;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+  <div style="padding:10px 14px;border-bottom:0.5px solid var(--gold-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="color:var(--gold);font-size:16px">&#9882;</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;color:var(--white)">La Maltesa</span>
+      <span style="font-size:10px;color:var(--white-30);letter-spacing:1px">ÁRBITRO</span>
+    </div>
+    <button onclick="toggleChat()" style="background:none;border:none;color:var(--white-30);font-size:20px;cursor:pointer;padding:0 4px;line-height:1">&#10005;</button>
+  </div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-height:120px"></div>
+  <div style="padding:10px 12px;border-top:0.5px solid var(--gold-border);display:flex;gap:8px;align-items:center;flex-shrink:0">
+    <input id="chat-input" type="text" placeholder="Pregunta sobre las reglas..." style="flex:1;background:rgba(255,255,255,0.06);border:0.5px solid var(--gold-border);border-radius:20px;padding:8px 14px;color:var(--white);font-size:13px;font-family:Inter,sans-serif;outline:none" onkeydown="if(event.key==='Enter')sendChat()">
+    <button id="chat-mic-btn" onclick="startVoiceInput()" title="Hablar" style="width:36px;height:36px;background:rgba(255,255,255,0.06);border:0.5px solid var(--gold-border);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;-webkit-tap-highlight-color:transparent">&#127908;</button>
+    <button onclick="sendChat()" style="width:36px;height:36px;background:var(--gold);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;-webkit-tap-highlight-color:transparent">&#8593;</button>
+  </div>
+</div>
+
 </body>
 </html>
