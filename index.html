@@ -137,6 +137,15 @@ tfoot td.td-winner{color:var(--gold-bright)}
 @keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 @media(max-width:400px){.home-title{font-size:52px}td.td-score input{font-size:13px;padding:6px 2px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* BLUE LAGOON THEME */
+.bl-theme { background: linear-gradient(160deg, #0a3a5c 0%, #0e5f7a 40%, #0a8a7a 100%) !important; }
+.bl-theme .page-header { background: rgba(8,50,80,0.85) !important; border-bottom-color: rgba(100,220,200,0.3) !important; }
+.bl-theme .page-header-title { color: #a8ecdf !important; }
+.bl-wave { position:fixed;bottom:0;left:0;right:0;height:80px;pointer-events:none;z-index:0;opacity:0.18; }
+.bl-content { position:relative;z-index:1; }
+@keyframes wave { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
 </style>
 </head>
 <body>
@@ -180,12 +189,12 @@ tfoot td.td-winner{color:var(--gold-bright)}
       </div>
       <div class="menu-item" onclick="go('s-stats-table')">
         <div class="menu-left">
-          <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px">&#127918;</div>
+          <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(184,134,11,0.15)">&#11088;</div>
           <div><div class="menu-label">Hall of Fame</div><div class="menu-desc">Tabla de estad&iacute;sticas completa</div></div>
         </div><span class="menu-arrow">&#8250;</span>
       </div>
     </div>
-    <div id="home-odometer" style="margin-top:1.5rem;text-align:center"><span id="odo-text" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:3px;color:rgba(255,255,255,0.2)">cargando...</span></div>
+    <div id="home-odometer" style="margin-top:1.75rem;text-align:center"><span id="odo-text" style="font-family:'Courier New',monospace;font-size:28px;letter-spacing:8px;color:var(--gold-bright)">00000</span></div>
   </div>
 </div>
 
@@ -195,10 +204,10 @@ tfoot td.td-winner{color:var(--gold-bright)}
     <div class="page-header-title" id="setup-title">Nueva partida</div>
   </div>
   <div class="content">
-    <div id="blue-lagoon-note" style="display:none;margin-bottom:1.25rem;padding:1rem 1.25rem;border:1px solid var(--gold-border);border-radius:var(--r);background:rgba(184,134,11,0.06)">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">A efectos de La Maltesa, &uacute;nicamente tendr&aacute; la consideraci&oacute;n de partida oficial aquella que se dispute en su totalidad de diez rondas.</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">Toda partida que no alcance dicho c&oacute;mputo recibir&aacute; la denominaci&oacute;n de <strong style="color:var(--gold-bright)">Blue Lagoon</strong> y, si bien su resultado ser&aacute; celebrado con el honor y el regocijo que merece cualquier victoria, no generar&aacute; efecto alguno sobre el hist&oacute;rico de la clasificaci&oacute;n general.</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--gold);line-height:1.8">El Blue Lagoon no existe para la historia. Solo para el ganador.</p>
+    <div id="blue-lagoon-note" style="display:none;margin-bottom:1.25rem;padding:1rem 1.25rem;border:1px solid rgba(100,220,200,0.3);border-radius:var(--r);background:rgba(10,100,120,0.2)">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">Una partida oficial son diez rondas. Lo que viene ahora es otra cosa.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">El <strong style="color:#64dcc8">Blue Lagoon</strong> no figura en el hist&oacute;rico ni en las estad&iacute;sticas. Su resultado es v&aacute;lido solo para quien estaba en la mesa ese d&iacute;a.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:#64dcc8;line-height:1.8">Malta, agua cristalina, y un c&oacute;ctel azul.<br>No existe para la historia. Pero ocurri&oacute;.</p>
     </div>
     <div class="section-label">Selecciona los jugadores</div>
     <div class="chips-wrap" id="preset-chips"></div>
@@ -435,6 +444,7 @@ function _renderScreen(id,mode){
   if(id==='s-stats-table')renderStatsTable();
   if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
+  if(id!=='s-game'){var gs=document.getElementById('s-game');if(gs){gs.classList.remove('bl-theme');var bw=document.getElementById('bl-wave');if(bw)bw.remove();}}
 }
 
 function go(id,mode){
@@ -475,22 +485,15 @@ function toggleChip(name){
 
 
 function renderHomeCounter(){
-  var official = savedHistory.length;
-  var blue = parseInt(localStorage.getItem('tm_blue_count')||'0');
-  var total = official + blue;
-  var odo = document.getElementById('odo-text');
-  if(!odo) return;
-  var padded = String(total).padStart(4,'0');
-  var offStr = String(official).padStart(4,'0');
-  var blStr = String(blue).padStart(3,'0');
-  odo.innerHTML =
-    '<span style="color:rgba(255,255,255,0.15)">' + padded.slice(0, padded.length - String(total).length) + '</span>' +
-    '<span style="color:var(--gold-bright);font-size:15px">' + String(total) + '</span>' +
-    '&nbsp;<span style="color:rgba(255,255,255,0.25);font-size:11px;letter-spacing:2px">partidas</span>' +
-    '<span style="color:rgba(255,255,255,0.12);margin:0 8px">|</span>' +
-    '<span style="color:#85B7EB;font-size:13px">' + official + '</span><span style="color:rgba(255,255,255,0.2);font-size:10px"> ofic</span>' +
-    '<span style="color:rgba(255,255,255,0.12);margin:0 6px">&middot;</span>' +
-    '<span style="color:rgba(133,183,235,0.6);font-size:13px">' + blue + '</span><span style="color:rgba(255,255,255,0.2);font-size:10px"> BL</span>';
+  var official=savedHistory.length;
+  var blue=parseInt(localStorage.getItem('tm_blue_count')||'0');
+  var total=official+blue;
+  var odo=document.getElementById('odo-text');
+  if(!odo)return;
+  var padded=String(total).padStart(5,'0');
+  var leading=padded.slice(0,padded.length-String(total).length);
+  var number=String(total);
+  odo.innerHTML='<span style="color:rgba(255,255,255,0.15)">'+leading+'</span><span>'+number+'</span>';
 }
 
 function renderStatsTable(){
@@ -499,10 +502,7 @@ function renderStatsTable(){
   var PLAYERS = ['ADRIAN','ALEIX','ARNAU','EDU','NACHO','MARC'];
   var DISPLAY = {ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'Nacho',MARC:'Marc'};
 
-  if(!savedHistory.length){
-    el.innerHTML='<div class="empty-state"><div class="empty-icon">&#127918;</div>A&uacute;n no hay partidas registradas.</div>';
-    return;
-  }
+  // show table even if empty
 
   var stats = PLAYERS.map(function(key){
     var name = DISPLAY[key];
@@ -622,6 +622,21 @@ function startGame(){
 
 function buildTable(){
   var players=window._players;
+  var gameScreen=document.getElementById('s-game');
+  if(gameMode==='blue'){
+    gameScreen.classList.add('bl-theme');
+    if(!document.getElementById('bl-wave')){
+      var waveEl=document.createElement('div');
+      waveEl.id='bl-wave';
+      waveEl.className='bl-wave';
+      waveEl.innerHTML='<svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="width:200%;height:100%;animation:wave 8s linear infinite"><path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#40c8c0"/><path d="M0,50 C200,20 400,70 600,50 C800,20 1000,70 1200,50 L1200,80 L0,80 Z" fill="#0e8a7a" opacity="0.5"/></svg>';
+      gameScreen.appendChild(waveEl);
+    }
+  } else {
+    gameScreen.classList.remove('bl-theme');
+    var old=document.getElementById('bl-wave');
+    if(old)old.remove();
+  }
   document.getElementById('game-title').textContent=gameMode==='blue'?'Blue Lagoon':'Talmut';
   document.getElementById('game-badge').innerHTML=gameMode==='blue'?'<span class="badge badge-blue">Blue Lagoon</span>':'<span class="badge badge-gold">Oficial</span>';
   var colW=Math.max(50,Math.floor(280/players.length));
@@ -737,7 +752,7 @@ function showTiebreak(tied,ranked){
 function showCelebration(winner,ranked){
   document.getElementById('cel-title').innerHTML='&#161;ENHORABUENA!';
   document.getElementById('cel-name').textContent=winner.name;
-  document.getElementById('cel-sub').textContent='HIC LUDUS ERROREM PUNIT';
+  document.getElementById('cel-sub').textContent=gameMode==='blue'?'Malta, agua cristalina. Siempre.':'HIC LUDUS ERROREM PUNIT';
   document.getElementById('cel-ranking').innerHTML=ranked.map(function(p,i){return '<div class="total-row '+(i===0?'leader':'')+'"><div class="total-name">'+(i===0?'<span class="star">&#9733;</span> ':'')+p.name+'</div><div class="total-pts '+(i===0?'leader-pts':'')+'">'+p.tot+' pts</div></div>';}).join('');
   var btn=document.getElementById('cel-btn');btn.textContent='Nueva partida';btn.onclick=function(){go('s-home');};
   if(gameMode==='blue'){var _bc=parseInt(localStorage.getItem('tm_blue_count')||'0')+1;localStorage.setItem('tm_blue_count',_bc);}
