@@ -138,6 +138,17 @@ tfoot td.td-winner{color:var(--gold-bright)}
 @media(max-width:400px){.home-title{font-size:52px}td.td-score input{font-size:13px;padding:6px 2px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
+
+.stats-sticky-table { overflow-x:auto; border:1px solid var(--gold-border-strong); border-radius:10px; }
+.stats-sticky-table table { border-collapse:collapse; min-width:520px; width:100%; }
+.stats-sticky-table th:first-child,
+.stats-sticky-table td:first-child {
+  position:sticky; left:0; z-index:2;
+  background:#0D2240;
+}
+.stats-sticky-table thead th:first-child { background:#112040; }
+.stats-sticky-table tr:nth-child(even) td:first-child { background:#0e2540; }
+
 /* BLUE LAGOON THEME */
 .bl-theme { background: linear-gradient(160deg, #0a3a5c 0%, #0e5f7a 40%, #0a8a7a 100%) !important; }
 .bl-theme .page-header { background: rgba(8,50,80,0.85) !important; border-bottom-color: rgba(100,220,200,0.3) !important; }
@@ -175,22 +186,16 @@ tfoot td.td-winner{color:var(--gold-bright)}
           <div><div class="menu-label">Hist&oacute;rico</div><div class="menu-desc">Partidas oficiales registradas</div></div>
         </div><span class="menu-arrow">&#8250;</span>
       </div>
-      <div class="menu-item" onclick="go('s-stats')">
+      <div class="menu-item" onclick="go('s-stats-table')">
         <div class="menu-left">
           <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px"><span style="font-size:22px;font-weight:700;color:#D4A017;font-family:Inter,sans-serif">42</span></div>
-          <div><div class="menu-label">Media de puntos</div><div class="menu-desc">Estad&iacute;sticas por jugador</div></div>
+          <div><div class="menu-label">Hall of Fame</div><div class="menu-desc">Estad&iacute;sticas y clasificaci&oacute;n general</div></div>
         </div><span class="menu-arrow">&#8250;</span>
       </div>
       <div class="menu-item" onclick="go('s-constitution')">
         <div class="menu-left">
           <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:28px">&#128214;</div>
           <div><div class="menu-label">La Maltesa</div><div class="menu-desc">Constituci&oacute;n oficial del juego</div></div>
-        </div><span class="menu-arrow">&#8250;</span>
-      </div>
-      <div class="menu-item" onclick="go('s-stats-table')">
-        <div class="menu-left">
-          <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(184,134,11,0.15)">&#11088;</div>
-          <div><div class="menu-label">Hall of Fame</div><div class="menu-desc">Tabla de estad&iacute;sticas completa</div></div>
         </div><span class="menu-arrow">&#8250;</span>
       </div>
     </div>
@@ -207,7 +212,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
     <div id="blue-lagoon-note" style="display:none;margin-bottom:1.25rem;padding:1rem 1.25rem;border:1px solid rgba(100,220,200,0.3);border-radius:var(--r);background:rgba(10,100,120,0.2)">
       <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">Una partida oficial son diez rondas. Lo que viene ahora es otra cosa.</p>
       <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">El <strong style="color:#64dcc8">Blue Lagoon</strong> no figura en el hist&oacute;rico ni en las estad&iacute;sticas. Su resultado es v&aacute;lido solo para quien estaba en la mesa ese d&iacute;a.</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:#64dcc8;line-height:1.8">Malta, agua cristalina, y un c&oacute;ctel azul.<br>No existe para la historia. Pero ocurri&oacute;.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:#64dcc8;line-height:1.8">No existe para la historia. Pero ocurri&oacute;.</p>
     </div>
     <div class="section-label">Selecciona los jugadores</div>
     <div class="chips-wrap" id="preset-chips"></div>
@@ -440,7 +445,7 @@ function _renderScreen(id,mode){
     renderChips();renderSelected();
   }
   if(id==='s-history')renderHistory();
-  if(id==='s-stats')renderStats();
+  
   if(id==='s-stats-table')renderStatsTable();
   if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
@@ -498,6 +503,38 @@ function renderHomeCounter(){
 
 function renderStatsTable(){
   var el = document.getElementById('stats-table-content');
+  if(!el) return;
+  var PLAYERS = ['ADRIAN','ALEIX','ARNAU','EDU','NACHO','MARC'];
+  var DISPLAY = {ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'NACHO',MARC:'Marc'};
+  // Build stat cards (from renderStats)
+  var names=[];savedHistory.forEach(function(g){g.players.forEach(function(p){if(names.indexOf(p.name)<0)names.push(p.name);});});
+  var statCards='';
+  if(names.length){
+    var statsData=names.map(function(name){
+      var games=savedHistory.filter(function(g){return g.players.find(function(p){return p.name===name;});});
+      var wins=savedHistory.filter(function(g){return g.players[0].name===name;}).length;
+      var pts=games.map(function(g){var pl=g.players.find(function(p){return p.name===name;});return pl?pl.tot:0;});
+      var avg=pts.length?Math.round(pts.reduce(function(a,b){return a+b;},0)/pts.length):0;
+      var totalR=games.reduce(function(a,g){return a+g.rounds;},0);
+      var rWins=games.reduce(function(a,g){var pl=g.players.find(function(p){return p.name===name;});return a+(pl&&pl.roundWins?pl.roundWins:0);},0);
+      var tPct=totalR>0?Math.round(rWins/totalR*100):0;
+      return{name:name,games:games.length,wins:wins,avg:avg,worst:Math.max.apply(null,pts),best:Math.min.apply(null,pts),tPct:tPct,rWins:rWins,totalR:totalR};
+    }).sort(function(a,b){return b.wins-a.wins||a.avg-b.avg;});
+    statCards='<div class="stats-grid" style="margin-bottom:1rem">'+statsData.map(function(s){
+      return '<div class="stat-card"><div class="stat-name">'+s.name+'</div>'
+        +'<div class="stat-val">'+s.wins+'</div>'
+        +'<div class="stat-lbl">victorias &middot; '+s.games+' partidas</div>'
+        +'<div style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--gold-border);font-size:11px;color:var(--white-30);text-transform:uppercase;letter-spacing:1px">Rondas ganadas</div>'
+        +'<div style="font-size:22px;font-weight:500;color:var(--gold-bright);margin:2px 0">'+s.tPct+'%</div>'
+        +'<div style="font-size:10px;color:var(--white-30)">'+s.rWins+' de '+s.totalR+'</div>'
+        +'<div class="stat-row">'
+        +'<div class="stat-mini"><div class="stat-mini-val">'+s.avg+'</div><div class="stat-mini-lbl">media</div></div>'
+        +'<div class="stat-mini"><div class="stat-mini-val">'+s.best+'</div><div class="stat-mini-lbl">mejor</div></div>'
+        +'<div class="stat-mini"><div class="stat-mini-val">'+s.worst+'</div><div class="stat-mini-lbl">peor</div></div>'
+        +'</div></div>';
+    }).join('')+'</div>'
+    +'<div style="font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Clasificaci&oacute;n completa</div>';
+  }
   if(!el) return;
   var PLAYERS = ['ADRIAN','ALEIX','ARNAU','EDU','NACHO','MARC'];
   var DISPLAY = {ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'Nacho',MARC:'Marc'};
@@ -589,9 +626,9 @@ function renderStatsTable(){
       + '</tr>';
   }).join('') + '</tbody>';
 
-  el.innerHTML = '<div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">PJ=Partidas · V=Victorias · %V=Ratio vic. · Top3=Podios · %Rnd=Rondas ganadas · #Mejor/#Peor=Posición · Últ.5=últimas 5</div>'
-    + '<div style="overflow-x:auto;border:1px solid var(--gold-border-strong);border-radius:10px">'
-    + '<table style="width:100%;border-collapse:collapse;min-width:520px">'
+  el.innerHTML = statCards + '<div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">PJ=Partidas · V=Victorias · %V=Ratio vic. · Top3=Podios · %Rnd=Rondas ganadas · #Mejor/#Peor=Posición · Últ.5=últimas 5</div>'
+    + '<div class="stats-sticky-table">'
+    + '<table style="width:100%;border-collapse:collapse;min-width:520px;border-spacing:0">'
     + thead + tbody
     + '</table></div>';
 }
@@ -752,7 +789,7 @@ function showTiebreak(tied,ranked){
 function showCelebration(winner,ranked){
   document.getElementById('cel-title').innerHTML='&#161;ENHORABUENA!';
   document.getElementById('cel-name').textContent=winner.name;
-  document.getElementById('cel-sub').textContent=gameMode==='blue'?'Malta, agua cristalina. Siempre.':'HIC LUDUS ERROREM PUNIT';
+  document.getElementById('cel-sub').textContent=gameMode==='blue'?'Muy bien, pero no ha servido para nada.':'HIC LUDUS ERROREM PUNIT';
   document.getElementById('cel-ranking').innerHTML=ranked.map(function(p,i){return '<div class="total-row '+(i===0?'leader':'')+'"><div class="total-name">'+(i===0?'<span class="star">&#9733;</span> ':'')+p.name+'</div><div class="total-pts '+(i===0?'leader-pts':'')+'">'+p.tot+' pts</div></div>';}).join('');
   var btn=document.getElementById('cel-btn');btn.textContent='Nueva partida';btn.onclick=function(){go('s-home');};
   if(gameMode==='blue'){var _bc=parseInt(localStorage.getItem('tm_blue_count')||'0')+1;localStorage.setItem('tm_blue_count',_bc);}
@@ -821,38 +858,6 @@ function renderHistory(){
   el.innerHTML=recordsHTML+tableHTML+'<div style="font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Partidas jugadas</div>'+gameRows;
 }
 
-function renderStats(){
-  var el=document.getElementById('stats-list');
-  if(!savedHistory.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">&#9678;</div>Sin datos todav&iacute;a.</div>';return;}
-  var names=[];savedHistory.forEach(function(g){g.players.forEach(function(p){if(names.indexOf(p.name)<0)names.push(p.name);});});
-  var stats=names.map(function(name){
-    var games=savedHistory.filter(function(g){return g.players.find(function(p){return p.name===name;});});
-    var wins=savedHistory.filter(function(g){return g.players[0].name===name;}).length;
-    var pts=games.map(function(g){var pl=g.players.find(function(p){return p.name===name;});return pl?pl.tot:0;});
-    var avg=pts.length?Math.round(pts.reduce(function(a,b){return a+b;},0)/pts.length):0;
-    var totalRounds2=games.reduce(function(a,g){return a+g.rounds;},0);
-    var talmutWins=games.reduce(function(a,g){var pl=g.players.find(function(p){return p.name===name;});return a+(pl&&pl.roundWins?pl.roundWins:0);},0);
-    var talmutPct=totalRounds2>0?Math.round(talmutWins/totalRounds2*100):0;
-    return{name:name,games:games.length,wins:wins,avg:avg,worst:Math.max.apply(null,pts),best:Math.min.apply(null,pts),talmutPct:talmutPct,talmutWins:talmutWins,totalRounds:totalRounds2};
-  }).sort(function(a,b){return b.wins-a.wins||a.avg-b.avg;});
-  el.innerHTML='<div class="stats-grid">'+stats.map(function(s){
-    return '<div class="stat-card">'
-      +'<div class="stat-name">'+s.name+'</div>'
-      +'<div class="stat-val">'+s.wins+'</div>'
-      +'<div class="stat-lbl">victorias &middot; '+s.games+' partidas</div>'
-      +'<div style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--gold-border);font-size:11px;color:var(--white-30);text-transform:uppercase;letter-spacing:1px">Rondas ganadas</div>'
-      +'<div style="font-size:22px;font-weight:500;color:var(--gold-bright);margin:2px 0">'+s.talmutPct+'%</div>'
-      +'<div style="font-size:10px;color:var(--white-30)">'+s.talmutWins+' de '+s.totalRounds+' rondas</div>'
-      +'<div class="stat-row">'
-      +'<div class="stat-mini"><div class="stat-mini-val">'+s.avg+'</div><div class="stat-mini-lbl">media</div></div>'
-      +'<div class="stat-mini"><div class="stat-mini-val">'+s.best+'</div><div class="stat-mini-lbl">mejor</div></div>'
-      +'<div class="stat-mini"><div class="stat-mini-val">'+s.worst+'</div><div class="stat-mini-lbl">peor</div></div>'
-      +'</div></div>';
-  }).join('')+'</div>';
-}
-
-var FINGER_COLORS=['#E24B4A','#1D9E75','#D4A017','#185FA5','#993C1D','#534AB7','#0F6E56','#D4537E'];
-var fingerTouches={};var fingerPhase='idle';var fingerCountdown=null;var fingerTimer=null;var fingerWinner=null;
 
 function goFinger(){
   fingerTouches={};fingerPhase='idle';clearInterval(fingerCountdown);clearTimeout(fingerTimer);fingerWinner=null;
