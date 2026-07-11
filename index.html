@@ -147,6 +147,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
     <div class="home-title">TALMUT</div>
     <div class="home-motto">Hic ludus errorem punit</div>
     <div class="home-divider"></div>
+    <div id="home-counter" style="display:flex;gap:24px;margin-bottom:1.25rem;justify-content:center"></div>
     <div class="home-menu">
       <div class="menu-item menu-item-featured" onclick="go('s-setup','talmut')">
         <div class="menu-left">
@@ -233,7 +234,8 @@ tfoot td.td-winner{color:var(--gold-bright)}
     <div class="game-quote" id="game-quote"></div>
     <div class="table-outer"><table id="score-table"></table></div>
     <div class="section-label">Clasificaci&oacute;n en tiempo real</div>
-    <div class="totals-bar" id="totals-bar"></div>
+    <div id="live-ranking" style="margin-bottom:1rem"></div>
+    <div class="totals-bar" id="totals-bar" style="display:none"></div>
     <div class="btn-row">
       <button class="btn-ghost" onclick="confirmBack()">&#10005; Abandonar</button>
       <button class="btn-gold" onclick="triggerFinish()">Finalizar &#10003;</button>
@@ -424,6 +426,7 @@ function _renderScreen(id,mode){
   }
   if(id==='s-history')renderHistory();
   if(id==='s-stats')renderStats();
+  if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
 }
 
@@ -461,6 +464,24 @@ function toggleChip(name){
   });
   renderSelected();
 }
+
+function renderHomeCounter(){
+  var official=savedHistory.length;
+  var blue=JSON.parse(localStorage.getItem('tm_blue_count')||'0');
+  var el=document.getElementById('home-counter');
+  if(!el)return;
+  el.innerHTML=
+    '<div style="text-align:center">'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:26px;font-weight:500;color:var(--gold-bright)">'+official+'</div>'
+    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-top:2px">Oficiales</div>'
+    +'</div>'
+    +'<div style="width:1px;background:var(--gold-border)"></div>'
+    +'<div style="text-align:center">'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:26px;font-weight:500;color:#85B7EB">'+blue+'</div>'
+    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-top:2px">Blue Lagoon</div>'
+    +'</div>';
+}
+
 function renderChips(){var wrap=document.getElementById('preset-chips');wrap.innerHTML='';PRESET.forEach(function(n){var d=PRESET_DISPLAY[n]||n;var div=document.createElement('div');div.className='chip'+(selected.includes(n)?' selected':'');div.textContent=d;div.setAttribute('data-key',n);div.addEventListener('click',function(){toggleChip(this.getAttribute('data-key'));});wrap.appendChild(div);});}
 function renderSelected(){
   var customs=[document.getElementById('custom1').value.trim(),document.getElementById('custom2').value.trim()].filter(Boolean);
@@ -518,6 +539,23 @@ function updateTotals(){
   var totals=players.map(function(_,p){return scores[p].reduce(function(a,v){return a+(v===''?0:parseInt(v)||0);},0);});
   var min=Math.min.apply(null,totals);
   players.forEach(function(_,p){var el=document.getElementById('tot'+p);if(el){el.textContent=totals[p];el.className=totals[p]===min?'td-winner':'';}});
+  // Color cells: green for round winner (0), red for round loser (max)
+  for(var r=0;r<totalRounds;r++){
+    var rowVals=players.map(function(_,p){return scores[p][r]===''?null:parseInt(scores[p][r])||0;});
+    var filled=rowVals.every(function(v){return v!==null;});
+    if(filled){
+      var rowMin=Math.min.apply(null,rowVals);
+      var rowMax=Math.max.apply(null,rowVals);
+      players.forEach(function(_,p){
+        var cell=document.getElementById('c'+r+'_'+p);
+        if(cell){
+          if(rowVals[p]===rowMin){cell.style.background='rgba(39,128,50,0.25)';cell.style.color='#7ddb8a';cell.style.fontWeight='600';}
+          else if(rowVals[p]===rowMax&&rowMax!==rowMin){cell.style.background='rgba(180,40,40,0.2)';cell.style.color='#f07070';cell.style.fontWeight='600';}
+          else{cell.style.background='';cell.style.color='';cell.style.fontWeight='';}
+        }
+      });
+    }
+  }
   renderTotalsBar(totals);
   if(allFilled()){setTimeout(function(){showWinner(totals);},600);}
 }
@@ -525,10 +563,29 @@ function updateTotals(){
 function renderTotalsBar(totals){
   var players=window._players;
   var sorted=players.map(function(pl,p){return{name:pl.name,c:pl.c,tot:totals[p]};}).sort(function(a,b){return a.tot-b.tot;});
-  document.getElementById('totals-bar').innerHTML=sorted.map(function(t,i){
-    var leader=i===0;
-    return '<div class="total-row '+(leader?'leader':'')+'"><div class="total-name">'+(leader?'<span class="star">&#9733;</span> ':'')+t.name+'</div><div class="total-pts '+(leader?'leader-pts':'')+'">'+t.tot+'</div></div>';
+  var leader=sorted[0].tot;
+  var rows=sorted.map(function(t,i){
+    var gap=i===0?'-':(t.tot-leader>0?'+'+( t.tot-leader):t.tot-leader);
+    var rowBg=i===0?'rgba(184,134,11,0.12)':'rgba(255,255,255,0.03)';
+    var borderC=i===0?'rgba(184,134,11,0.6)':'rgba(255,255,255,0.07)';
+    var nameColor=i===0?'var(--gold-bright)':'var(--white)';
+    var ptsColor=i===0?'var(--gold-bright)':'rgba(255,255,255,0.6)';
+    var gapColor=i===0?'var(--gold)':'rgba(228,75,74,0.8)';
+    return '<tr style="border-top:0.5px solid '+borderC+';background:'+rowBg+'">'
+      +'<td style="padding:7px 10px;font-size:12px;color:rgba(255,255,255,0.3);width:24px;text-align:center">'+(i+1)+'</td>'
+      +'<td style="padding:7px 6px;font-size:14px;font-weight:500;color:'+nameColor+'">'+(i===0?'&#9733; ':'')+t.name+'</td>'
+      +'<td style="padding:7px 10px;font-size:15px;font-weight:500;color:'+ptsColor+';text-align:right">'+t.tot+'</td>'
+      +'<td style="padding:7px 10px;font-size:12px;color:'+gapColor+';text-align:right;width:44px">'+gap+'</td>'
+      +'</tr>';
   }).join('');
+  document.getElementById('live-ranking').innerHTML=
+    '<table style="width:100%;border-collapse:collapse;border:1px solid var(--gold-border);border-radius:10px;overflow:hidden">'
+    +'<thead><tr style="background:rgba(184,134,11,0.18)">'
+    +'<th style="padding:6px 10px;font-size:9px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;width:24px">#</th>'
+    +'<th style="padding:6px 6px;font-size:9px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;text-align:left">Jugador</th>'
+    +'<th style="padding:6px 10px;font-size:9px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;text-align:right">Pts</th>'
+    +'<th style="padding:6px 10px;font-size:9px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;text-align:right">Dif</th>'
+    +'</tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function triggerFinish(){
@@ -569,8 +626,9 @@ function showCelebration(winner,ranked){
   document.getElementById('cel-sub').textContent='HIC LUDUS ERROREM PUNIT';
   document.getElementById('cel-ranking').innerHTML=ranked.map(function(p,i){return '<div class="total-row '+(i===0?'leader':'')+'"><div class="total-name">'+(i===0?'<span class="star">&#9733;</span> ':'')+p.name+'</div><div class="total-pts '+(i===0?'leader-pts':'')+'">'+p.tot+' pts</div></div>';}).join('');
   var btn=document.getElementById('cel-btn');btn.textContent='Nueva partida';btn.onclick=function(){go('s-home');};
+  if(gameMode==='blue'){var _bc=parseInt(localStorage.getItem('tm_blue_count')||'0')+1;localStorage.setItem('tm_blue_count',_bc);}
   if(gameMode==='talmut'){
-    savedHistory.push({date:new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),players:ranked.map(function(t){return{name:t.name,tot:t.tot};}),rounds:totalRounds});
+    var _roundWins=window._players.map(function(_,p){var wins=0;for(var r=0;r<totalRounds;r++){var roundTots=window._players.map(function(_,pp){return scores[pp][r]===''?999:parseInt(scores[pp][r])||0;});var minR=Math.min.apply(null,roundTots);if(roundTots[p]===minR&&minR<999)wins++;}return wins;});savedHistory.push({date:new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),players:ranked.map(function(t){var pidx=window._players.findIndex(function(pl){return pl.name===t.name;});return{name:t.name,tot:t.tot,roundWins:pidx>=0?_roundWins[pidx]:0};}),rounds:totalRounds});
     localStorage.setItem('tm_v3_hist',JSON.stringify(savedHistory));
   }
   launchConfetti();go('s-celebration');
@@ -593,6 +651,25 @@ function confirmBack(){if(confirm('Abandonar la partida? Se perder\u00e1n los da
 function renderHistory(){
   var el=document.getElementById('history-list');
   if(!savedHistory.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">&#127942;</div>A&uacute;n no hay partidas oficiales.</div>';return;}
+  // Best and worst individual scores across all history
+  var allScores=[];
+  savedHistory.forEach(function(g){g.players.forEach(function(p){allScores.push({name:p.name,tot:p.tot,date:g.date});});});
+  var best=allScores.reduce(function(a,b){return a.tot<=b.tot?a:b;},allScores[0]);
+  var worst=allScores.reduce(function(a,b){return a.tot>=b.tot?a:b;},allScores[0]);
+  var recordsHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem">'
+    +'<div style="background:rgba(39,128,50,0.15);border:1px solid rgba(39,128,50,0.4);border-radius:var(--r);padding:10px 12px;text-align:center">'
+    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(125,219,138,0.7);margin-bottom:4px">&#127942; Mejor partida</div>'
+    +'<div style="font-size:22px;font-weight:500;color:#7ddb8a">'+best.tot+' pts</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px">'+best.name+'</div>'
+    +'<div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px">'+best.date+'</div>'
+    +'</div>'
+    +'<div style="background:rgba(180,40,40,0.15);border:1px solid rgba(180,40,40,0.4);border-radius:var(--r);padding:10px 12px;text-align:center">'
+    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(240,112,112,0.7);margin-bottom:4px">&#128293; Peor partida</div>'
+    +'<div style="font-size:22px;font-weight:500;color:#f07070">'+worst.tot+' pts</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px">'+worst.name+'</div>'
+    +'<div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px">'+worst.date+'</div>'
+    +'</div>'
+    +'</div>';
   var names=[];
   savedHistory.forEach(function(g){g.players.forEach(function(p){if(names.indexOf(p.name)<0)names.push(p.name);});});
   var ranking=names.map(function(name){
@@ -612,7 +689,7 @@ function renderHistory(){
 
   var gameRows=[].concat(savedHistory).reverse().map(function(g){return '<div class="history-item"><div class="history-date">'+g.date+'</div><div class="history-winner"><span style="color:var(--gold)">&#9734;</span> '+g.players[0].name+' &mdash; '+g.players[0].tot+' pts</div><div class="history-detail">'+g.players.slice(1).map(function(p){return p.name+' '+p.tot;}).join(' &middot; ')+'</div></div>';}).join('');
 
-  el.innerHTML=tableHTML+'<div style="font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Partidas jugadas</div>'+gameRows;
+  el.innerHTML=recordsHTML+tableHTML+'<div style="font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Partidas jugadas</div>'+gameRows;
 }
 
 function renderStats(){
@@ -622,11 +699,27 @@ function renderStats(){
   var stats=names.map(function(name){
     var games=savedHistory.filter(function(g){return g.players.find(function(p){return p.name===name;});});
     var wins=savedHistory.filter(function(g){return g.players[0].name===name;}).length;
-    var pts=games.map(function(g){return g.players.find(function(p){return p.name===name;})?g.players.find(function(p){return p.name===name;}).tot:0;});
+    var pts=games.map(function(g){var pl=g.players.find(function(p){return p.name===name;});return pl?pl.tot:0;});
     var avg=pts.length?Math.round(pts.reduce(function(a,b){return a+b;},0)/pts.length):0;
-    return{name:name,games:games.length,wins:wins,avg:avg,worst:Math.max.apply(null,pts),best:Math.min.apply(null,pts)};
+    var totalRounds2=games.reduce(function(a,g){return a+g.rounds;},0);
+    var talmutWins=games.reduce(function(a,g){var pl=g.players.find(function(p){return p.name===name;});return a+(pl&&pl.roundWins?pl.roundWins:0);},0);
+    var talmutPct=totalRounds2>0?Math.round(talmutWins/totalRounds2*100):0;
+    return{name:name,games:games.length,wins:wins,avg:avg,worst:Math.max.apply(null,pts),best:Math.min.apply(null,pts),talmutPct:talmutPct,talmutWins:talmutWins,totalRounds:totalRounds2};
   }).sort(function(a,b){return b.wins-a.wins||a.avg-b.avg;});
-  el.innerHTML='<div class="stats-grid">'+stats.map(function(s){return '<div class="stat-card"><div class="stat-name">'+s.name+'</div><div class="stat-val">'+s.wins+'</div><div class="stat-lbl">victorias &middot; '+s.games+' partidas</div><div class="stat-row"><div class="stat-mini"><div class="stat-mini-val">'+s.avg+'</div><div class="stat-mini-lbl">media</div></div><div class="stat-mini"><div class="stat-mini-val">'+s.best+'</div><div class="stat-mini-lbl">mejor</div></div><div class="stat-mini"><div class="stat-mini-val">'+s.worst+'</div><div class="stat-mini-lbl">peor</div></div></div></div>';}).join('')+'</div>';
+  el.innerHTML='<div class="stats-grid">'+stats.map(function(s){
+    return '<div class="stat-card">'
+      +'<div class="stat-name">'+s.name+'</div>'
+      +'<div class="stat-val">'+s.wins+'</div>'
+      +'<div class="stat-lbl">victorias &middot; '+s.games+' partidas</div>'
+      +'<div style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--gold-border);font-size:11px;color:var(--white-30);text-transform:uppercase;letter-spacing:1px">Rondas ganadas</div>'
+      +'<div style="font-size:22px;font-weight:500;color:var(--gold-bright);margin:2px 0">'+s.talmutPct+'%</div>'
+      +'<div style="font-size:10px;color:var(--white-30)">'+s.talmutWins+' de '+s.totalRounds+' rondas</div>'
+      +'<div class="stat-row">'
+      +'<div class="stat-mini"><div class="stat-mini-val">'+s.avg+'</div><div class="stat-mini-lbl">media</div></div>'
+      +'<div class="stat-mini"><div class="stat-mini-val">'+s.best+'</div><div class="stat-mini-lbl">mejor</div></div>'
+      +'<div class="stat-mini"><div class="stat-mini-val">'+s.worst+'</div><div class="stat-mini-lbl">peor</div></div>'
+      +'</div></div>';
+  }).join('')+'</div>';
 }
 
 var FINGER_COLORS=['#E24B4A','#1D9E75','#D4A017','#185FA5','#993C1D','#534AB7','#0F6E56','#D4537E'];
@@ -697,8 +790,12 @@ function pickFingerWinner(){
   if(!keys.length){document.getElementById('finger-msg').textContent='¡Nadie puso el dedo!';document.getElementById('finger-sub').textContent='';setTimeout(resetFinger,2000);return;}
   fingerWinner=keys[Math.floor(Math.random()*keys.length)];
   renderFingerDots();
-  document.getElementById('finger-msg').textContent='¡Empieza!';
-  document.getElementById('finger-sub').textContent='HIC LUDUS ERROREM PUNIT';
+  var _fm=document.getElementById('finger-msg');
+  _fm.style.fontFamily="'Cormorant Garamond',serif";
+  _fm.style.fontSize='22px';
+  _fm.style.fontWeight='400';
+  _fm.textContent='';
+  document.getElementById('finger-sub').textContent='';
   document.getElementById('finger-overlay').style.pointerEvents='none';
   var btn=document.getElementById('finger-start-btn');
   btn.textContent='Continuar a la partida';
@@ -777,7 +874,7 @@ async function sendChat(){
   addChatTyping();
   try {
     var messages = chatHistory.slice(-6);
-    var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AQ.Ab8RN6LmQj1WpNRbA4On7stOr3i8Ureld89s9cLMAHtsfQYv8w', {
+    var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAQ.Ab8RN6JtMahoJW7f8nIsZ9QZ83CKktBx53Xi_ixlKg1G6dalQA', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
