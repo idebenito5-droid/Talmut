@@ -777,7 +777,7 @@ async function sendChat(){
   addChatTyping();
   try {
     var messages = chatHistory.slice(-6);
-    var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAQ.Ab8RN6JtMahoJW7f8nIsZ9QZ83CKktBx53Xi_ixlKg1G6dalQA', {
+    var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AQ.Ab8RN6LmQj1WpNRbA4On7stOr3i8Ureld89s9cLMAHtsfQYv8w', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
