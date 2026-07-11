@@ -147,7 +147,6 @@ tfoot td.td-winner{color:var(--gold-bright)}
     <div class="home-title">TALMUT</div>
     <div class="home-motto">Hic ludus errorem punit</div>
     <div class="home-divider"></div>
-    <div id="home-counter" style="display:flex;gap:24px;margin-bottom:1.25rem;justify-content:center"></div>
     <div class="home-menu">
       <div class="menu-item menu-item-featured" onclick="go('s-setup','talmut')">
         <div class="menu-left">
@@ -179,7 +178,14 @@ tfoot td.td-winner{color:var(--gold-bright)}
           <div><div class="menu-label">La Maltesa</div><div class="menu-desc">Constituci&oacute;n oficial del juego</div></div>
         </div><span class="menu-arrow">&#8250;</span>
       </div>
+      <div class="menu-item" onclick="go('s-stats-table')">
+        <div class="menu-left">
+          <div class="menu-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px">&#127918;</div>
+          <div><div class="menu-label">Hall of Fame</div><div class="menu-desc">Tabla de estad&iacute;sticas completa</div></div>
+        </div><span class="menu-arrow">&#8250;</span>
+      </div>
     </div>
+    <div id="home-odometer" style="margin-top:1.5rem;text-align:center"><span id="odo-text" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:3px;color:rgba(255,255,255,0.2)">cargando...</span></div>
   </div>
 </div>
 
@@ -426,6 +432,7 @@ function _renderScreen(id,mode){
   }
   if(id==='s-history')renderHistory();
   if(id==='s-stats')renderStats();
+  if(id==='s-stats-table')renderStatsTable();
   if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
 }
@@ -465,21 +472,128 @@ function toggleChip(name){
   renderSelected();
 }
 
+
+
 function renderHomeCounter(){
-  var official=savedHistory.length;
-  var blue=JSON.parse(localStorage.getItem('tm_blue_count')||'0');
-  var el=document.getElementById('home-counter');
-  if(!el)return;
-  el.innerHTML=
-    '<div style="text-align:center">'
-    +'<div style="font-family:Cormorant Garamond,serif;font-size:26px;font-weight:500;color:var(--gold-bright)">'+official+'</div>'
-    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-top:2px">Oficiales</div>'
-    +'</div>'
-    +'<div style="width:1px;background:var(--gold-border)"></div>'
-    +'<div style="text-align:center">'
-    +'<div style="font-family:Cormorant Garamond,serif;font-size:26px;font-weight:500;color:#85B7EB">'+blue+'</div>'
-    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-top:2px">Blue Lagoon</div>'
-    +'</div>';
+  var official = savedHistory.length;
+  var blue = parseInt(localStorage.getItem('tm_blue_count')||'0');
+  var total = official + blue;
+  var odo = document.getElementById('odo-text');
+  if(!odo) return;
+  var padded = String(total).padStart(4,'0');
+  var offStr = String(official).padStart(4,'0');
+  var blStr = String(blue).padStart(3,'0');
+  odo.innerHTML =
+    '<span style="color:rgba(255,255,255,0.15)">' + padded.slice(0, padded.length - String(total).length) + '</span>' +
+    '<span style="color:var(--gold-bright);font-size:15px">' + String(total) + '</span>' +
+    '&nbsp;<span style="color:rgba(255,255,255,0.25);font-size:11px;letter-spacing:2px">partidas</span>' +
+    '<span style="color:rgba(255,255,255,0.12);margin:0 8px">|</span>' +
+    '<span style="color:#85B7EB;font-size:13px">' + official + '</span><span style="color:rgba(255,255,255,0.2);font-size:10px"> ofic</span>' +
+    '<span style="color:rgba(255,255,255,0.12);margin:0 6px">&middot;</span>' +
+    '<span style="color:rgba(133,183,235,0.6);font-size:13px">' + blue + '</span><span style="color:rgba(255,255,255,0.2);font-size:10px"> BL</span>';
+}
+
+function renderStatsTable(){
+  var el = document.getElementById('stats-table-content');
+  if(!el) return;
+  var PLAYERS = ['ADRIAN','ALEIX','ARNAU','EDU','NACHO','MARC'];
+  var DISPLAY = {ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'Nacho',MARC:'Marc'};
+
+  if(!savedHistory.length){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">&#127918;</div>A&uacute;n no hay partidas registradas.</div>';
+    return;
+  }
+
+  var stats = PLAYERS.map(function(key){
+    var name = DISPLAY[key];
+    var games = savedHistory.filter(function(g){return g.players.find(function(p){return p.name===name||p.name===key;});});
+    if(!games.length) return {name:name,games:0,wins:0,winPct:0,roundWins:0,roundWinPct:0,worstFinish:0,bestFinish:0,avg:0,best:'-',worst:'-',podiums:0};
+    var wins = games.filter(function(g){return g.players[0].name===name||g.players[0].name===key;}).length;
+    var pts = games.map(function(g){var pl=g.players.find(function(p){return p.name===name||p.name===key;});return pl?pl.tot:0;});
+    var positions = games.map(function(g){var idx=g.players.findIndex(function(p){return p.name===name||p.name===key;});return idx+1;});
+    var totalRoundsAll = games.reduce(function(a,g){return a+g.rounds;},0);
+    var rWins = games.reduce(function(a,g){var pl=g.players.find(function(p){return p.name===name||p.name===key;});return a+(pl&&pl.roundWins?pl.roundWins:0);},0);
+    var avg = Math.round(pts.reduce(function(a,b){return a+b;},0)/pts.length);
+    var worst_score = Math.max.apply(null,pts);
+    var best_score = Math.min.apply(null,pts);
+    var worstPos = Math.max.apply(null,positions);
+    var bestPos = Math.min.apply(null,positions);
+    var podiums = positions.filter(function(p){return p<=3;}).length;
+    var lastFive = games.slice(-5).map(function(g){
+      return g.players[0].name===name||g.players[0].name===key ? 'W' : 'L';
+    });
+    return {
+      name:name, games:games.length, wins:wins,
+      winPct: Math.round(wins/games.length*100),
+      roundWins:rWins, totalRounds:totalRoundsAll,
+      roundWinPct: totalRoundsAll>0?Math.round(rWins/totalRoundsAll*100):0,
+      worstFinish:worstPos, bestFinish:bestPos,
+      avg:avg, best:best_score, worst:worst_score,
+      podiums:podiums, lastFive:lastFive
+    };
+  }).sort(function(a,b){return a.name.localeCompare(b.name);});
+
+  var cols = [
+    {key:'name',     label:'Jugador'},
+    {key:'games',    label:'PJ'},
+    {key:'wins',     label:'V'},
+    {key:'winPct',   label:'%V', suffix:'%'},
+    {key:'podiums',  label:'Top3'},
+    {key:'roundWinPct', label:'%Rnd', suffix:'%'},
+    {key:'avg',      label:'Media'},
+    {key:'best',     label:'Mejor'},
+    {key:'worst',    label:'Peor'},
+    {key:'bestFinish', label:'#Mejor'},
+    {key:'worstFinish',label:'#Peor'},
+    {key:'lastFive', label:'Últ.5'},
+  ];
+
+  var gold = 'var(--gold-border-strong)';
+  var thead = '<thead><tr style="background:rgba(184,134,11,0.2);border-bottom:1px solid '+gold+'">'
+    + cols.map(function(col){
+        return '<th style="padding:7px 6px;font-size:9px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap;text-align:'+(col.key==='name'?'left':'center')+'">'
+          + col.label + '</th>';
+      }).join('') + '</tr></thead>';
+
+  var tbody = '<tbody>' + stats.map(function(s,si){
+    var bg = si%2===0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+    return '<tr style="border-top:0.5px solid rgba(184,134,11,0.1);background:'+bg+'">'
+      + cols.map(function(col){
+          var val = s[col.key];
+          var align = col.key==='name' ? 'left' : 'center';
+          var extra = '';
+          if(col.key==='name'){
+            return '<td style="padding:8px 6px;font-size:13px;font-weight:500;color:var(--white);white-space:nowrap">'+val+'</td>';
+          }
+          if(col.key==='lastFive'){
+            var dots = (val||[]).map(function(r){
+              return '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:'+(r==='W'?'#7ddb8a':'#f07070')+'"></span>';
+            }).join('');
+            return '<td style="padding:8px 6px;text-align:center">'+dots+'</td>';
+          }
+          if(col.key==='winPct'||col.key==='roundWinPct'){
+            var clr = val>=50?'#7ddb8a':val>=30?'var(--gold-bright)':'rgba(255,255,255,0.5)';
+            return '<td style="padding:8px 6px;font-size:12px;font-weight:500;color:'+clr+';text-align:center">'+(val||0)+'%</td>';
+          }
+          if(col.key==='best'){
+            return '<td style="padding:8px 6px;font-size:12px;color:#7ddb8a;text-align:center">'+val+'</td>';
+          }
+          if(col.key==='worst'){
+            return '<td style="padding:8px 6px;font-size:12px;color:#f07070;text-align:center">'+val+'</td>';
+          }
+          if(col.key==='wins'){
+            return '<td style="padding:8px 6px;font-size:13px;font-weight:500;color:var(--gold-bright);text-align:center">'+val+'</td>';
+          }
+          return '<td style="padding:8px 6px;font-size:12px;color:rgba(255,255,255,0.55);text-align:center">'+(val!==undefined?val:'-')+'</td>';
+        }).join('')
+      + '</tr>';
+  }).join('') + '</tbody>';
+
+  el.innerHTML = '<div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">PJ=Partidas · V=Victorias · %V=Ratio vic. · Top3=Podios · %Rnd=Rondas ganadas · #Mejor/#Peor=Posición · Últ.5=últimas 5</div>'
+    + '<div style="overflow-x:auto;border:1px solid var(--gold-border-strong);border-radius:10px">'
+    + '<table style="width:100%;border-collapse:collapse;min-width:520px">'
+    + thead + tbody
+    + '</table></div>';
 }
 
 function renderChips(){var wrap=document.getElementById('preset-chips');wrap.innerHTML='';PRESET.forEach(function(n){var d=PRESET_DISPLAY[n]||n;var div=document.createElement('div');div.className='chip'+(selected.includes(n)?' selected':'');div.textContent=d;div.setAttribute('data-key',n);div.addEventListener('click',function(){toggleChip(this.getAttribute('data-key'));});wrap.appendChild(div);});}
@@ -948,6 +1062,17 @@ function startVoiceInput(){
     <input id="chat-input" type="text" placeholder="Pregunta sobre las reglas..." style="flex:1;background:rgba(255,255,255,0.06);border:0.5px solid var(--gold-border);border-radius:20px;padding:8px 14px;color:var(--white);font-size:13px;font-family:Inter,sans-serif;outline:none" onkeydown="if(event.key==='Enter')sendChat()">
     <button id="chat-mic-btn" onclick="startVoiceInput()" title="Hablar" style="width:36px;height:36px;background:rgba(255,255,255,0.06);border:0.5px solid var(--gold-border);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;-webkit-tap-highlight-color:transparent">&#127908;</button>
     <button onclick="sendChat()" style="width:36px;height:36px;background:var(--gold);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;-webkit-tap-highlight-color:transparent">&#8593;</button>
+  </div>
+</div>
+
+
+<div class="screen" id="s-stats-table">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
+    <div class="page-header-title">Estadísticas</div>
+  </div>
+  <div class="content content-scroll" style="padding:0.75rem">
+    <div id="stats-table-content"></div>
   </div>
 </div>
 
