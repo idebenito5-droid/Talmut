@@ -32,7 +32,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 .talmut-card{width:100%;display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;background:rgba(0,0,0,0.25);border:1px solid var(--gbord);border-radius:var(--r);cursor:pointer;transition:background .15s;}
 .talmut-card:active{background:rgba(184,134,11,0.1);}
 .card-icon{width:44px;height:44px;object-fit:contain;}
-.card-label{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:3px;color:#fff;}
+.card-label{font-family:'Inter',sans-serif;font-size:17px;font-weight:600;letter-spacing:0;color:#fff;}
 .card-desc{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;}
 .card-arrow{color:var(--gold2);font-size:20px;margin-left:auto;}
 
@@ -76,11 +76,11 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 .table-scroll{overflow-x:auto;flex-shrink:0;}
 .table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
 .score-table{border-collapse:collapse;min-width:100%;}
-.score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:3px 2px;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;}
-.score-table th:first-child{color:var(--w30);width:22px;font-size:9px;}
+.score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:5px 0;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;max-width:44px;}
+.score-table th:first-child{color:var(--w30);width:20px;font-size:9px;}
 .score-table td{border:.5px solid rgba(184,134,11,0.15);padding:0;text-align:center;}
 .score-table td:first-child{font-size:9px;color:var(--w30);padding:3px 3px;}
-.score-cell{width:100%;background:transparent;color:var(--w);font-size:11px;text-align:center;padding:3px 1px;font-family:'Inter',sans-serif;cursor:pointer;display:block;min-width:30px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
+.score-cell{width:100%;background:transparent;color:var(--w);font-size:12px;text-align:center;padding:10px 0;font-family:'Inter',sans-serif;cursor:pointer;display:block;max-width:44px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
 .score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;}
 .score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;}
 .score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;}
@@ -115,8 +115,8 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
   <div class="home-menu">
     <button class="talmut-card" onclick="openSetup()">
       <img src="Talmut.png" alt="Talmut" class="card-icon">
-      <div style="flex:1">
-        <div class="card-label">TALMUT</div>
+      <div style="flex:1;text-align:left">
+        <div class="card-label">Talmut</div>
         <div class="card-desc">Partida oficial · 10 rondas</div>
       </div>
       <span class="card-arrow">›</span>
