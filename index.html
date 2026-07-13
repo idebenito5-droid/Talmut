@@ -13,8 +13,8 @@
   --navy:#0B1F3A;--gold:#B8860B;--gold2:#D4A017;
   --gbord:rgba(184,134,11,0.35);--gbord2:rgba(184,134,11,0.6);
   --w:#fff;--w60:rgba(255,255,255,0.6);--w30:rgba(255,255,255,0.3);--w10:rgba(255,255,255,0.08);
-  --green:rgba(39,174,96,0.28);--greentext:#7ddb8a;
-  --red:rgba(192,57,43,0.28);--redtext:#f07070;
+  --green:rgba(39,174,96,0.14);--greentext:rgba(125,219,138,0.85);
+  --red:rgba(192,57,43,0.14);--redtext:rgba(240,112,112,0.85);
   --r:12px;
 }
 html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font-family:'Inter',sans-serif;}
@@ -74,18 +74,18 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 
 /* Score table */
 .table-scroll{overflow-x:auto;flex-shrink:0;}
-.table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
-.score-table{table-layout:fixed;}
+.table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;justify-content:center;}
+.score-table{table-layout:fixed;width:auto;border-collapse:collapse;}
 .score-table{border-collapse:collapse;min-width:100%;}
 .score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:5px 0;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;max-width:44px;}
-.score-table th:first-child{color:var(--w30);width:26px;font-size:9px;}
-.score-table td{border:.5px solid rgba(184,134,11,0.15);padding:0;text-align:center;}
-.score-table td:first-child{font-size:9px;color:var(--w30);padding:3px 3px;}
-.score-cell{width:100%;background:transparent;color:var(--w);font-size:13px;text-align:center;padding:13px 0;font-family:'Inter',sans-serif;cursor:pointer;display:block;height:38px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
+.score-table th:first-child{color:var(--w30);width:26px;font-size:9px;border:1px solid var(--gbord2);}
+.score-table td{border:1px solid var(--gbord2);padding:0;text-align:center;width:44px;}
+.score-table td:first-child{font-size:9px;color:var(--w30);padding:0;width:26px;border:1px solid var(--gbord2);}
+.score-cell{width:44px;height:33px;background:transparent;color:var(--w);font-size:12px;text-align:center;padding:0;line-height:33px;font-family:'Inter',sans-serif;cursor:pointer;display:block;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
 .score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;}
 .score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;}
 .score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;}
-.tot-row td{padding:10px 0;font-weight:600;font-size:12px;text-align:center;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
+.tot-row td{height:33px;line-height:33px;padding:0;font-weight:600;font-size:12px;text-align:center;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
 .tot-row td.leader{color:var(--gold2);}
 
 /* Ranking */
@@ -566,7 +566,7 @@ function buildGameTable(){
 
   // Cabecera
   var head='<thead><tr><th>#</th>';
-  gamePlayers.forEach(function(p){ head+='<th>'+p.name+'</th>'; });
+  gamePlayers.forEach(function(p){ head+='<th title="'+p.name+'">'+p.name.slice(0,4)+'</th>'; });
   head+='</tr></thead>';
 
   // Game title
