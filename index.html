@@ -459,7 +459,7 @@ function _renderScreen(id,mode){
   if(id==='s-history')renderHistory();
   
   if(id==='s-stats-table'){renderStatsTable();startHofMusic();}
-  else{stopHofMusic();}
+  else if(id!=='s-stats-table'){stopHofMusic();}
   if(id==='s-driving-menu'){renderDrivingMenu();}
   if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
@@ -950,14 +950,12 @@ function pickFingerWinner(){
   btn.onclick=function(){
     var arena=document.getElementById('finger-arena');
     arena.removeEventListener('touchstart',onFingerTouch);arena.removeEventListener('touchmove',onFingerMove);arena.removeEventListener('touchend',onFingerEnd);arena.removeEventListener('touchcancel',onFingerEnd);
+    buildTable();
+    go('s-game');
     var introAudio=new Audio('solo_quede_uno.mp3');
     introAudio.volume=0.8;
     introAudio.play().catch(function(){});
-    go('s-game');
-    setTimeout(function(){
-      buildTable();
-      startQuoteRotation();
-    },50);
+    setTimeout(startQuoteRotation,100);
   };
 }
 
