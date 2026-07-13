@@ -147,7 +147,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       </div>
       <span class="card-arrow" style="color:var(--w30)">›</span>
     </button>
-    <button class="talmut-card" onclick="openHof()" style="margin-top:.6rem;border-color:rgba(30,80,160,0.8)">
+    <button class="talmut-card" onclick="openHof()" style="margin-top:.6rem;border-color:#1a2d6e;box-shadow:0 0 0 .5px rgba(20,45,110,0.5)">
       <div class="card-icon" style="font-size:22px;font-weight:700;color:var(--gold2);font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center">42</div>
       <div style="flex:1;text-align:left">
         <div class="card-label">Hall of Fame</div>
@@ -155,7 +155,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       </div>
       <span class="card-arrow">›</span>
     </button>
-    <button class="talmut-card" onclick="openConstitution()" style="margin-top:.6rem;border-color:rgba(140,20,40,0.8)">
+    <button class="talmut-card" onclick="openConstitution()" style="margin-top:.6rem;border-color:#6b1020;box-shadow:0 0 0 .5px rgba(107,16,32,0.4)">
       <div class="card-icon" style="font-size:26px;display:flex;align-items:center;justify-content:center">📜</div>
       <div style="flex:1;text-align:left">
         <div class="card-label">La Maltesa</div>
@@ -305,6 +305,7 @@ function showScreen(id) {
   // Stop any playing audio when changing screen
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   if (id !== 's-hof') { stopHofMusic(); }
+  if (id !== 's-celebration') { stopConfetti(); }
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   screenHistory.push(id);
@@ -700,6 +701,16 @@ function updateTable(){
     }
   }
 
+  // Check all filled
+  var allFilled2=true;
+  for(var rr=0;rr<(scoreValues[0]?scoreValues[0].length:TOTAL_ROUNDS);rr++){
+    for(var pp=0;pp<gamePlayers.length;pp++){
+      if(!scoreValues[pp][rr]&&scoreValues[pp][rr]!=='0'){allFilled2=false;break;}
+    }
+    if(!allFilled2) break;
+  }
+  if(allFilled2 && gamePlayers.length>0){ setTimeout(showCelebration, 800); return; }
+
   // Ranking
   var ranked=totals.map(function(t,i){return{name:gamePlayers[i].name,tot:t};}).sort(function(a,b){return a.tot-b.tot;});
   var leader=ranked[0].tot;
@@ -916,6 +927,136 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/Talmut/sw.js').catch(function(){});
   });
 }
+
+// ═══════ CELEBRACIÓN ═══════
+var _confettiAnim = null;
+
+function showCelebration() {
+  var n = gamePlayers.length;
+  var rounds = scoreValues[0].length;
+
+  // Compute totals and per-player stats
+  var stats = gamePlayers.map(function(p, pi) {
+    var roundScores = scoreValues[pi].map(function(v){ return parseInt(v)||0; });
+    var total = roundScores.reduce(function(a,b){return a+b;},0);
+    var rounWins = 0;
+    for (var r=0; r<rounds; r++) {
+      var rowVals = gamePlayers.map(function(_,pj){ return parseInt(scoreValues[pj][r])||0; });
+      var minV = Math.min.apply(null, rowVals);
+      if ((parseInt(scoreValues[pi][r])||0) === minV) rounWins++;
+    }
+    var best  = Math.min.apply(null, roundScores);
+    var worst = Math.max.apply(null, roundScores);
+    return { name: p.name, total: total, rounWins: rounWins, best: best, worst: worst };
+  });
+
+  var sorted = stats.slice().sort(function(a,b){ return a.total - b.total; });
+  var winner = sorted[0];
+
+  // Fill screen
+  document.getElementById('cel-winner-name').textContent = winner.name;
+  document.getElementById('cel-winner-pts').textContent  = winner.total + ' puntos totales';
+
+  // Ranking
+  document.getElementById('cel-ranking').innerHTML = sorted.map(function(p, i) {
+    var isFirst = i === 0;
+    return '<div style="display:flex;align-items:center;gap:10px;padding:.5rem .75rem;'
+      + 'background:' + (isFirst ? 'rgba(184,134,11,0.12)' : 'rgba(255,255,255,0.03)') + ';'
+      + 'border:.5px solid ' + (isFirst ? 'var(--gbord)' : 'rgba(255,255,255,0.06)') + ';'
+      + 'border-radius:10px;margin-bottom:.3rem">'
+      + '<div style="font-size:13px;color:var(--w30);width:18px">' + (i+1) + '</div>'
+      + '<div style="flex:1;text-align:left;font-size:14px;font-weight:' + (isFirst?'600':'400') + ';color:' + (isFirst?'var(--gold2)':'var(--w)') + '">'
+      + (isFirst ? '🏆 ' : '') + p.name + '</div>'
+      + '<div style="font-size:14px;color:' + (isFirst?'var(--gold2)':'var(--w60)') + ';font-weight:' + (isFirst?'600':'400') + '">' + p.total + ' pts</div>'
+      + '</div>';
+  }).join('');
+
+  // Stats per player
+  document.getElementById('cel-stats').innerHTML = stats.map(function(p) {
+    return '<div style="background:rgba(255,255,255,0.03);border:.5px solid rgba(255,255,255,0.08);border-radius:10px;padding:.5rem .6rem;text-align:left">'
+      + '<div style="font-size:12px;font-weight:500;color:var(--w);margin-bottom:.3rem">' + p.name + '</div>'
+      + '<div style="display:flex;gap:8px">'
+      + '<div style="text-align:center"><div style="font-size:14px;font-weight:600;color:var(--gold2)">' + p.rounWins + '</div><div style="font-size:8px;color:var(--w30)">rondas</div></div>'
+      + '<div style="text-align:center"><div style="font-size:14px;color:rgba(125,219,138,0.9)">' + p.best + '</div><div style="font-size:8px;color:var(--w30)">mejor</div></div>'
+      + '<div style="text-align:center"><div style="font-size:14px;color:rgba(240,112,112,0.8)">' + p.worst + '</div><div style="font-size:8px;color:var(--w30)">peor</div></div>'
+      + '<div style="text-align:center"><div style="font-size:14px;color:var(--w60)">' + p.total + '</div><div style="font-size:8px;color:var(--w30)">total</div></div>'
+      + '</div></div>';
+  }).join('');
+
+  // Save to history
+  if (gameMode === 'talmut') {
+    var hist = JSON.parse(localStorage.getItem('tm_history') || '[]');
+    var now  = new Date();
+    hist.push({
+      date: now.toLocaleDateString('es-ES', {weekday:'short',day:'numeric',month:'short',year:'numeric'}),
+      duration: Math.round((now.getTime() - (window._gameStart||now.getTime())) / 60000),
+      players: sorted.map(function(p){ return {name:p.name, total:p.total}; }),
+      rounds: rounds,
+      official: true
+    });
+    localStorage.setItem('tm_history', JSON.stringify(hist));
+  }
+
+  showScreen('s-celebration');
+  startConfetti();
+}
+
+function finishGame() {
+  stopConfetti();
+  screenHistory = ['s-home'];
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('s-home').classList.add('active');
+  document.getElementById('numpad').style.display = 'none';
+  activeCell = null;
+}
+
+function startConfetti() {
+  var canvas = document.getElementById('confetti-canvas');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var colors = ['#D4A017','#B8860B','#FFD700','#F0C040','#ffffff','#E8C86A'];
+
+  for (var i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: 4 + Math.random() * 6,
+      h: 8 + Math.random() * 10,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speed: 1.5 + Math.random() * 2.5,
+      angle: Math.random() * 360,
+      spin: (Math.random() - 0.5) * 4,
+      opacity: 0.7 + Math.random() * 0.3
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(function(p) {
+      p.y     += p.speed;
+      p.angle += p.spin;
+      if (p.y > canvas.height) { p.y = -20; p.x = Math.random() * canvas.width; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle * Math.PI / 180);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle   = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    _confettiAnim = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function stopConfetti() {
+  if (_confettiAnim) { cancelAnimationFrame(_confettiAnim); _confettiAnim = null; }
+  var canvas = document.getElementById('confetti-canvas');
+  if (canvas) { var ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); }
+}
+
 </script>
 
 <!-- HISTÓRICO -->
@@ -1113,6 +1254,32 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 </div>
+</div>
+
+
+<!-- CELEBRACIÓN -->
+<div class="screen" id="s-celebration">
+  <canvas id="confetti-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:0"></canvas>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;position:relative;z-index:1;overflow-y:auto">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:3px;color:var(--gold2);margin-bottom:.4rem">Partida finalizada</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:rgba(255,255,255,0.7);margin-bottom:.1rem">¡ENHORABUENA!</div>
+    <div id="cel-winner-name" style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:var(--gold2);line-height:1.1;margin-bottom:.2rem"></div>
+    <div id="cel-winner-pts" style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:1.25rem;letter-spacing:1px"></div>
+
+    <!-- Clasificación -->
+    <div style="width:100%;max-width:340px;margin-bottom:1rem">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin-bottom:.5rem">Clasificación final</div>
+      <div id="cel-ranking" style="width:100%"></div>
+    </div>
+
+    <!-- Stats por jugador -->
+    <div style="width:100%;max-width:340px;margin-bottom:1.25rem">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin-bottom:.5rem">Estadísticas de la partida</div>
+      <div id="cel-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem"></div>
+    </div>
+
+    <button onclick="finishGame()" style="padding:.85rem 2.5rem;background:var(--gold);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;min-height:52px">Volver al inicio</button>
+  </div>
 </div>
 
 </body>
