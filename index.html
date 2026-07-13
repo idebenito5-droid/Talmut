@@ -765,13 +765,19 @@ function openHistory() {
   });
   var players = Object.values(playerMap).sort(function(a,b){ return a.name.localeCompare(b.name); });
   var cardHTML = players.map(function(p) {
-    return '<div style="background:rgba(184,134,11,0.07);border:.5px solid var(--gbord);border-radius:14px;padding:.75rem .5rem;text-align:center;aspect-ratio:1">'
-      + '<div style="font-size:13px;font-weight:500;color:var(--w);margin-bottom:.3rem">' + p.name + '</div>'
-      + '<div style="font-size:22px;font-weight:600;color:var(--gold2);line-height:1">' + p.wins + '</div>'
-      + '<div style="font-size:9px;color:var(--w30);margin-top:.3rem">' + (p.games===1?'1 partida':p.games+' partidas') + '</div>'
+    return '<div style="'
+      + 'width:90px;height:90px;'
+      + 'background:rgba(184,134,11,0.06);'
+      + 'border:.5px solid rgba(184,134,11,0.4);'
+      + 'border-radius:14px;'
+      + 'display:flex;flex-direction:column;align-items:center;justify-content:center;'
+      + 'text-align:center;flex-shrink:0;padding:.4rem">'
+      + '<div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.7);margin-bottom:.2rem;letter-spacing:.3px">' + p.name + '</div>'
+      + '<div style="font-size:26px;font-weight:700;color:var(--gold2);line-height:1.1">' + p.wins + '</div>'
+      + '<div style="font-size:9px;color:var(--w30);margin-top:.2rem">' + p.games + ' partidas</div>'
       + '</div>';
   }).join('');
-  document.getElementById('stat-cards').innerHTML = cardHTML || '<div style="color:var(--w30);font-size:13px">Sin datos aún</div>';
+  document.getElementById('stat-cards').innerHTML = cardHTML || '';
 
   // Lista de partidas
   var listHTML = official.slice().reverse().map(function(g) {
@@ -870,7 +876,7 @@ function openConstitution() {
   </div>
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.5rem .75rem .75rem">
     <!-- Stat cards -->
-    <div id="stat-cards" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1rem;margin-top:.25rem"></div>
+    <div id="stat-cards" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:1rem;margin-top:.25rem"></div>
     <!-- Separator -->
     <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">
       <div style="flex:1;height:1px;background:linear-gradient(to right,var(--gold2),transparent)"></div>
