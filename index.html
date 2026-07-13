@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Talmut</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,28 +70,28 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 
 /* ── GAME ── */
 .game-ph{display:flex;align-items:center;gap:10px;padding:.7rem 1rem;border-bottom:.5px solid var(--gbord);flex-shrink:0;}
-.game-body{flex:1;display:flex;flex-direction:column;padding:.6rem .75rem;overflow:hidden;gap:.5rem;justify-content:center;}
+.game-body{flex:1;display:flex;flex-direction:column;padding:.5rem .75rem 0;overflow:hidden;gap:.5rem;justify-content:center;align-items:stretch;}
 
 /* Score table */
 .table-scroll{overflow-x:auto;flex-shrink:0;}
-.table-scroll{border-radius:10px;overflow:hidden;border:.5px solid var(--gbord2);}
+.table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
 .score-table{border-collapse:collapse;min-width:100%;}
-.score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:4px 3px;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;}
+.score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:3px 2px;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;}
 .score-table th:first-child{color:var(--w30);width:22px;font-size:9px;}
 .score-table td{border:.5px solid rgba(184,134,11,0.15);padding:0;text-align:center;}
 .score-table td:first-child{font-size:9px;color:var(--w30);padding:3px 3px;}
-.score-cell{width:100%;background:transparent;color:var(--w);font-size:12px;text-align:center;padding:4px 2px;font-family:'Inter',sans-serif;cursor:pointer;display:block;min-width:34px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
+.score-cell{width:100%;background:transparent;color:var(--w);font-size:11px;text-align:center;padding:3px 1px;font-family:'Inter',sans-serif;cursor:pointer;display:block;min-width:30px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
 .score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;}
 .score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;}
 .score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;}
-.tot-row td{padding:4px 3px;font-weight:600;font-size:12px;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
+.tot-row td{padding:4px 2px;font-weight:600;font-size:11px;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
 .tot-row td.leader{color:var(--gold2);}
 
 /* Ranking */
 .rank-label{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin-bottom:.3rem;flex-shrink:0;}
-.rank-table{width:100%;border-collapse:collapse;border:.5px solid var(--gbord);border-radius:10px;overflow:hidden;flex-shrink:0;}
-.rank-table th{font-size:9px;color:var(--gold2);padding:5px 8px;text-transform:uppercase;letter-spacing:.5px;background:rgba(184,134,11,0.12);}
-.rank-table td{padding:5px 8px;font-size:13px;border-top:.5px solid rgba(184,134,11,0.08);}
+.rank-table{width:100%;border-collapse:collapse;border:.5px solid var(--gbord);border-radius:14px;overflow:hidden;flex-shrink:0;}
+.rank-table th{font-size:9px;color:var(--gold2);padding:4px 8px;text-transform:uppercase;letter-spacing:.5px;background:rgba(184,134,11,0.12);}
+.rank-table td{padding:4px 8px;font-size:12px;border-top:.5px solid rgba(184,134,11,0.08);}
 
 /* Custom keyboard */
 #numpad{position:absolute;bottom:0;left:0;right:0;z-index:50;background:#0D2240;border-top:1px solid var(--gbord2);border-radius:16px 16px 0 0;padding:.5rem .75rem .75rem;display:none;}
