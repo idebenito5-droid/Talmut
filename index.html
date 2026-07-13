@@ -70,22 +70,22 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 
 /* ── GAME ── */
 .game-ph{display:flex;align-items:center;gap:10px;padding:.7rem 1rem;border-bottom:.5px solid var(--gbord);flex-shrink:0;}
-.game-body{flex:1;display:flex;flex-direction:column;padding:.5rem .75rem 0;overflow:hidden;gap:.5rem;justify-content:center;align-items:stretch;}
+.game-body{flex:1;display:flex;flex-direction:column;padding:.4rem .75rem 0;overflow:hidden;gap:.4rem;justify-content:flex-start;align-items:stretch;}
 
 /* Score table */
 .table-scroll{overflow-x:auto;flex-shrink:0;}
-.table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;justify-content:center;}
-.score-table{table-layout:fixed;width:auto;border-collapse:collapse;}
+.table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.score-table{table-layout:fixed;width:100%;border-collapse:collapse;}
 .score-table{border-collapse:collapse;min-width:100%;}
 .score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:5px 0;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;max-width:44px;}
-.score-table th:first-child{color:var(--w30);width:26px;font-size:9px;border:1px solid var(--gbord2);}
-.score-table td{border:1px solid var(--gbord2);padding:0;text-align:center;width:44px;}
-.score-table td:first-child{font-size:9px;color:var(--w30);padding:0;width:26px;border:1px solid var(--gbord2);}
-.score-cell{width:44px;height:33px;background:transparent;color:var(--w);font-size:12px;text-align:center;padding:0;line-height:33px;font-family:'Inter',sans-serif;cursor:pointer;display:block;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
-.score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;}
-.score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;}
-.score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;}
-.tot-row td{height:33px;line-height:33px;padding:0;font-weight:600;font-size:12px;text-align:center;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
+.score-table th.ronda-col{color:var(--gold2);font-size:8px;font-weight:600;letter-spacing:.5px;width:38px;background:rgba(184,134,11,0.18);border:1px solid var(--gbord2);}
+.score-table td{border:1px solid var(--gbord2);padding:0;height:42px;}
+.score-table td.ronda-col{font-size:13px;font-weight:700;color:rgba(184,134,11,0.9);padding:0;width:38px;background:rgba(184,134,11,0.07);border:1px solid var(--gbord2);text-align:center;vertical-align:middle;}
+.score-cell{width:100%;height:42px;background:transparent;color:var(--w);font-size:13px;text-align:center;padding:0;line-height:42px;font-family:'Inter',sans-serif;cursor:pointer;display:block;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;box-sizing:border-box;}
+.score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;width:100%;}
+.score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;width:100%;}
+.score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;width:100%;}
+.tot-row td{height:36px;line-height:36px;padding:0;font-weight:600;font-size:12px;text-align:center;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
 .tot-row td.leader{color:var(--gold2);}
 
 /* Ranking */
@@ -565,8 +565,8 @@ function buildGameTable(){
   var rounds = scoreValues[0] ? scoreValues[0].length : TOTAL_ROUNDS;
 
   // Cabecera
-  var head='<thead><tr><th>#</th>';
-  gamePlayers.forEach(function(p){ head+='<th title="'+p.name+'">'+p.name.slice(0,4)+'</th>'; });
+  var head='<thead><tr><th class="ronda-col">RONDA</th>';
+  gamePlayers.forEach(function(p){ head+='<th>'+p.name+'</th>'; });
   head+='</tr></thead>';
 
   // Game title
@@ -578,7 +578,7 @@ function buildGameTable(){
   var body='<tbody>';
   cellOrder=[];
   for(var r=0;r<rounds;r++){
-    body+='<tr><td>'+(r+1)+'</td>';
+    body+='<tr><td class="ronda-col">'+(r+1)+'</td>';
     for(var p=0;p<n;p++){
       var id='c'+r+'_'+p;
       cellOrder.push({row:r,col:p,id:id});
