@@ -385,6 +385,11 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <script>
 
+var fingerTouches = {};
+var fingerPhase = 'idle';
+var fingerWinner = null;
+var fingerTimer = null;
+var fingerCountdown = null;
 var AUDIO_FILES = [
   'bastardo.mp3','basura_feo.mp3','billy.mp3','choza.mp3','doblaos.mp3',
   'frances.mp3','gij_rojbla.mp3','juego_entero.mp3','kkk.mp3','mlg_blaazu.mp3',
@@ -658,13 +663,11 @@ function getPlayers(){
 function startGame(){
   var players=getPlayers();
   if(players.length<2){alert('Selecciona al menos 2 jugadores.');return;}
-  alert('PASO 1: ' + players.length + ' jugadores: ' + players.join(', '));
   window._players=players.map(function(name,i){return{name:name,c:COLORS[i%COLORS.length]};});
   totalRounds=gameMode==='blue'?Math.min(9,parseInt(document.getElementById('custom-rounds').value)||5):10;
   scores=window._players.map(function(){return Array(totalRounds).fill('');});
-  alert('PASO 2: totalRounds=' + totalRounds + ', scores.length=' + scores.length);
-  try { buildTable(); alert('PASO 3: buildTable OK'); } catch(e){ alert('ERROR buildTable: ' + e.message); return; }
-  try { goFinger(); alert('PASO 4: goFinger OK'); } catch(e){ alert('ERROR goFinger: ' + e.message); }
+  buildTable();
+  goFinger();
 }
 
 function buildTable(){
