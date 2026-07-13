@@ -658,13 +658,13 @@ function getPlayers(){
 function startGame(){
   var players=getPlayers();
   if(players.length<2){alert('Selecciona al menos 2 jugadores.');return;}
+  alert('PASO 1: ' + players.length + ' jugadores: ' + players.join(', '));
   window._players=players.map(function(name,i){return{name:name,c:COLORS[i%COLORS.length]};});
   totalRounds=gameMode==='blue'?Math.min(9,parseInt(document.getElementById('custom-rounds').value)||5):10;
   scores=window._players.map(function(){return Array(totalRounds).fill('');});
-  // Build table first so DOM is ready
-  buildTable();
-  // Then show finger screen for the sorteo
-  goFinger();
+  alert('PASO 2: totalRounds=' + totalRounds + ', scores.length=' + scores.length);
+  try { buildTable(); alert('PASO 3: buildTable OK'); } catch(e){ alert('ERROR buildTable: ' + e.message); return; }
+  try { goFinger(); alert('PASO 4: goFinger OK'); } catch(e){ alert('ERROR goFinger: ' + e.message); }
 }
 
 function buildTable(){
