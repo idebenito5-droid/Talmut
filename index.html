@@ -44,7 +44,7 @@ body{min-height:100vh}
 .badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
 .badge-gold{background:rgba(184,134,11,0.2);color:var(--gold-bright);border:.5px solid var(--gold-border-strong)}
 .badge-blue{background:rgba(24,95,165,0.3);color:#85B7EB;border:.5px solid rgba(24,95,165,0.5)}
-.content{flex:1;padding:1.25rem;max-width:600px;width:100%;margin:0 auto;overflow-y:auto;padding-bottom:1.5rem;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;justify-content:center}
+.content{flex:1;padding:1.25rem;max-width:600px;width:100%;margin:0 auto;overflow-y:hidden;display:flex;flex-direction:column;justify-content:center}
 .content-scroll{justify-content:flex-start}
 .section-label{font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;margin-top:1.25rem}
 .section-label:first-child{margin-top:0}
@@ -204,9 +204,6 @@ tfoot td.td-winner{color:var(--gold-bright)}
         </div><span class="menu-arrow">&#8250;</span>
       </div>
     </div>
-  <div style="position:absolute;bottom:2rem;left:0;right:0;text-align:center;pointer-events:none">
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,0.18);margin-bottom:5px">Partidas jugadas</div>
-    <div id="odo-text" style="font-family:'Courier New',monospace;font-size:24px;letter-spacing:8px;color:var(--gold-bright)">00000</div>
   </div>
   </div>
 </div>
@@ -446,8 +443,7 @@ function _renderScreen(id,mode){
   window.scrollTo(0,0);
   var contentEl=document.querySelector('#'+id+' .content');
   if(contentEl){
-    if(id==='s-constitution'||id==='s-history'||id==='s-stats-table'||id==='s-game'){contentEl.classList.add('content-scroll');}
-    else{contentEl.classList.remove('content-scroll');}
+    if(id==='s-constitution'||id==='s-stats-table'){contentEl.classList.add('content-scroll');} else{contentEl.classList.remove('content-scroll');}
   }
   if(id==='s-setup'){
     startSetupMusic();
@@ -465,7 +461,6 @@ function _renderScreen(id,mode){
   if(id==='s-history')renderHistory();
   
   if(id==='s-stats-table'){renderStatsTable();startHofMusic();}
-  if(id==='s-home')renderHomeCounter();
   if(id!=='s-stats-table'){stopHofMusic();}
 }
 
@@ -524,9 +519,11 @@ function renderStatsTable(){
   var PLAYERS = ['ADRIAN','ALEIX','ARNAU','EDU','NACHO','MARC'];
   var DISPLAY = {ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'NACHO',MARC:'Marc'};
   // Build stat cards (from renderStats)
-  var names=[];savedHistory.forEach(function(g){g.players.forEach(function(p){if(names.indexOf(p.name)<0)names.push(p.name);});});
+  // Always use all 6 players, show zeros if no history
+  var DISP={ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'Nacho',MARC:'Marc'};
+  var names=['Adrián','Aleix','Arnau','Edu','Nacho','Marc'];
   var statCards='';
-  if(names.length){
+  if(true){
     var statsData=names.map(function(name){
       var games=savedHistory.filter(function(g){return g.players.find(function(p){return p.name===name;});});
       var wins=savedHistory.filter(function(g){return g.players[0].name===name;}).length;
@@ -556,7 +553,7 @@ function renderStatsTable(){
   var PLAYERS = ['ADRIAN','ALEIX','ARNAU','EDU','NACHO','MARC'];
   var DISPLAY = {ADRIAN:'Adrián',ALEIX:'Aleix',ARNAU:'Arnau',EDU:'Edu',NACHO:'Nacho',MARC:'Marc'};
 
-  // show table even if empty
+  // always render table
 
   var stats = PLAYERS.map(function(key){
     var name = DISPLAY[key];
@@ -651,16 +648,6 @@ function renderStatsTable(){
 }
 
 
-function renderHomeCounter(){
-  var official=savedHistory.length;
-  var blue=parseInt(localStorage.getItem('tm_blue_count')||'0');
-  var total=official+blue;
-  var el=document.getElementById('odo-text');
-  if(!el)return;
-  var padded=String(total).padStart(5,'0');
-  var leading=padded.slice(0,padded.length-String(total).length);
-  el.innerHTML='<span style="color:rgba(255,255,255,0.15)">'+leading+'</span><span>'+String(total)+'</span>';
-}
 
 function renderChips(){var wrap=document.getElementById('preset-chips');wrap.innerHTML='';PRESET.forEach(function(n){var d=PRESET_DISPLAY[n]||n;var div=document.createElement('div');div.className='chip'+(selected.includes(n)?' selected':'');div.textContent=d;div.setAttribute('data-key',n);div.addEventListener('click',function(){toggleChip(this.getAttribute('data-key'));});wrap.appendChild(div);});}
 function renderSelected(){
@@ -845,12 +832,10 @@ function confirmBack(){if(confirm('Abandonar la partida? Se perder\u00e1n los da
 
 function renderHistory(){
   var el=document.getElementById('history-list');
-  if(!savedHistory.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">&#127942;</div>A&uacute;n no hay partidas oficiales.</div>';return;}
-  // Best and worst individual scores across all history
   var allScores=[];
   savedHistory.forEach(function(g){g.players.forEach(function(p){allScores.push({name:p.name,tot:p.tot,date:g.date});});});
-  var best=allScores.reduce(function(a,b){return a.tot<=b.tot?a:b;},allScores[0]);
-  var worst=allScores.reduce(function(a,b){return a.tot>=b.tot?a:b;},allScores[0]);
+  var best=allScores.length?allScores.reduce(function(a,b){return a.tot<=b.tot?a:b;}):{name:'-',tot:'-',date:'-'};
+  var worst=allScores.length?allScores.reduce(function(a,b){return a.tot>=b.tot?a:b;}):{name:'-',tot:'-',date:'-'};
   var recordsHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem">'
     +'<div style="background:rgba(39,128,50,0.15);border:1px solid rgba(39,128,50,0.4);border-radius:var(--r);padding:10px 12px;text-align:center">'
     +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(125,219,138,0.7);margin-bottom:4px">&#127942; Mejor partida</div>'
@@ -884,7 +869,10 @@ function renderHistory(){
 
   var gameRows=[].concat(savedHistory).reverse().map(function(g){return '<div class="history-item"><div class="history-date">'+g.date+'</div><div class="history-winner"><span style="color:var(--gold)">&#9734;</span> '+g.players[0].name+' &mdash; '+g.players[0].tot+' pts</div><div class="history-detail">'+g.players.slice(1).map(function(p){return p.name+' '+p.tot;}).join(' &middot; ')+'</div></div>';}).join('');
 
-  el.innerHTML=recordsHTML+tableHTML+'<div style="font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Partidas jugadas</div>'+gameRows;
+  var histSection=savedHistory.length
+    ?recordsHTML+'<div style="font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Partidas jugadas</div>'+gameRows
+    :'';
+  el.innerHTML=histSection;
 }
 
 
