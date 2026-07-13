@@ -204,6 +204,10 @@ tfoot td.td-winner{color:var(--gold-bright)}
         </div><span class="menu-arrow" >&#8250;</span>
       </div>
     </div>
+    <div style="margin-top:1.5rem;text-align:center">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:6px">Partidas jugadas</div>
+      <div id="odo-text" style="font-family:'Courier New',monospace;font-size:26px;letter-spacing:8px;color:var(--gold-bright)">00000</div>
+    </div>
   </div>
 </div>
 
@@ -211,6 +215,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
   <div class="page-header">
     <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
     <div class="page-header-title" id="setup-title">Nueva partida</div>
+    <button id="setup-mute-btn" onclick="toggleSetupMusic()" style="margin-left:auto;background:none;border:.5px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:5px 10px;color:rgba(255,255,255,0.4);font-size:13px;cursor:pointer">&#9654; música</button>
   </div>
   <div class="content">
     <div id="blue-lagoon-note" style="display:none;margin-bottom:1.25rem;padding:1rem 1.25rem;border:1px solid rgba(100,220,200,0.3);border-radius:var(--r);background:rgba(10,100,120,0.2)">
@@ -284,13 +289,6 @@ tfoot td.td-winner{color:var(--gold-bright)}
   <div class="content content-scroll"><div id="history-list"></div></div>
 </div>
 
-<div class="screen" id="s-stats">
-  <div class="page-header">
-    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
-    <div class="page-header-title">Media de puntos</div>
-  </div>
-  <div class="content content-scroll"><div id="stats-list"></div></div>
-</div>
 
 <div class="screen" id="s-constitution">
   <div class="page-header">
@@ -457,13 +455,14 @@ function _renderScreen(id,mode){
   if(id==='s-history')renderHistory();
   
   if(id==='s-stats-table'){renderStatsTable();startHofMusic();}
+  if(id==='s-home')renderHomeCounter();
   else if(id!=='s-stats-table'){stopHofMusic();}
 }
 
 function go(id,mode){
   if(id==='s-home'){_screenHistory=['s-home'];}
   else{_screenHistory.push(id);}
-  history.pushState({screen:id},'','');
+  history.replaceState({screen:id},'','');
   _renderScreen(id,mode);
 }
 
@@ -628,6 +627,18 @@ function renderStatsTable(){
     + '<table style="width:100%;border-collapse:collapse;min-width:560px;border-spacing:0">'
     + thead + tbody
     + '</table></div>';
+}
+
+
+function renderHomeCounter(){
+  var official=savedHistory.length;
+  var blue=parseInt(localStorage.getItem('tm_blue_count')||'0');
+  var total=official+blue;
+  var el=document.getElementById('odo-text');
+  if(!el)return;
+  var padded=String(total).padStart(5,'0');
+  var leading=padded.slice(0,padded.length-String(total).length);
+  el.innerHTML='<span style="color:rgba(255,255,255,0.15)">'+leading+'</span><span>'+String(total)+'</span>';
 }
 
 function renderChips(){var wrap=document.getElementById('preset-chips');wrap.innerHTML='';PRESET.forEach(function(n){var d=PRESET_DISPLAY[n]||n;var div=document.createElement('div');div.className='chip'+(selected.includes(n)?' selected':'');div.textContent=d;div.setAttribute('data-key',n);div.addEventListener('click',function(){toggleChip(this.getAttribute('data-key'));});wrap.appendChild(div);});}
@@ -951,14 +962,34 @@ renderChips();
 
 // ===================== DR DRIVING =====================
 
+
+var _hofMuted = false;
+var _setupMuted = false;
+
+function toggleHofMusic(){
+  _hofMuted = !_hofMuted;
+  if(_hofMusic) _hofMusic.volume = _hofMuted ? 0 : 0.35;
+  var btn = document.getElementById('hof-mute-btn');
+  if(btn) btn.innerHTML = _hofMuted ? '&#9646;&#9646; música' : '&#9654; música';
+}
+
+function toggleSetupMusic(){
+  _setupMuted = !_setupMuted;
+  if(_setupMusic) _setupMusic.volume = _setupMuted ? 0 : 0.12;
+  var btn = document.getElementById('setup-mute-btn');
+  if(btn) btn.innerHTML = _setupMuted ? '&#9646;&#9646; música' : '&#9654; música';
+}
+
 var _hofMusic = null;
 
 var _setupMusic = null;
 function startSetupMusic(){
-  if(_setupMusic) return;
-  _setupMusic = new Audio('black_Ops.mp3');
-  _setupMusic.loop = true;
-  _setupMusic.volume = 0.12;
+  if(_setupMusic && !_setupMusic.paused) return;
+  if(!_setupMusic){
+    _setupMusic = new Audio('black_Ops.mp3');
+    _setupMusic.loop = true;
+  }
+  _setupMusic.volume = _setupMuted ? 0 : 0.12;
   _setupMusic.play().catch(function(){});
 }
 function stopSetupMusic(){
@@ -986,6 +1017,7 @@ function stopHofMusic(){
   <div class="page-header">
     <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
     <div class="page-header-title">Hall of Fame</div>
+    <button id="hof-mute-btn" onclick="toggleHofMusic()" style="margin-left:auto;background:none;border:.5px solid var(--gold-border);border-radius:var(--r);padding:5px 10px;color:var(--gold);font-size:13px;cursor:pointer">&#9654; música</button>
   </div>
   <div class="content content-scroll" style="padding:0.75rem">
     <div id="stats-table-content"></div>
