@@ -457,7 +457,8 @@ function _renderScreen(id,mode){
   }
   if(id==='s-history')renderHistory();
   
-  if(id==='s-stats-table')renderStatsTable();
+  if(id==='s-stats-table'){renderStatsTable();startHofMusic();}
+  else{stopHofMusic();}
   if(id==='s-driving-menu'){renderDrivingMenu();}
   if(id==='s-home')renderHomeCounter();
   showChatBubble(id==='s-game');
@@ -612,7 +613,7 @@ function renderStatsTable(){
           var align = col.key==='name' ? 'left' : 'center';
           var extra = '';
           if(col.key==='name'){
-            return '<td style="padding:8px 6px;font-size:13px;font-weight:500;color:var(--white);white-space:nowrap">'+val+'</td>';
+            return '<td style="padding:8px 14px 8px 10px;font-size:13px;font-weight:500;color:var(--white);white-space:nowrap;min-width:80px">'+val+'</td>';
           }
           if(col.key==='lastFive'){
             var dots = (val||[]).map(function(r){
@@ -640,7 +641,7 @@ function renderStatsTable(){
 
   el.innerHTML = statCards + '<div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">PJ=Partidas · V=Victorias · %V=Ratio vic. · Top3=Podios · %Rnd=Rondas ganadas · #Mejor/#Peor=Posición · Últ.5=últimas 5</div>'
     + '<div class="stats-sticky-table">'
-    + '<table style="width:100%;border-collapse:collapse;min-width:520px;border-spacing:0">'
+    + '<table style="width:100%;border-collapse:collapse;min-width:560px;border-spacing:0">'
     + thead + tbody
     + '</table></div>';
 }
@@ -665,7 +666,6 @@ function startGame(){
   window._players=players.map(function(name,i){return{name:name,c:COLORS[i%COLORS.length]};});
   totalRounds=gameMode==='blue'?Math.min(9,parseInt(document.getElementById('custom-rounds').value)||5):10;
   scores=window._players.map(function(){return Array(totalRounds).fill('');});
-  buildTable();
   goFinger();
 }
 
@@ -949,7 +949,14 @@ function pickFingerWinner(){
   btn.onclick=function(){
     var arena=document.getElementById('finger-arena');
     arena.removeEventListener('touchstart',onFingerTouch);arena.removeEventListener('touchmove',onFingerMove);arena.removeEventListener('touchend',onFingerEnd);arena.removeEventListener('touchcancel',onFingerEnd);
-    go('s-game');setTimeout(startQuoteRotation,100);
+    var introAudio=new Audio('solo_quede_uno.mp3');
+    introAudio.volume=0.8;
+    introAudio.play().catch(function(){});
+    go('s-game');
+    setTimeout(function(){
+      buildTable();
+      startQuoteRotation();
+    },50);
   };
 }
 
@@ -1081,6 +1088,19 @@ var _origRenderScreen = _renderScreen;
 
 
 // ===================== DR DRIVING =====================
+
+var _hofMusic = null;
+function startHofMusic(){
+  if(_hofMusic){ _hofMusic.pause(); _hofMusic.currentTime=0; }
+  _hofMusic = new Audio('MEdal_Of_Honor.mp3');
+  _hofMusic.loop = true;
+  _hofMusic.volume = 0.35;
+  _hofMusic.play().catch(function(){});
+}
+function stopHofMusic(){
+  if(_hofMusic){ _hofMusic.pause(); _hofMusic.currentTime=0; _hofMusic=null; }
+}
+
 var _logoClicks = 0;
 var _logoTimer = null;
 var _drivingUnlocked = false;
