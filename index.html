@@ -1153,7 +1153,7 @@ function selectDrivingPlayer(el, name){
 }
 
 function stopDriving(){
-  if(_drvGame){ clearInterval(_drvGame.timer); clearInterval(_drvGame.loop); _drvGame = null; }
+  if(_drvGame){ clearInterval(_drvGame.timer); cancelAnimationFrame(_drvGame.loop); _drvGame = null; }
   go('s-driving-menu');
 }
 
@@ -1162,8 +1162,13 @@ function startDrivingGame(){
   var overlay = document.getElementById('drv-overlay');
   overlay.style.display = 'none';
   var canvas = document.getElementById('drv-canvas');
-  var W = canvas.offsetWidth; var H = canvas.offsetHeight;
-  canvas.width = W; canvas.height = H;
+  // Use window dimensions since canvas fills the screen
+  var W = window.innerWidth;
+  var H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
   var ctx = canvas.getContext('2d');
 
   var car = { x:W/2, y:H*0.7, angle:0, speed:0, maxSpeed:4, acc:0.15, friction:0.92, turnSpeed:3 };
@@ -1293,11 +1298,13 @@ function startDrivingGame(){
   }
 
   var gameOver = false;
+  if(_drvGame&&_drvGame.loop){cancelAnimationFrame(_drvGame.loop);}
   var loopId = requestAnimationFrame(loop);
 
   function loop(){
     if(gameOver) return;
     loopId = requestAnimationFrame(loop);
+    if(_drvGame) _drvGame.loop = loopId;
 
     // Physics
     if(keys.up) car.speed = Math.min(car.speed+car.acc, car.maxSpeed);
@@ -1403,6 +1410,9 @@ function startDrivingGame(){
   },1000);
 
   _drvGame={timer:timer,loop:loopId};
+  // Keep loopId updated in _drvGame
+  var _origLoop = loop;
+  function updateLoopRef(id){ if(_drvGame) _drvGame.loop=id; }
 }
 
 function endDrivingGame(score){
@@ -1420,7 +1430,7 @@ function endDrivingGame(score){
 
 function startDriving(){
   go('s-driving-game');
-  setTimeout(startDrivingGame,100);
+  setTimeout(startDrivingGame,300);
 }
 
 // Init driving menu when entering
