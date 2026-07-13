@@ -201,7 +201,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
         </div><span class="menu-arrow">&#8250;</span>
       </div>
       </div>
-        </div><span class="menu-arrow" >&#8250;</span>
+        </div><span class="menu-arrow">&#8250;</span>
       </div>
     </div>
   <div style="position:absolute;bottom:2rem;left:0;right:0;text-align:center;pointer-events:none">
@@ -213,6 +213,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <div class="screen" id="s-setup">
   <div class="page-header">
+    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
     <div class="page-header-title" id="setup-title">Nueva partida</div>
     <button id="setup-mute-btn" onclick="toggleSetupMusic()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:20px;color:rgba(255,255,255,0.35);padding:4px 8px;-webkit-tap-highlight-color:transparent" title="Silenciar música">&#128266;</button>
   </div>
@@ -254,6 +255,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <div class="screen" id="s-game">
   <div class="page-header">
+    <button class="back-btn" onclick="confirmBack()" aria-label="Volver">&#8249;</button>
     <div class="page-header-title" id="game-title">Partida</div>
     <div class="page-badge" id="game-badge"></div>
   </div>
@@ -281,6 +283,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <div class="screen" id="s-history">
   <div class="page-header">
+    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
     <div class="page-header-title">Hist&oacute;rico</div>
   </div>
   <div class="content content-scroll"><div id="history-list"></div></div>
@@ -289,6 +292,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <div class="screen" id="s-constitution">
   <div class="page-header">
+    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
     <div class="page-header-title">La Maltesa</div>
   </div>
   <div class="content content-scroll">
@@ -1027,6 +1031,7 @@ function stopHofMusic(){
 
 <div class="screen" id="s-stats-table">
   <div class="page-header">
+    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
     <div class="page-header-title">Hall of Fame</div>
     <button id="hof-mute-btn" onclick="toggleHofMusic()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:20px;color:var(--gold);padding:4px 8px;-webkit-tap-highlight-color:transparent" title="Silenciar música">&#128266;</button>
   </div>
