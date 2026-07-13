@@ -75,16 +75,17 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 /* Score table */
 .table-scroll{overflow-x:auto;flex-shrink:0;}
 .table-scroll{border-radius:16px;overflow:hidden;border:1px solid var(--gbord2);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.score-table{table-layout:fixed;}
 .score-table{border-collapse:collapse;min-width:100%;}
 .score-table th{font-size:10px;font-weight:500;color:var(--gold2);padding:5px 0;text-align:center;border:.5px solid var(--gbord);background:rgba(184,134,11,0.12);white-space:nowrap;max-width:44px;}
-.score-table th:first-child{color:var(--w30);width:20px;font-size:9px;}
+.score-table th:first-child{color:var(--w30);width:26px;font-size:9px;}
 .score-table td{border:.5px solid rgba(184,134,11,0.15);padding:0;text-align:center;}
 .score-table td:first-child{font-size:9px;color:var(--w30);padding:3px 3px;}
-.score-cell{width:100%;background:transparent;color:var(--w);font-size:13px;text-align:center;padding:14px 0;font-family:'Inter',sans-serif;cursor:pointer;display:block;max-width:46px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
+.score-cell{width:100%;background:transparent;color:var(--w);font-size:13px;text-align:center;padding:13px 0;font-family:'Inter',sans-serif;cursor:pointer;display:block;height:38px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
 .score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;}
 .score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;}
 .score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;}
-.tot-row td{padding:8px 2px;font-weight:600;font-size:12px;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
+.tot-row td{padding:10px 0;font-weight:600;font-size:12px;text-align:center;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
 .tot-row td.leader{color:var(--gold2);}
 
 /* Ranking */
@@ -130,11 +131,27 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       </div>
       <span class="card-arrow" style="color:rgba(100,220,200,0.8)">›</span>
     </button>
-    <button class="talmut-card" onclick="openHistory()" style="margin-top:.6rem;border-color:rgba(255,255,255,0.15)">
+    <button class="talmut-card" onclick="openHistory()" style="margin-top:.6rem;border-color:rgba(255,255,255,0.5)">
       <img src="Hist%C3%B3rico.png" alt="Histórico" class="card-icon">
       <div style="flex:1;text-align:left">
         <div class="card-label">Histórico</div>
         <div class="card-desc">Partidas jugadas y estadísticas</div>
+      </div>
+      <span class="card-arrow" style="color:var(--w30)">›</span>
+    </button>
+    <button class="talmut-card" onclick="openHof()" style="margin-top:.6rem;border-color:rgba(184,134,11,0.4)">
+      <div class="card-icon" style="font-size:22px;font-weight:700;color:var(--gold2);font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center">42</div>
+      <div style="flex:1;text-align:left">
+        <div class="card-label">Hall of Fame</div>
+        <div class="card-desc" style="color:rgba(255,255,255,0.5)">Estadísticas y clasificación general</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </button>
+    <button class="talmut-card" onclick="openConstitution()" style="margin-top:.6rem;border-color:rgba(255,255,255,0.2)">
+      <div class="card-icon" style="font-size:26px;display:flex;align-items:center;justify-content:center">📜</div>
+      <div style="flex:1;text-align:left">
+        <div class="card-label">La Maltesa</div>
+        <div class="card-desc" style="color:rgba(255,255,255,0.4)">Constitución oficial del juego</div>
       </div>
       <span class="card-arrow" style="color:var(--w30)">›</span>
     </button>
@@ -538,12 +555,7 @@ function pickWinner(){
 function goToGame(){
   buildGameTable();
   showScreen('s-game');
-  if(gameMode !== 'blue'){
-    setTimeout(function(){
-      var a=new Audio('solo_quede_uno.mp3'); a.volume=0.85;
-      a.play().catch(function(){});
-    }, 2000);
-  }
+  // (no audio on game start)
 }
 
 // ═══════ TABLA DE JUEGO ═══════
@@ -753,10 +765,10 @@ function openHistory() {
   });
   var players = Object.values(playerMap).sort(function(a,b){ return a.name.localeCompare(b.name); });
   var cardHTML = players.map(function(p) {
-    return '<div style="background:rgba(184,134,11,0.07);border:.5px solid var(--gbord);border-radius:12px;padding:.6rem .5rem;text-align:center">'
-      + '<div style="font-size:12px;font-weight:500;color:var(--w);margin-bottom:.2rem">' + p.name + '</div>'
-      + '<div style="font-size:20px;font-weight:600;color:var(--gold2)">' + p.wins + '</div>'
-      + '<div style="font-size:9px;color:var(--w30);margin-top:.1rem">' + (p.games===1?'1 partida':p.games+' partidas') + '</div>'
+    return '<div style="background:rgba(184,134,11,0.07);border:.5px solid var(--gbord);border-radius:14px;padding:.75rem .5rem;text-align:center;aspect-ratio:1">'
+      + '<div style="font-size:13px;font-weight:500;color:var(--w);margin-bottom:.3rem">' + p.name + '</div>'
+      + '<div style="font-size:22px;font-weight:600;color:var(--gold2);line-height:1">' + p.wins + '</div>'
+      + '<div style="font-size:9px;color:var(--w30);margin-top:.3rem">' + (p.games===1?'1 partida':p.games+' partidas') + '</div>'
       + '</div>';
   }).join('');
   document.getElementById('stat-cards').innerHTML = cardHTML || '<div style="color:var(--w30);font-size:13px">Sin datos aún</div>';
@@ -786,6 +798,63 @@ openFinger = function() {
   _origOpenFinger();
 };
 
+
+// ═══════ HALL OF FAME ═══════
+function openHof() {
+  var history = JSON.parse(localStorage.getItem('tm_history') || '[]');
+  var official = history.filter(function(g){ return g.official; });
+
+  var pMap = {};
+  PRESET.forEach(function(p){ pMap[p.name]={name:p.name,games:0,wins:0,top3:0,scores:[],positions:[],roundWins:0,totalRounds:0}; });
+
+  official.forEach(function(g) {
+    g.players.forEach(function(p, idx) {
+      if(!pMap[p.name]) pMap[p.name]={name:p.name,games:0,wins:0,top3:0,scores:[],positions:[],roundWins:0,totalRounds:0};
+      pMap[p.name].games++;
+      pMap[p.name].scores.push(p.total);
+      pMap[p.name].positions.push(idx+1);
+      if(idx===0) pMap[p.name].wins++;
+      if(idx<3) pMap[p.name].top3++;
+      if(p.roundWins){ pMap[p.name].roundWins+=p.roundWins; }
+      if(g.rounds){ pMap[p.name].totalRounds+=g.rounds; }
+    });
+  });
+
+  var rows = Object.values(pMap).sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(p,si) {
+    var pj = p.games;
+    var v  = p.wins;
+    var pct= pj>0 ? Math.round(v/pj*100)+'%' : '0%';
+    var avg= p.scores.length>0 ? Math.round(p.scores.reduce(function(a,b){return a+b;},0)/p.scores.length) : '-';
+    var top3=p.top3;
+    var rnd= p.totalRounds>0 ? Math.round(p.roundWins/p.totalRounds*100)+'%' : '0%';
+    var best= p.scores.length>0 ? Math.min.apply(null,p.scores) : '-';
+    var worst=p.scores.length>0 ? Math.max.apply(null,p.scores) : '-';
+    var bpos= p.positions.length>0 ? Math.min.apply(null,p.positions) : '-';
+    var wpos= p.positions.length>0 ? Math.max.apply(null,p.positions) : '-';
+    var bg = si%2===0?'transparent':'rgba(255,255,255,0.02)';
+    return '<tr style="background:'+bg+'">'
+      +'<td style="position:sticky;left:0;z-index:1;background:'+(si%2===0?'#0B1F3A':'#0c2240')+';padding:8px 10px;font-size:13px;font-weight:500;color:#fff;border:.5px solid var(--gbord);white-space:nowrap">'+p.name+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+pj+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:13px;font-weight:600;color:var(--gold2);border:.5px solid var(--gbord)">'+v+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+pct+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+avg+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+top3+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+rnd+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:rgba(125,219,138,0.9);border:.5px solid var(--gbord)">'+best+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:rgba(240,112,112,0.9);border:.5px solid var(--gbord)">'+worst+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+bpos+'</td>'
+      +'<td style="padding:8px;text-align:center;font-size:12px;color:var(--w60);border:.5px solid var(--gbord)">'+wpos+'</td>'
+      +'</tr>';
+  }).join('');
+
+  document.getElementById('hof-body').innerHTML = rows;
+  showScreen('s-hof');
+}
+
+function openConstitution() {
+  showScreen('s-constitution');
+}
+
 </script>
 
 <!-- HISTÓRICO -->
@@ -795,16 +864,138 @@ openFinger = function() {
     <span class="ph-title">Histórico</span>
   </div>
   <!-- Odómetro -->
-  <div style="text-align:center;padding:.75rem 1rem .5rem;flex-shrink:0;border-bottom:.5px solid var(--gbord)">
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:var(--w30);margin-bottom:.3rem">Partidas oficiales</div>
-    <div id="odo-count" style="font-family:'Courier New',monospace;font-size:28px;letter-spacing:8px;color:var(--gold2)">00000</div>
+  <div style="text-align:center;padding:.6rem 1rem .5rem;flex-shrink:0">
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:var(--w30);margin-bottom:.25rem">Partidas oficiales</div>
+    <div id="odo-count" style="font-family:'Courier New',monospace;font-size:26px;letter-spacing:8px;color:var(--gold2)">00000</div>
   </div>
-  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.75rem">
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.5rem .75rem .75rem">
     <!-- Stat cards -->
-    <div id="stat-cards" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1rem"></div>
-    <!-- Game list -->
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);font-weight:500;margin-bottom:.5rem">Registro de partidas</div>
+    <div id="stat-cards" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1rem;margin-top:.25rem"></div>
+    <!-- Separator -->
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">
+      <div style="flex:1;height:1px;background:linear-gradient(to right,var(--gold2),transparent)"></div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);font-weight:500">Registro de partidas</div>
+      <div style="flex:1;height:1px;background:linear-gradient(to left,var(--gold2),transparent)"></div>
+    </div>
     <div id="game-list"></div>
+  </div>
+</div>
+
+
+<!-- HALL OF FAME -->
+<div class="screen" id="s-hof">
+  <div class="ph">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <span class="ph-title">Hall of Fame</span>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding:.75rem">
+    <!-- Tabla -->
+    <div style="flex:1;overflow:auto;border-radius:12px;border:.5px solid var(--gbord2);margin-bottom:.75rem">
+      <table id="hof-table" style="border-collapse:collapse;min-width:700px;width:100%">
+        <thead>
+          <tr style="background:rgba(184,134,11,0.15)">
+            <th style="position:sticky;left:0;z-index:2;background:#0D2240;padding:8px 10px;text-align:left;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap;min-width:80px">JUGADOR</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">PJ</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">V</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">%V</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">MEDIA</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">TOP3</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">%RND</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">MEJOR</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">PEOR</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">#MEJOR</th>
+            <th style="padding:8px 8px;font-size:10px;color:var(--gold2);border:.5px solid var(--gbord);white-space:nowrap">#PEOR</th>
+          </tr>
+        </thead>
+        <tbody id="hof-body"></tbody>
+      </table>
+    </div>
+    <!-- Leyenda -->
+    <div style="flex-shrink:0;background:rgba(184,134,11,0.06);border:.5px solid var(--gbord);border-radius:12px;padding:.6rem .75rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">PJ</span> Partidas jugadas</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">V</span> Victorias</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">%V</span> Ratio de victorias</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">MEDIA</span> Media de puntos</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">TOP3</span> Veces en el podio</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">%RND</span> Rondas ganadas</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">MEJOR</span> Mejor puntuación</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">PEOR</span> Peor puntuación</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">#MEJOR</span> Mejor posición lograda</div>
+        <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">#PEOR</span> Peor posición lograda</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LA MALTESA -->
+<div class="screen" id="s-constitution">
+  <div class="ph">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <span class="ph-title">La Maltesa</span>
+  </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem 1.25rem 2rem">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(255,255,255,0.65);line-height:1.9">
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <div style="font-size:22px;font-weight:600;letter-spacing:3px;color:#fff">CONSTITUTIO · LA MALTESA</div>
+        <div style="font-size:10px;letter-spacing:2px;color:var(--gold2);text-transform:uppercase;margin-top:.3rem">Lex suprema ludi</div>
+        <div style="width:120px;height:1px;background:linear-gradient(to right,transparent,var(--gold2),transparent);margin:.75rem auto 0"></div>
+      </div>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Preámbulo</div>
+      <p style="margin-bottom:.75rem">Nosotros, los fundadores del juego conocido como <strong style="color:#fff">TALMUT</strong>, en uso de nuestra soberanía lúdica, establecemos la presente constitución como norma suprema e inapelable. Todo aquel que tome asiento en la mesa acepta sus términos sin excepción. El lema fundacional, <em style="color:var(--gold2)">HIC LUDUS ERROREM PUNIT</em>, resume el espíritu de La Maltesa: la ignorancia de la norma no exime de su cumplimiento.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo I · El Reparto</div>
+      <p style="margin-bottom:.75rem">Cada jugador recibe <strong style="color:#fff">cuatro cartas boca abajo</strong>. Antes de comenzar, cada jugador tiene derecho a mirar exactamente <strong style="color:#fff">dos de sus cartas</strong> durante un tiempo breve. Dichas cartas vuelven boca abajo y no pueden consultarse salvo por efecto de cartas especiales.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo II · El Turno</div>
+      <p style="margin-bottom:.5rem">El jugador en turno <strong style="color:#fff">roba una carta del mazo</strong>. Puede:</p>
+      <p style="margin-bottom:.5rem"><strong style="color:#fff">a)</strong> Quedársela, descartando una de sus cartas boca abajo.</p>
+      <p style="margin-bottom:.75rem"><strong style="color:#fff">b)</strong> Descartarla directamente desde el mazo, activando su efecto especial si lo tiene.</p>
+      <p style="margin-bottom:.75rem">Los efectos especiales solo se activan cuando la carta se descarta directamente del mazo, sin haber sido intercambiada previamente.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo III · Cartas Especiales</div>
+      <p style="margin-bottom:.4rem"><strong style="color:#fff">10 —</strong> Miras una de tus propias cartas.</p>
+      <p style="margin-bottom:.4rem"><strong style="color:#fff">J —</strong> Miras una carta ajena. Al descartarla debes pronunciar: <em>a... JJJJJ... jena.</em></p>
+      <p style="margin-bottom:.4rem"><strong style="color:#fff">Q —</strong> Intercambio ciego: cambias una carta tuya con una ajena sin ver ninguna.</p>
+      <p style="margin-bottom:.4rem"><strong style="color:#fff">K —</strong> Miras una carta ajena y puedes quedártela o devolvérsela.</p>
+      <p style="margin-bottom:.75rem"><strong style="color:#fff">JOKER —</strong> Vale <strong style="color:#fff">−1 punto</strong> si ganas la ronda. Vale <strong style="color:#fff">+50 puntos</strong> si pierdes.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo IV · El Descarte Cruzado</div>
+      <p style="margin-bottom:.5rem">Si un jugador descarta una carta y otro tiene el mismo valor en mano, puede descartarla inmediatamente. <strong style="color:#fff">La velocidad es ley.</strong></p>
+      <p style="margin-bottom:.75rem">Si un jugador tiene dos cartas del mismo valor que la carta descartada, puede descartarlas ambas en un solo movimiento.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo V · La Ley de la Tortilla</div>
+      <p style="margin-bottom:.75rem">Todo Descarte Cruzado propio debe realizarse <strong style="color:#fff">con una sola mano</strong> en un movimiento continuo e ininterrumpido. El uso de ambas manos constituye una infracción penalizable.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo VI · TALMUT</div>
+      <p style="margin-bottom:.5rem">Cuando un jugador considera que tiene <strong style="color:#fff">5 puntos o menos</strong>, puede declarar <strong style="color:#fff">TALMUT</strong> antes de robar carta o tras descartar.</p>
+      <p style="margin-bottom:.5rem">Tras la declaración, todos los demás jugadores tienen <strong style="color:#fff">un turno más</strong>. El declarante conserva el derecho al Descarte Cruzado durante ese turno final.</p>
+      <p style="margin-bottom:.75rem"><strong style="color:#fff">TALMUT erróneo:</strong> Si el declarante supera los 5 puntos al revelar, suma la puntuación de todos los demás jugadores a su total.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo VII · La Puntuación</div>
+      <p style="margin-bottom:.5rem">Gana la ronda quien tenga <strong style="color:#fff">menos puntos</strong>. El ganador anota <strong style="color:#fff">0</strong>.</p>
+      <p style="margin-bottom:.5rem"><strong style="color:#fff">A=1 · 2–9=valor · 10=10 · J=20 · Q=30 · K=40</strong></p>
+      <p style="margin-bottom:.5rem">Empate entre declarante de TALMUT y otro: gana quien <strong style="color:#fff">no declaró</strong>.</p>
+      <p style="margin-bottom:.75rem">Una partida oficial consta de <strong style="color:#fff">10 rondas</strong>. Gana quien acumule menos puntos.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo VIII · Penalizaciones</div>
+      <p style="margin-bottom:.4rem">El infractor recibe una carta de penalización (no puede verla) por:</p>
+      <p style="margin-bottom:.3rem">— Mirar cartas propias sin permiso.</p>
+      <p style="margin-bottom:.3rem">— Violar la Ley de la Tortilla.</p>
+      <p style="margin-bottom:.3rem">— Realizar un Descarte Cruzado erróneo.</p>
+      <p style="margin-bottom:.3rem">— Robar fuera de turno.</p>
+      <p style="margin-bottom:.75rem">— TALMUT erróneo: suma la puntuación de todos los demás.</p>
+
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);margin:1.25rem 0 .4rem;font-weight:500">Artículo IX · Enmiendas</div>
+      <p style="margin-bottom:.5rem"><strong style="color:#fff">§ 6.6 — TALMUT Automático:</strong> Si a un jugador le quedan cero cartas, en su siguiente turno está obligado a robar y descartar inmediatamente.</p>
+      <p style="margin-bottom:.5rem"><strong style="color:#fff">§ 6.7 — El Intocable de Elliot Ness:</strong> Tras declarar TALMUT, el declarante es inmune a todos los efectos de cartas especiales hasta el fin de la ronda.</p>
+      <p style="margin-bottom:.75rem"><strong style="color:#fff">§ 7.5 — El Blue Lagoon:</strong> Toda partida que no alcance las diez rondas recibirá la denominación de <strong style="color:#64dcc8">Blue Lagoon</strong>. No genera efecto alguno sobre el histórico. No existe para la historia.</p>
+
+      <div style="text-align:center;margin-top:1.5rem;padding-top:1rem;border-top:.5px solid var(--gbord)">
+        <div style="font-size:10px;color:var(--gold2);letter-spacing:2px;text-transform:uppercase">HIC LUDUS ERROREM PUNIT</div>
+      </div>
+    </div>
   </div>
 </div>
 
