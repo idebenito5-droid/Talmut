@@ -131,7 +131,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       <span class="card-arrow" style="color:rgba(100,220,200,0.8)">›</span>
     </button>
     <button class="talmut-card" onclick="openHistory()" style="margin-top:.6rem;border-color:rgba(255,255,255,0.15)">
-      <div class="card-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px">📋</div>
+      <img src="Hist%C3%B3rico.png" alt="Histórico" class="card-icon">
       <div style="flex:1;text-align:left">
         <div class="card-label">Histórico</div>
         <div class="card-desc">Partidas jugadas y estadísticas</div>
@@ -148,18 +148,9 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
     <span class="ph-title">Nueva partida</span>
   </div>
   <div class="setup-body">
-    <div id="bl-note" style="display:none;background:rgba(10,100,120,0.18);border:.5px solid rgba(100,220,200,0.3);border-radius:14px;padding:.75rem 1rem;margin-bottom:.5rem;">
+    <div id="bl-note" style="display:none;background:rgba(10,100,120,0.18);border:.5px solid rgba(100,220,200,0.3);border-radius:14px;padding:.75rem 1rem;margin-bottom:.75rem;">
       <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:.4rem">El <strong style="color:#64dcc8">Blue Lagoon</strong> no figura en el histórico ni en las estadísticas. Su resultado es válido solo para quien estaba en la mesa ese día.</p>
       <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#64dcc8;line-height:1.7">No existe para la historia.</p>
-    </div>
-    <div id="rounds-wrap" style="display:none;margin-bottom:.25rem">
-      <div class="slabel">Número de rondas</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <button onclick="changeRounds(-1)" style="width:34px;height:34px;border-radius:50%;background:var(--w10);border:.5px solid var(--w30);color:var(--w);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
-        <span id="rounds-val" style="font-size:22px;font-weight:600;color:var(--gold2);min-width:28px;text-align:center">5</span>
-        <button onclick="changeRounds(1)" style="width:34px;height:34px;border-radius:50%;background:var(--w10);border:.5px solid var(--w30);color:var(--w);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
-        <span style="font-size:11px;color:var(--w30)">rondas · no computa en histórico</span>
-      </div>
     </div>
     <div class="slabel">Selecciona los jugadores</div>
     <div class="chips-row" id="preset-chips"></div>
@@ -168,6 +159,15 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
     <button class="add-btn" id="add-btn" onclick="addCustom()">
       <span style="font-size:18px;font-weight:300">+</span> Añadir jugador
     </button>
+    <div id="rounds-wrap" style="display:none;margin-top:.75rem;padding-top:.75rem;border-top:.5px solid var(--gbord)">
+      <div class="slabel" style="margin-top:0">Número de rondas</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button onclick="changeRounds(-1)" style="width:36px;height:36px;border-radius:50%;background:var(--w10);border:.5px solid var(--w30);color:var(--w);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+        <span id="rounds-val" style="font-size:26px;font-weight:600;color:var(--gold2);min-width:30px;text-align:center">5</span>
+        <button onclick="changeRounds(1)" style="width:36px;height:36px;border-radius:50%;background:var(--w10);border:.5px solid var(--w30);color:var(--w);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+        <span style="font-size:11px;color:var(--w30)">rondas · no computa en histórico</span>
+      </div>
+    </div>
     <div class="slabel">En juego</div>
     <div class="preview" id="preview"></div>
     <button class="btn-start" onclick="startGame()">Comenzar partida ›</button>
@@ -277,6 +277,8 @@ var cellOrder     = [];   // [{row,col}] ordered list
 var screenHistory = ['s-home'];
 
 function showScreen(id) {
+  // Stop any playing audio when changing screen
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   screenHistory.push(id);
@@ -739,8 +741,9 @@ function openHistory() {
     '<span style="color:rgba(255,255,255,0.2)">' + padded.slice(0, 5 - String(official.length).length) + '</span>' +
     '<span>' + String(official.length) + '</span>';
 
-  // Stat cards — todos los jugadores que aparecen
+  // Stat cards — siempre los 6 jugadores base con 0 si no hay datos
   var playerMap = {};
+  PRESET.forEach(function(p){ playerMap[p.name] = {name:p.name, wins:0, games:0}; });
   official.forEach(function(g) {
     g.players.forEach(function(p, idx) {
       if (!playerMap[p.name]) playerMap[p.name] = {name:p.name, wins:0, games:0};
