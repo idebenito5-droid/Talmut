@@ -147,7 +147,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       </div>
       <span class="card-arrow" style="color:var(--w30)">›</span>
     </button>
-    <button class="talmut-card" onclick="openHof()" style="margin-top:.6rem;border-color:rgba(184,134,11,0.4)">
+    <button class="talmut-card" onclick="openHof()" style="margin-top:.6rem;border-color:rgba(30,80,160,0.8)">
       <div class="card-icon" style="font-size:22px;font-weight:700;color:var(--gold2);font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center">42</div>
       <div style="flex:1;text-align:left">
         <div class="card-label">Hall of Fame</div>
@@ -155,7 +155,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       </div>
       <span class="card-arrow">›</span>
     </button>
-    <button class="talmut-card" onclick="openConstitution()" style="margin-top:.6rem;border-color:rgba(255,255,255,0.2)">
+    <button class="talmut-card" onclick="openConstitution()" style="margin-top:.6rem;border-color:rgba(140,20,40,0.8)">
       <div class="card-icon" style="font-size:26px;display:flex;align-items:center;justify-content:center">📜</div>
       <div style="flex:1;text-align:left">
         <div class="card-label">La Maltesa</div>
@@ -173,10 +173,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
     <span class="ph-title">Nueva partida</span>
   </div>
   <div class="setup-body">
-    <div id="bl-note" style="display:none;background:rgba(10,100,120,0.18);border:.5px solid rgba(100,220,200,0.3);border-radius:14px;padding:.75rem 1rem;margin-bottom:.75rem;">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:.4rem">El <strong style="color:#64dcc8">Blue Lagoon</strong> no figura en el histórico ni en las estadísticas. Su resultado es válido solo para quien estaba en la mesa ese día.</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#64dcc8;line-height:1.7">No existe para la historia.</p>
-    </div>
+
     <div class="slabel">Selecciona los jugadores</div>
     <div class="chips-row" id="preset-chips"></div>
     <div class="slabel">Añadir jugador</div>
@@ -232,6 +229,9 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
   </div>
   <!-- Custom numpad -->
   <div id="numpad">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.25rem">
+      <button onclick="hideNumpad()" style="background:none;border:none;color:var(--w30);font-size:12px;cursor:pointer;padding:2px 4px;font-family:'Inter',sans-serif">Ocultar ↓</button>
+    </div>
     <div class="numpad-row">
       <button class="numpad-btn" onclick="numInput('7')">7</button>
       <button class="numpad-btn" onclick="numInput('8')">8</button>
@@ -358,7 +358,7 @@ function openSetup(mode) {
   selected=[]; customInputs=[];
   document.getElementById('custom-list').innerHTML='';
   // Show/hide BL elements
-  document.getElementById('bl-note').style.display = gameMode==='blue' ? 'block' : 'none';
+
   document.getElementById('rounds-wrap').style.display = gameMode==='blue' ? 'block' : 'none';
   document.getElementById('rounds-val').textContent = blRounds;
   // Update title
@@ -607,6 +607,12 @@ function buildGameTable(){
 }
 
 // ═══════ NUMPAD ═══════
+function hideNumpad(){
+  document.getElementById('numpad').style.display='none';
+  document.querySelectorAll('.score-cell.active').forEach(function(el){el.classList.remove('active');});
+  activeCell=null;
+  updateTable();
+}
 function activateCell(row,col){
   // Quita active anterior
   document.querySelectorAll('.score-cell.active').forEach(function(el){ el.classList.remove('active'); });
