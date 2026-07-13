@@ -144,10 +144,10 @@ tfoot td.td-winner{color:var(--gold-bright)}
 .stats-sticky-table th:first-child,
 .stats-sticky-table td:first-child {
   position:sticky; left:0; z-index:2;
-  background:#0D2240;
+  background:rgba(15,30,55,0.98);
 }
-.stats-sticky-table thead th:first-child { background:#112040; }
-.stats-sticky-table tr:nth-child(even) td:first-child { background:#0e2540; }
+.stats-sticky-table thead th:first-child { background:rgba(20,40,65,0.98); }
+.stats-sticky-table tr:nth-child(even) td:first-child { background:rgba(15,30,55,0.98); }
 
 /* BLUE LAGOON THEME */
 .bl-theme { background: linear-gradient(160deg, #0a3a5c 0%, #0e5f7a 40%, #0a8a7a 100%) !important; }
@@ -614,7 +614,7 @@ function renderStatsTable(){
           var align = col.key==='name' ? 'left' : 'center';
           var extra = '';
           if(col.key==='name'){
-            return '<td style="padding:8px 14px 8px 10px;font-size:13px;font-weight:500;color:var(--white);white-space:nowrap;min-width:80px">'+val+'</td>';
+            return '<td style="padding:8px 16px 8px 12px;font-size:13px;font-weight:500;color:var(--white);white-space:nowrap;min-width:100px;background:rgba(184,134,11,0.1);border-right:1px solid var(--gold-border)">'+val+'</td>';
           }
           if(col.key==='lastFive'){
             var dots = (val||[]).map(function(r){
@@ -667,6 +667,9 @@ function startGame(){
   window._players=players.map(function(name,i){return{name:name,c:COLORS[i%COLORS.length]};});
   totalRounds=gameMode==='blue'?Math.min(9,parseInt(document.getElementById('custom-rounds').value)||5):10;
   scores=window._players.map(function(){return Array(totalRounds).fill('');});
+  // Build table first so DOM is ready
+  buildTable();
+  // Then show finger screen for the sorteo
   goFinger();
 }
 
@@ -880,7 +883,7 @@ function goFinger(){
   document.getElementById('finger-btn-wrap').style.display='flex';
   document.getElementById('finger-overlay').style.pointerEvents='none';
   renderFingerDots();
-  go('s-finger');
+  _renderScreen('s-finger');
   var arena=document.getElementById('finger-arena');
   arena.addEventListener('touchstart',onFingerTouch,{passive:false});
   arena.addEventListener('touchmove',onFingerMove,{passive:false});
@@ -950,8 +953,7 @@ function pickFingerWinner(){
   btn.onclick=function(){
     var arena=document.getElementById('finger-arena');
     arena.removeEventListener('touchstart',onFingerTouch);arena.removeEventListener('touchmove',onFingerMove);arena.removeEventListener('touchend',onFingerEnd);arena.removeEventListener('touchcancel',onFingerEnd);
-    buildTable();
-    go('s-game');
+    _renderScreen('s-game');
     var introAudio=new Audio('solo_quede_uno.mp3');
     introAudio.volume=0.8;
     introAudio.play().catch(function(){});
