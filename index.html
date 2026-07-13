@@ -23,8 +23,8 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 .screen.active{display:flex;}
 
 /* ── HOME ── */
-#s-home{align-items:center;justify-content:flex-start;padding:2.5rem 1.5rem 2rem;}
-.home-header{display:flex;flex-direction:column;align-items:center;margin-bottom:2rem;}
+#s-home{align-items:center;justify-content:center;padding:1.5rem;gap:0;}
+.home-header{display:flex;flex-direction:column;align-items:center;margin-bottom:1.5rem;}
 .home-logo{width:80px;height:80px;object-fit:contain;border-radius:16px;margin-bottom:.75rem;}
 .home-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;letter-spacing:6px;color:var(--w);margin-bottom:.3rem;}
 .home-sub{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--w30);}
@@ -113,13 +113,21 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
     <div class="home-sub">HIC LUDUS ERROREM PUNIT</div>
   </div>
   <div class="home-menu">
-    <button class="talmut-card" onclick="openSetup()">
+    <button class="talmut-card" onclick="openSetup('talmut')" style="margin-bottom:.6rem">
       <img src="Talmut.png" alt="Talmut" class="card-icon">
       <div style="flex:1;text-align:left">
         <div class="card-label">Talmut</div>
         <div class="card-desc">Partida oficial · 10 rondas</div>
       </div>
       <span class="card-arrow">›</span>
+    </button>
+    <button class="talmut-card" onclick="openSetup('blue')" style="border-color:rgba(100,220,200,0.35)">
+      <img src="Blue_Lagoon.png" alt="Blue Lagoon" class="card-icon">
+      <div style="flex:1;text-align:left">
+        <div class="card-label" style="color:rgba(255,255,255,0.9)">Blue Lagoon</div>
+        <div class="card-desc">Partida rápida · rondas libres</div>
+      </div>
+      <span class="card-arrow" style="color:rgba(100,220,200,0.8)">›</span>
     </button>
   </div>
 </div>
@@ -131,6 +139,19 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
     <span class="ph-title">Nueva partida</span>
   </div>
   <div class="setup-body">
+    <div id="bl-note" style="display:none;background:rgba(10,100,120,0.18);border:.5px solid rgba(100,220,200,0.3);border-radius:14px;padding:.75rem 1rem;margin-bottom:.5rem;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:.4rem">El <strong style="color:#64dcc8">Blue Lagoon</strong> no figura en el histórico ni en las estadísticas. Su resultado es válido solo para quien estaba en la mesa ese día.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#64dcc8;line-height:1.7">No existe para la historia. Pero ocurrió.</p>
+    </div>
+    <div id="rounds-wrap" style="display:none;margin-bottom:.25rem">
+      <div class="slabel">Número de rondas</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onclick="changeRounds(-1)" style="width:34px;height:34px;border-radius:50%;background:var(--w10);border:.5px solid var(--w30);color:var(--w);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+        <span id="rounds-val" style="font-size:22px;font-weight:600;color:var(--gold2);min-width:28px;text-align:center">5</span>
+        <button onclick="changeRounds(1)" style="width:34px;height:34px;border-radius:50%;background:var(--w10);border:.5px solid var(--w30);color:var(--w);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+        <span style="font-size:11px;color:var(--w30)">rondas · no computa en histórico</span>
+      </div>
+    </div>
     <div class="slabel">Selecciona los jugadores</div>
     <div class="chips-row" id="preset-chips"></div>
     <div class="slabel">Añadir jugador</div>
@@ -223,6 +244,7 @@ var FINGER_COLORS = ['#E74C3C','#3498DB','#2ECC71','#F39C12','#9B59B6','#1ABC9C'
 var TOTAL_ROUNDS = 10;
 
 // ═══════ ESTADO ═══════
+var gameMode     = 'talmut';
 var selected     = [];
 var customInputs = [];
 var gamePlayers  = [];
@@ -293,11 +315,23 @@ function playAudio() {
 }
 
 // ═══════ SETUP ═══════
-function openSetup() {
+var blRounds = 5;
+function openSetup(mode) {
+  gameMode = mode || 'talmut';
   selected=[]; customInputs=[];
   document.getElementById('custom-list').innerHTML='';
+  // Show/hide BL elements
+  document.getElementById('bl-note').style.display = gameMode==='blue' ? 'block' : 'none';
+  document.getElementById('rounds-wrap').style.display = gameMode==='blue' ? 'block' : 'none';
+  document.getElementById('rounds-val').textContent = blRounds;
+  // Update title
+  document.querySelector('#s-setup .ph-title').textContent = gameMode==='blue' ? 'Blue Lagoon' : 'Nueva partida';
   renderChips(); renderPreview(); updateAddBtn();
   showScreen('s-setup');
+}
+function changeRounds(delta) {
+  blRounds = Math.max(1, Math.min(9, blRounds + delta));
+  document.getElementById('rounds-val').textContent = blRounds;
 }
 
 function renderChips() {
@@ -313,7 +347,7 @@ function renderChips() {
 }
 
 function toggleChip(key) {
-  playAudio();
+  if(gameMode !== 'blue') playAudio();
   var i=selected.indexOf(key);
   if(i>-1){ selected.splice(i,1); } else { selected.push(key); }
   renderChips(); renderPreview();
@@ -357,7 +391,8 @@ function startGame(){
   var players=getAllPlayers();
   if(players.length<2){ alert('Selecciona al menos 2 jugadores.'); return; }
   gamePlayers=players.map(function(n){return{name:n};});
-  scoreValues=gamePlayers.map(function(){ return Array(TOTAL_ROUNDS).fill(''); });
+  var rounds = gameMode==='blue' ? blRounds : TOTAL_ROUNDS;
+  scoreValues=gamePlayers.map(function(){ return Array(rounds).fill(''); });
   openFinger();
 }
 
@@ -492,27 +527,34 @@ function pickWinner(){
 function goToGame(){
   buildGameTable();
   showScreen('s-game');
-  // solo_quede_uno suena 2 segundos después de entrar
-  setTimeout(function(){
-    var a=new Audio('solo_quede_uno.mp3'); a.volume=0.85;
-    a.play().catch(function(){});
-  }, 2000);
+  if(gameMode !== 'blue'){
+    setTimeout(function(){
+      var a=new Audio('solo_quede_uno.mp3'); a.volume=0.85;
+      a.play().catch(function(){});
+    }, 2000);
+  }
 }
 
 // ═══════ TABLA DE JUEGO ═══════
 function buildGameTable(){
   var tbl=document.getElementById('score-table');
   var n=gamePlayers.length;
+  var rounds = scoreValues[0] ? scoreValues[0].length : TOTAL_ROUNDS;
 
   // Cabecera
   var head='<thead><tr><th>#</th>';
   gamePlayers.forEach(function(p){ head+='<th>'+p.name+'</th>'; });
   head+='</tr></thead>';
 
+  // Game title
+  document.querySelector('#s-game .ph-title').innerHTML = gameMode==='blue'
+    ? 'Blue Lagoon &nbsp;<span style="font-size:9px;color:var(--w30);letter-spacing:1px;text-transform:uppercase">'+rounds+' rondas</span>'
+    : 'Talmut &nbsp;<span style="font-size:9px;color:var(--w30);letter-spacing:1px;text-transform:uppercase">Oficial · 10 rondas</span>';
+
   // Cuerpo
   var body='<tbody>';
   cellOrder=[];
-  for(var r=0;r<TOTAL_ROUNDS;r++){
+  for(var r=0;r<rounds;r++){
     body+='<tr><td>'+(r+1)+'</td>';
     for(var p=0;p<n;p++){
       var id='c'+r+'_'+p;
@@ -594,7 +636,8 @@ function updateTable(){
   });
 
   // Color celdas por ronda
-  for(var r=0;r<TOTAL_ROUNDS;r++){
+  var rounds2=scoreValues[0]?scoreValues[0].length:TOTAL_ROUNDS;
+  for(var r=0;r<rounds2;r++){
     var vals=[];
     var allFilled=true;
     for(var p=0;p<n;p++){
