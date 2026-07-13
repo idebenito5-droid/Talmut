@@ -436,7 +436,7 @@ function _renderScreen(id,mode){
   window.scrollTo(0,0);
   var contentEl=document.querySelector('#'+id+' .content');
   if(contentEl){
-    if(id==='s-constitution'||id==='s-history'||id==='s-stats'||id==='s-game'){contentEl.classList.add('content-scroll');}
+    if(id==='s-constitution'||id==='s-history'||id==='s-stats-table'||id==='s-game'){contentEl.classList.add('content-scroll');}
     else{contentEl.classList.remove('content-scroll');}
   }
   if(id==='s-setup'){
@@ -456,7 +456,7 @@ function _renderScreen(id,mode){
   
   if(id==='s-stats-table'){renderStatsTable();startHofMusic();}
   if(id==='s-home')renderHomeCounter();
-  else if(id!=='s-stats-table'){stopHofMusic();}
+  if(id!=='s-stats-table'){stopHofMusic();}
 }
 
 function go(id,mode){
