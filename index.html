@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="touch-action:none">
 <head>
 <meta charset="UTF-8">
 <meta name="theme-color" content="#0B1F3A">
@@ -18,7 +18,7 @@
 :root{--navy:#0B1F3A;--navy-light:#112847;--navy-mid:#0D2240;--gold:#B8860B;--gold-bright:#D4A017;--gold-light:rgba(184,134,11,0.12);--gold-border:rgba(184,134,11,0.4);--gold-border-strong:rgba(184,134,11,0.7);--white:#FFF;--white-90:rgba(255,255,255,0.9);--white-60:rgba(255,255,255,0.6);--white-30:rgba(255,255,255,0.3);--white-10:rgba(255,255,255,0.08);--white-05:rgba(255,255,255,0.04);--r:8px}
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--navy);color:var(--white);font-family:'Inter',sans-serif;font-size:15px}
-body{min-height:100vh}
+body{min-height:100vh;touch-action:none;-webkit-tap-highlight-color:transparent}
 .screen{display:none;height:100vh;max-height:100vh;flex-direction:column;background:var(--navy);overflow:hidden}
 .screen.active{display:flex;height:100vh;max-height:100vh;overflow:hidden}
 .home-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0.5rem 1.5rem;overflow:hidden;max-height:100vh;position:relative}
@@ -203,20 +203,18 @@ tfoot td.td-winner{color:var(--gold-bright)}
       </div>
         </div><span class="menu-arrow">&#8250;</span>
       </div>
+      <div style="margin-top:8px;text-align:center;padding:6px 0">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,0.18);margin-bottom:3px">Partidas jugadas</div>
+        <div id="odo-text" style="font-family:'Courier New',monospace;font-size:22px;letter-spacing:6px;color:var(--gold-bright)">00000</div>
+      </div>
     </div>
-  <div style="position:absolute;bottom:2rem;left:0;right:0;text-align:center;pointer-events:none">
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,0.18);margin-bottom:5px">Partidas jugadas</div>
-    <div id="odo-text" style="font-family:'Courier New',monospace;font-size:24px;letter-spacing:8px;color:var(--gold-bright)">00000</div>
-  </div>
   </div>
 </div>
 
-<div class="screen" id="s-setup">
-  <div class="page-header">
-    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
-    <div class="page-header-title" id="setup-title">Nueva partida</div>
+<div class="screen" id="s-setup" style="position:relative">
     <button id="setup-mute-btn" onclick="toggleSetupMusic()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:20px;color:rgba(255,255,255,0.35);padding:4px 8px;-webkit-tap-highlight-color:transparent" title="Silenciar música">&#128266;</button>
   </div>
+  <button id="setup-mute-btn" onclick="toggleSetupMusic()" style="position:absolute;top:12px;right:16px;z-index:30;background:none;border:none;cursor:pointer;font-size:22px;color:rgba(255,255,255,0.35);-webkit-tap-highlight-color:transparent">&#128266;</button>
   <div class="content">
     <div id="blue-lagoon-note" style="display:none;margin-bottom:1.25rem;padding:1rem 1.25rem;border:1px solid rgba(100,220,200,0.3);border-radius:var(--r);background:rgba(10,100,120,0.2)">
       <p style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--white-60);line-height:1.8;margin-bottom:.75rem">Una partida oficial son diez rondas. Lo que viene ahora es otra cosa.</p>
@@ -243,7 +241,7 @@ tfoot td.td-winner{color:var(--gold-bright)}
 
 <div class="screen" id="s-finger" style="overflow:hidden;position:relative">
   <button class="back-btn" onclick="go('s-setup',gameMode)" aria-label="Volver" style="position:absolute;top:12px;left:12px;z-index:30;background:rgba(0,0,0,0.4);border-color:rgba(255,255,255,0.2)">&#8249;</button>
-  <div id="finger-arena" style="position:absolute;inset:0;background:var(--navy);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none"></div>
+  <div id="finger-arena" style="position:absolute;inset:0;background:var(--navy);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer"></div>
   <div id="finger-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;pointer-events:none">
     <div id="finger-msg" style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:500;color:var(--white);text-align:center;padding:0 2rem;line-height:1.3;transition:opacity .4s">Poned los dedos</div>
     <div id="finger-sub" style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;text-align:center;letter-spacing:1px">Todos a la vez cuando empiece la cuenta</div>
@@ -254,9 +252,6 @@ tfoot td.td-winner{color:var(--gold-bright)}
 </div>
 
 <div class="screen" id="s-game">
-  <div class="page-header">
-    <button class="back-btn" onclick="confirmBack()" aria-label="Volver">&#8249;</button>
-    <div class="page-header-title" id="game-title">Partida</div>
     <div class="page-badge" id="game-badge"></div>
   </div>
   <div class="content content-scroll">
@@ -282,18 +277,12 @@ tfoot td.td-winner{color:var(--gold-bright)}
 </div>
 
 <div class="screen" id="s-history">
-  <div class="page-header">
-    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
-    <div class="page-header-title">Hist&oacute;rico</div>
   </div>
   <div class="content content-scroll"><div id="history-list"></div></div>
 </div>
 
 
 <div class="screen" id="s-constitution">
-  <div class="page-header">
-    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
-    <div class="page-header-title">La Maltesa</div>
   </div>
   <div class="content content-scroll">
     <div class="constitution">
@@ -467,11 +456,22 @@ function _renderScreen(id,mode){
 function go(id,mode){
   if(id==='s-home'){_screenHistory=['s-home'];}
   else{_screenHistory.push(id);}
-  history.replaceState({screen:id},'','');
+  history.pushState({screen:id},'','');
   _renderScreen(id,mode);
 }
 
 window.addEventListener('popstate',function(e){
+  var cur=_screenHistory[_screenHistory.length-1];
+  if(cur==='s-game'){
+    if(confirm('¿Seguro que quieres salir? Se perderán todos los datos de esta partida.')){
+      _screenHistory.pop();
+      var prev=_screenHistory[_screenHistory.length-1]||'s-home';
+      _renderScreen(prev);
+    } else {
+      history.pushState({screen:'s-game'},'','');
+    }
+    return;
+  }
   if(_screenHistory.length>1){
     _screenHistory.pop();
     var prev=_screenHistory[_screenHistory.length-1];
@@ -934,7 +934,7 @@ function startFingerCountdown(){
 
 function pickFingerWinner(){
   fingerPhase='result';var keys=Object.keys(fingerTouches);
-  if(!keys.length){document.getElementById('finger-msg').textContent='¡Nadie puso el dedo!';document.getElementById('finger-sub').textContent='';setTimeout(resetFinger,2000);return;}
+  if(!keys.length){var _fm=document.getElementById('finger-msg');_fm.style.fontSize='22px';_fm.style.fontFamily="'Cormorant Garamond',serif";_fm.textContent='¡Pero poned los dedos! ¡HOMBRE YA!';document.getElementById('finger-sub').textContent='';setTimeout(resetFinger,2000);return;}
   fingerWinner=keys[Math.floor(Math.random()*keys.length)];
   renderFingerDots();
   var _fm=document.getElementById('finger-msg');
@@ -1032,12 +1032,10 @@ function stopHofMusic(){
 
 
 
-<div class="screen" id="s-stats-table">
-  <div class="page-header">
-    <button class="back-btn" onclick="go('s-home')" aria-label="Volver">&#8249;</button>
-    <div class="page-header-title">Hall of Fame</div>
+<div class="screen" id="s-stats-table" style="position:relative">
     <button id="hof-mute-btn" onclick="toggleHofMusic()" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:20px;color:var(--gold);padding:4px 8px;-webkit-tap-highlight-color:transparent" title="Silenciar música">&#128266;</button>
   </div>
+  <button id="hof-mute-btn" onclick="toggleHofMusic()" style="position:absolute;top:12px;right:16px;z-index:30;background:none;border:none;cursor:pointer;font-size:22px;color:var(--gold);-webkit-tap-highlight-color:transparent">&#128266;</button>
   <div class="content content-scroll" style="padding:0.75rem">
     <div id="stats-table-content"></div>
   </div>
