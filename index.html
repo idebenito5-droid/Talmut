@@ -7,298 +7,270 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 :root {
-  --navy:   #0B1F3A;
-  --gold:   #B8860B;
-  --gold2:  #D4A017;
-  --gbord:  rgba(184,134,11,0.35);
-  --w:      #ffffff;
-  --w60:    rgba(255,255,255,0.6);
-  --w30:    rgba(255,255,255,0.3);
-  --w10:    rgba(255,255,255,0.08);
-  --r:      12px;
+  --navy:#0B1F3A; --gold:#B8860B; --gold2:#D4A017;
+  --gbord:rgba(184,134,11,0.35); --gbord2:rgba(184,134,11,0.6);
+  --w:#fff; --w60:rgba(255,255,255,0.6); --w30:rgba(255,255,255,0.3); --w10:rgba(255,255,255,0.08);
+  --green:rgba(39,174,96,0.25); --greentext:#7ddb8a;
+  --red:rgba(192,57,43,0.22);   --redtext:#f07070;
+  --r:12px;
 }
+html,body { height:100%; overflow:hidden; background:var(--navy); color:var(--w); font-family:'Inter',sans-serif; }
 
-html, body {
-  height: 100%; overflow: hidden;
-  background: var(--navy);
-  color: var(--w);
-  font-family: 'Inter', sans-serif;
-}
+/* SCREENS */
+.screen { display:none; height:100vh; flex-direction:column; overflow:hidden; position:relative; }
+.screen.active { display:flex; }
 
-/* ── SCREENS ── */
-.screen {
-  display: none;
-  height: 100vh;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-}
-.screen.active { display: flex; }
+/* ── HOME ── */
+#s-home { align-items:center; justify-content:flex-start; padding:2.5rem 1.5rem 2rem; }
+.home-header { display:flex; flex-direction:column; align-items:center; margin-bottom:2rem; }
+.home-logo { width:80px; height:80px; object-fit:contain; border-radius:16px; margin-bottom:.75rem; }
+.home-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:500; letter-spacing:6px; color:var(--w); margin-bottom:.3rem; }
+.home-sub { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--w30); }
+.home-menu { width:100%; max-width:340px; }
+.talmut-card { width:100%; display:flex; align-items:center; gap:14px; padding:1rem 1.25rem; background:rgba(0,0,0,0.25); border:1px solid var(--gbord); border-radius:var(--r); cursor:pointer; transition:background .15s; }
+.talmut-card:active { background:rgba(184,134,11,0.1); }
+.card-icon { width:44px; height:44px; object-fit:contain; }
+.card-label { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; letter-spacing:3px; }
+.card-desc { font-size:11px; color:var(--w30); margin-top:2px; }
+.card-arrow { color:var(--gold2); font-size:20px; margin-left:auto; }
 
-/* ══════════════════════════════
-   HOME
-══════════════════════════════ */
-#s-home {
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
-}
+/* ── SETUP ── */
+#s-setup { justify-content:flex-start; }
+.ph { display:flex; align-items:center; gap:10px; padding:.8rem 1rem; border-bottom:.5px solid var(--gbord); flex-shrink:0; }
+.back-btn { background:none; border:.5px solid var(--w10); border-radius:8px; color:var(--w60); font-size:20px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.ph-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:500; }
+.setup-body { flex:1; display:flex; flex-direction:column; justify-content:center; padding:1.25rem 1rem; overflow:hidden; }
+.slabel { font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--gold2); font-weight:500; margin-bottom:.5rem; margin-top:.9rem; }
+.slabel:first-child { margin-top:0; }
+.chips-row { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { padding:7px 16px; border:.5px solid var(--w30); border-radius:20px; font-size:13px; font-weight:500; color:var(--w60); cursor:pointer; background:transparent; font-family:'Inter',sans-serif; transition:all .15s; }
+.chip.on { border-color:#E8A000; background:rgba(232,160,0,0.15); color:#E8A000; }
+.custom-list { display:flex; flex-direction:column; gap:8px; margin-bottom:4px; }
+.custom-row { display:flex; align-items:center; gap:8px; }
+.custom-input { flex:1; background:var(--w10); border:.5px solid rgba(255,255,255,0.12); border-radius:10px; padding:9px 14px; color:var(--w); font-size:13px; font-family:'Inter',sans-serif; }
+.custom-input:focus { outline:none; border-color:var(--gbord); }
+.custom-input::placeholder { color:var(--w30); }
+.del-btn { width:28px; height:28px; background:none; border:.5px solid var(--w10); border-radius:50%; color:var(--w30); font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+.add-btn { display:flex; align-items:center; gap:6px; background:none; border:.5px dashed var(--w30); border-radius:10px; padding:8px 14px; color:var(--w30); font-size:13px; font-family:'Inter',sans-serif; cursor:pointer; width:100%; margin-top:4px; }
+.add-btn:active { border-color:var(--gold); color:var(--gold); }
+.preview { display:flex; flex-wrap:wrap; gap:6px; min-height:24px; }
+.stag { font-size:12px; color:var(--w60); background:var(--w10); border-radius:12px; padding:3px 10px; }
+.btn-start { width:100%; padding:.9rem; background:var(--gold); border:none; border-radius:var(--r); color:#fff; font-size:15px; font-weight:600; font-family:'Inter',sans-serif; margin-top:1rem; cursor:pointer; }
+.btn-start:active { opacity:.85; }
 
-.talmut-card {
-  width: 100%;
-  max-width: 340px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 1rem 1.25rem;
-  background: rgba(0,0,0,0.25);
-  border: 1px solid var(--gbord);
-  border-radius: var(--r);
-  cursor: pointer;
-  transition: background .15s;
-}
-.talmut-card:active { background: rgba(184,134,11,0.1); }
+/* ── FINGER ── */
+#s-finger { background:#0B1F3A; }
+#finger-arena { position:absolute; inset:0; touch-action:none; user-select:none; -webkit-user-select:none; }
+#finger-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none; z-index:5; }
+#finger-msg { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:500; color:var(--w); text-align:center; padding:0 2rem; }
+#finger-sub { font-size:12px; color:var(--w30); margin-top:.5rem; letter-spacing:1px; text-align:center; }
+#finger-start-btn { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); z-index:10; padding:.7rem 2.5rem; background:var(--gold); border:none; border-radius:var(--r); color:#fff; font-size:15px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; }
+#finger-back-btn { position:absolute; top:14px; left:14px; z-index:10; background:rgba(0,0,0,0.4); border:.5px solid var(--w10); border-radius:8px; color:var(--w60); font-size:20px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
 
-.talmut-card img { width: 48px; height: 48px; object-fit: contain; border-radius: 10px; }
+/* ── GAME ── */
+#s-game { }
+.game-ph { display:flex; align-items:center; gap:10px; padding:.7rem 1rem; border-bottom:.5px solid var(--gbord); flex-shrink:0; }
+.game-body { flex:1; display:flex; flex-direction:column; padding:.75rem; overflow:hidden; gap:.6rem; }
+.table-scroll { overflow-x:auto; flex-shrink:0; }
+.score-table { border-collapse:collapse; min-width:100%; }
+.score-table th { font-size:11px; font-weight:500; color:var(--gold2); padding:5px 6px; text-align:center; border-bottom:.5px solid var(--gbord); white-space:nowrap; }
+.score-table th:first-child { color:var(--w30); width:26px; font-size:10px; }
+.score-table td { padding:2px 3px; text-align:center; }
+.score-table td:first-child { font-size:10px; color:var(--w30); }
+.score-input { width:100%; border:none; background:transparent; color:var(--w); font-size:14px; text-align:center; padding:5px 2px; font-family:'Inter',sans-serif; -webkit-appearance:none; min-width:42px; }
+.score-input:focus { outline:2px solid var(--gold); border-radius:4px; background:rgba(184,134,11,0.08); }
+.score-input.win  { background:var(--green); color:var(--greentext); font-weight:600; border-radius:4px; }
+.score-input.lose { background:var(--red);   color:var(--redtext);   font-weight:600; border-radius:4px; }
+.tot-row td { padding:5px 6px; font-weight:600; font-size:14px; border-top:.5px solid var(--gbord2); }
+.tot-row td.leader { color:var(--gold2); }
 
-.talmut-card-text { flex: 1; }
-.talmut-card-text .label { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; letter-spacing: 3px; color: var(--w); }
-.talmut-card-text .desc  { font-size: 11px; color: var(--w30); margin-top: 2px; letter-spacing: 1px; }
-
-.talmut-card .arrow { color: var(--gold2); font-size: 20px; }
-
-/* ══════════════════════════════
-   SETUP — PLAYER SELECTION
-══════════════════════════════ */
-#s-setup {
-  background: var(--navy);
-}
-
-.setup-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: .8rem 1rem;
-  border-bottom: .5px solid var(--gbord);
-  flex-shrink: 0;
-}
-.back-btn {
-  background: none;
-  border: .5px solid var(--w10);
-  border-radius: 8px;
-  color: var(--w60);
-  font-size: 20px;
-  width: 34px; height: 34px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-}
-.setup-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px; font-weight: 500;
-}
-
-.setup-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem 1rem 1.5rem;
-  -webkit-overflow-scrolling: touch;
-}
-
-.section-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--gold2);
-  font-weight: 500;
-  margin-bottom: .5rem;
-  margin-top: .9rem;
-}
-.section-label:first-child { margin-top: 0; }
-
-/* Preset chips */
-.chips-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.chip {
-  padding: 7px 16px;
-  border: .5px solid var(--w30);
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--w60);
-  cursor: pointer;
-  transition: all .15s;
-  background: transparent;
-  font-family: 'Inter', sans-serif;
-}
-.chip.selected {
-  border-color: #E8A000;
-  background: rgba(232,160,0,0.15);
-  color: #E8A000;
-}
-
-/* Custom players */
-.custom-list { display: flex; flex-direction: column; gap: 8px; }
-.custom-row  { display: flex; align-items: center; gap: 8px; }
-.custom-input {
-  flex: 1;
-  background: var(--w10);
-  border: .5px solid rgba(255,255,255,0.12);
-  border-radius: 10px;
-  padding: 9px 14px;
-  color: var(--w);
-  font-size: 13px;
-  font-family: 'Inter', sans-serif;
-}
-.custom-input:focus { outline: none; border-color: var(--gbord); }
-.custom-input::placeholder { color: var(--w30); }
-.remove-btn {
-  width: 28px; height: 28px;
-  background: none;
-  border: .5px solid var(--w10);
-  border-radius: 50%;
-  color: var(--w30);
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.add-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: .5px dashed var(--w30);
-  border-radius: 10px;
-  padding: 8px 14px;
-  color: var(--w30);
-  font-size: 13px;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 4px;
-  transition: all .15s;
-}
-.add-btn:active { border-color: var(--gold); color: var(--gold); }
-.add-btn .plus { font-size: 18px; font-weight: 300; }
-
-/* Selected preview */
-.selected-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  min-height: 28px;
-}
-.stag {
-  font-size: 12px;
-  color: var(--w60);
-  background: var(--w10);
-  border-radius: 12px;
-  padding: 3px 10px;
-}
-
-/* Start button */
-.btn-start {
-  width: 100%;
-  padding: .9rem;
-  background: var(--gold);
-  border: none;
-  border-radius: var(--r);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: .5px;
-  margin-top: 1.25rem;
-  cursor: pointer;
-}
-.btn-start:active { opacity: .85; }
+/* RANKING */
+.rank-label { font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--gold2); margin-bottom:.35rem; flex-shrink:0; }
+.rank-table { width:100%; border-collapse:collapse; border:.5px solid var(--gbord); border-radius:8px; overflow:hidden; flex-shrink:0; }
+.rank-table th { font-size:9px; color:var(--gold2); padding:5px 8px; text-transform:uppercase; letter-spacing:.5px; background:rgba(184,134,11,0.12); }
+.rank-table td { padding:6px 8px; font-size:13px; border-top:.5px solid rgba(184,134,11,0.08); }
+.rank-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
 </style>
 </head>
 <body>
 
-<!-- ══ HOME ══ -->
+<!-- HOME -->
 <div class="screen active" id="s-home">
-  <button class="talmut-card" onclick="openSetup()">
-    <img src="icon.png" alt="Talmut">
-    <div class="talmut-card-text">
-      <div class="label">TALMUT</div>
-      <div class="desc">Partida oficial · 10 rondas</div>
-    </div>
-    <span class="arrow">›</span>
-  </button>
+  <div class="home-header">
+    <img src="icon.png" alt="Logo" class="home-logo">
+    <div class="home-title">TALMUT</div>
+    <div class="home-sub">HIC LUDUS ERROREM PUNIT</div>
+  </div>
+  <div class="home-menu">
+    <button class="talmut-card" onclick="openSetup()">
+      <img src="Talmut.png" alt="Talmut" class="card-icon">
+      <div style="flex:1">
+        <div class="card-label">TALMUT</div>
+        <div class="card-desc">Partida oficial · 10 rondas</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </button>
+  </div>
 </div>
 
-<!-- ══ SETUP ══ -->
+<!-- SETUP -->
 <div class="screen" id="s-setup">
-  <div class="setup-header">
-    <button class="back-btn" onclick="goHome()">‹</button>
-    <span class="setup-title">Nueva partida</span>
+  <div class="ph">
+    <button class="back-btn" onclick="showScreen('s-home')">‹</button>
+    <span class="ph-title">Nueva partida</span>
   </div>
   <div class="setup-body">
-
-    <div class="section-label">Selecciona los jugadores</div>
+    <div class="slabel">Selecciona los jugadores</div>
     <div class="chips-row" id="preset-chips"></div>
-
-    <div class="section-label">Añadir jugador</div>
+    <div class="slabel">Añadir jugador</div>
     <div class="custom-list" id="custom-list"></div>
-    <button class="add-btn" id="add-btn" onclick="addCustomField()">
-      <span class="plus">+</span> Añadir jugador
+    <button class="add-btn" id="add-btn" onclick="addCustom()">
+      <span style="font-size:18px;font-weight:300">+</span> Añadir jugador
     </button>
-
-    <div class="section-label">En juego</div>
-    <div class="selected-preview" id="selected-preview"></div>
-
+    <div class="slabel">En juego</div>
+    <div class="preview" id="preview"></div>
     <button class="btn-start" onclick="startGame()">Comenzar partida ›</button>
+  </div>
+</div>
 
+<!-- FINGER -->
+<div class="screen" id="s-finger">
+  <button id="finger-back-btn" onclick="showScreen('s-setup')">‹</button>
+  <div id="finger-arena"></div>
+  <div id="finger-center">
+    <div id="finger-msg">Poned los dedos</div>
+    <div id="finger-sub">Toca la pantalla para iniciar la cuenta atrás</div>
+  </div>
+  <button id="finger-start-btn" onclick="startCountdown()">Iniciar cuenta atrás</button>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="s-game">
+  <div class="game-ph">
+    <button class="back-btn" onclick="confirmLeave()">‹</button>
+    <span class="ph-title" id="game-title">Talmut</span>
+  </div>
+  <div class="game-body">
+    <div class="table-scroll">
+      <table class="score-table" id="score-table"></table>
+    </div>
+    <div class="rank-label">Clasificación en tiempo real</div>
+    <table class="rank-table">
+      <thead><tr>
+        <th style="width:22px;text-align:left">#</th>
+        <th style="text-align:left">Jugador</th>
+        <th>Pts</th>
+        <th>Dif</th>
+      </tr></thead>
+      <tbody id="rank-body"></tbody>
+    </table>
   </div>
 </div>
 
 <script>
-// ── DATOS ──
+// ═══════════════════════════════
+// CONSTANTES
+// ═══════════════════════════════
 var PRESET = [
-  { key:'adrian', name:'Adrián' },
-  { key:'aleix',  name:'Aleix'  },
-  { key:'arnau',  name:'Arnau'  },
-  { key:'edu',    name:'Edu'    },
-  { key:'marc',   name:'Marc'   },
-  { key:'nacho',  name:'Nacho'  },
+  {key:'adrian', name:'Adrián'},
+  {key:'aleix',  name:'Aleix'},
+  {key:'arnau',  name:'Arnau'},
+  {key:'edu',    name:'Edu'},
+  {key:'marc',   name:'Marc'},
+  {key:'nacho',  name:'Nacho'},
 ];
 
-var MAX_CUSTOM = 5;
-var selected   = [];   // keys of selected preset players
-var customInputs = []; // array of input element references
+var AUDIO_FILES = [
+  'bastardo.mp3','basura_feo.mp3','billy.mp3','choza.mp3','doblaos.mp3',
+  'frances.mp3','gij_rojbla.mp3','juego_entero.mp3','kkk.mp3','mlg_blaazu.mp3',
+  'osasuna.mp3','parche_hdp.mp3','parches_ofi.mp3','peinaguindillas.mp3',
+  'pes_verdad.mp3','porra.mp3','rasgaprepucios.mp3','september.mp3',
+  'siuuu.mp3','tiki_taka.mp3','cerdo_mixta.mp3','palo.mp3','pitapita.mp3',
+  'maraton.mp3','rocas.mp3','Fieshta.mp3','africa.mp3','helikopter.mp3',
+  'Da\u00f1o_Tio.mp3','Mosca_Fanta.mp3','Fanta1.mp3','esperare.m4a',
+  'oso_caja.mp3','Caja.mp3','Vodka.mp3','Groove.m4a','Huele_Raro.mp3',
+  'Cara_Al_Sol.mp3','Pedro1.mp3','Stelio_Kontos.mp3','avengers.mp3','MARC.mp3',
+  'Rubiales.mp3','Curazao.mp3','Cilantro.mp3','negros.mp3','lavate_manos.mp3'
+];
 
-// ── NAVEGACIÓN ──
-function show(id) {
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+var FINGER_COLORS = [
+  '#E74C3C','#3498DB','#2ECC71','#F39C12',
+  '#9B59B6','#1ABC9C','#E67E22','#E91E63'
+];
+
+var TOTAL_ROUNDS = 10;
+
+// ═══════════════════════════════
+// ESTADO GLOBAL
+// ═══════════════════════════════
+var selected     = [];   // claves preset seleccionadas
+var customInputs = [];   // referencias a <input> libres
+var gamePlayers  = [];   // [{name}] al empezar partida
+var scores       = [];   // scores[ronda][jugador]
+
+// Audio
+var audioQueue   = [];
+var currentAudio = null;
+
+// Finger
+var fingerPhase    = 'idle';
+var fingerTouches  = {};
+var fingerTimer    = null;
+var fingerCountdown= null;
+
+// ═══════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) {
+    s.classList.remove('active');
+  });
   document.getElementById(id).classList.add('active');
 }
 
+// ═══════════════════════════════
+// AUDIO — cola sin repetición
+// ═══════════════════════════════
+function shuffleQueue() {
+  audioQueue = AUDIO_FILES.slice();
+  for (var i = audioQueue.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = audioQueue[i]; audioQueue[i] = audioQueue[j]; audioQueue[j] = t;
+  }
+}
+shuffleQueue();
+
+function playAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (!audioQueue.length) shuffleQueue();
+  var file = audioQueue.pop();
+  currentAudio = new Audio(file);
+  currentAudio.volume = 1.0;
+  var p = currentAudio.play();
+  if (p && p.catch) p.catch(function() {});
+}
+
+// ═══════════════════════════════
+// SETUP
+// ═══════════════════════════════
 function openSetup() {
-  selected     = [];
+  selected = [];
   customInputs = [];
   document.getElementById('custom-list').innerHTML = '';
   renderChips();
   renderPreview();
   updateAddBtn();
-  show('s-setup');
+  showScreen('s-setup');
 }
 
-function goHome() { show('s-home'); }
-
-// ── CHIPS ──
 function renderChips() {
   var wrap = document.getElementById('preset-chips');
   wrap.innerHTML = '';
   PRESET.forEach(function(p) {
     var btn = document.createElement('button');
-    btn.className = 'chip' + (selected.includes(p.key) ? ' selected' : '');
+    btn.className = 'chip' + (selected.includes(p.key) ? ' on' : '');
     btn.textContent = p.name;
     btn.addEventListener('click', function() { toggleChip(p.key); });
     wrap.appendChild(btn);
@@ -306,63 +278,45 @@ function renderChips() {
 }
 
 function toggleChip(key) {
+  playAudio();
   var i = selected.indexOf(key);
   if (i > -1) { selected.splice(i, 1); }
-  else         { selected.push(key);    }
+  else         { selected.push(key); }
   renderChips();
   renderPreview();
 }
 
-// ── CAMPOS LIBRES ──
-function addCustomField() {
-  if (customInputs.length >= MAX_CUSTOM) return;
-
+function addCustom() {
+  if (customInputs.length >= 5) return;
   var list = document.getElementById('custom-list');
   var row  = document.createElement('div');
   row.className = 'custom-row';
-
   var inp = document.createElement('input');
-  inp.type        = 'text';
-  inp.className   = 'custom-input';
+  inp.type = 'text'; inp.className = 'custom-input';
   inp.placeholder = 'Nombre del jugador';
   inp.addEventListener('input', renderPreview);
-
   var del = document.createElement('button');
-  del.className   = 'remove-btn';
-  del.textContent = '×';
+  del.className = 'del-btn'; del.textContent = '×';
   del.addEventListener('click', function() {
     list.removeChild(row);
     customInputs = customInputs.filter(function(x) { return x !== inp; });
-    renderPreview();
-    updateAddBtn();
+    renderPreview(); updateAddBtn();
   });
-
-  row.appendChild(inp);
-  row.appendChild(del);
+  row.appendChild(inp); row.appendChild(del);
   list.appendChild(row);
   customInputs.push(inp);
   inp.focus();
-  updateAddBtn();
-  renderPreview();
+  updateAddBtn(); renderPreview();
 }
 
 function updateAddBtn() {
-  var btn = document.getElementById('add-btn');
-  btn.style.display = customInputs.length >= MAX_CUSTOM ? 'none' : 'flex';
-}
-
-// ── PREVIEW ──
-function renderPreview() {
-  var all = getAllPlayers();
-  var wrap = document.getElementById('selected-preview');
-  wrap.innerHTML = all.map(function(n) {
-    return '<span class="stag">' + n + '</span>';
-  }).join('');
+  document.getElementById('add-btn').style.display =
+    customInputs.length >= 5 ? 'none' : 'flex';
 }
 
 function getAllPlayers() {
-  var names = selected.map(function(key) {
-    return PRESET.find(function(p) { return p.key === key; }).name;
+  var names = selected.map(function(k) {
+    return PRESET.find(function(p) { return p.key === k; }).name;
   });
   customInputs.forEach(function(inp) {
     var v = inp.value.trim();
@@ -371,15 +325,306 @@ function getAllPlayers() {
   return names;
 }
 
-// ── COMENZAR ──
+function renderPreview() {
+  var wrap = document.getElementById('preview');
+  wrap.innerHTML = getAllPlayers().map(function(n) {
+    return '<span class="stag">' + n + '</span>';
+  }).join('');
+}
+
+// ═══════════════════════════════
+// INICIO DE PARTIDA → DEDOS
+// ═══════════════════════════════
 function startGame() {
   var players = getAllPlayers();
-  if (players.length < 2) {
-    alert('Selecciona al menos 2 jugadores.');
+  if (players.length < 2) { alert('Selecciona al menos 2 jugadores.'); return; }
+  gamePlayers = players.map(function(n) { return { name: n }; });
+  scores = [];
+  for (var r = 0; r < TOTAL_ROUNDS; r++) {
+    scores[r] = gamePlayers.map(function() { return ''; });
+  }
+  openFinger();
+}
+
+// ═══════════════════════════════
+// JUEGO DEL DEDO
+// ═══════════════════════════════
+function openFinger() {
+  // Reset estado
+  fingerPhase   = 'idle';
+  fingerTouches = {};
+  clearTimeout(fingerTimer);
+  clearInterval(fingerCountdown);
+  fingerTimer     = null;
+  fingerCountdown = null;
+
+  // Reset UI
+  var arena = document.getElementById('finger-arena');
+  arena.innerHTML = '';
+  arena.style.background = 'var(--navy)';
+
+  var msg = document.getElementById('finger-msg');
+  msg.style.fontSize   = '32px';
+  msg.style.fontFamily = "'Cormorant Garamond',serif";
+  msg.style.color      = '#fff';
+  msg.textContent      = 'Poned los dedos';
+
+  document.getElementById('finger-sub').textContent = 'Toca la pantalla para iniciar la cuenta atrás';
+  document.getElementById('finger-start-btn').style.display = 'block';
+  document.getElementById('finger-back-btn').style.display  = 'flex';
+
+  showScreen('s-finger');
+
+  // Eventos táctiles en el arena
+  arena.addEventListener('touchstart',  onTouchStart,  {passive: false});
+  arena.addEventListener('touchmove',   onTouchMove,   {passive: false});
+  arena.addEventListener('touchend',    onTouchEnd,    {passive: false});
+  arena.addEventListener('touchcancel', onTouchEnd,    {passive: false});
+}
+
+function onTouchStart(e) {
+  e.preventDefault();
+  if (fingerPhase !== 'active') return;
+  for (var i = 0; i < e.changedTouches.length; i++) {
+    var t = e.changedTouches[i];
+    var colorIdx = Object.keys(fingerTouches).length % FINGER_COLORS.length;
+    fingerTouches[t.identifier] = {
+      x: t.clientX, y: t.clientY,
+      color: FINGER_COLORS[colorIdx]
+    };
+  }
+  renderDots();
+}
+
+function onTouchMove(e) { e.preventDefault(); }
+
+function onTouchEnd(e) {
+  e.preventDefault();
+  if (fingerPhase !== 'active') return;
+  for (var i = 0; i < e.changedTouches.length; i++) {
+    delete fingerTouches[e.changedTouches[i].identifier];
+  }
+  renderDots();
+}
+
+function renderDots() {
+  var arena = document.getElementById('finger-arena');
+  arena.innerHTML = '';
+  Object.keys(fingerTouches).forEach(function(k) {
+    var t = fingerTouches[k];
+    var dot = document.createElement('div');
+    dot.style.cssText =
+      'position:absolute;width:64px;height:64px;border-radius:50%;' +
+      'background:' + t.color + ';opacity:0.85;pointer-events:none;' +
+      'transform:translate(-50%,-50%);' +
+      'left:' + t.x + 'px;top:' + t.y + 'px;';
+    arena.appendChild(dot);
+  });
+}
+
+function startCountdown() {
+  document.getElementById('finger-start-btn').style.display = 'none';
+  document.getElementById('finger-back-btn').style.display  = 'none';
+  fingerPhase = 'countdown';
+
+  var count = 3;
+  var msg   = document.getElementById('finger-msg');
+  var sub   = document.getElementById('finger-sub');
+
+  msg.style.fontSize   = '140px';
+  msg.style.fontFamily = 'Arial, sans-serif';
+  msg.style.fontWeight = '900';
+  msg.style.color      = '#fff';
+  msg.textContent      = '3';
+  sub.textContent      = '';
+
+  fingerCountdown = setInterval(function() {
+    count--;
+    if (count > 0) {
+      msg.textContent = String(count);
+    } else {
+      clearInterval(fingerCountdown);
+      // Pantalla negra — poned los dedos
+      document.getElementById('finger-arena').style.background = '#000';
+      msg.textContent = '';
+      sub.textContent = '';
+      fingerPhase     = 'active';
+      fingerTimer     = setTimeout(pickWinner, 5000);
+    }
+  }, 1000);
+}
+
+function pickWinner() {
+  fingerPhase = 'result';
+  var keys = Object.keys(fingerTouches);
+
+  if (keys.length === 0) {
+    var msg = document.getElementById('finger-msg');
+    msg.style.fontSize   = '20px';
+    msg.style.fontFamily = "'Cormorant Garamond',serif";
+    msg.style.color      = '#fff';
+    msg.textContent      = '¡Pero poned los dedos! ¡HOMBRE YA!';
+    var btn = document.getElementById('finger-start-btn');
+    btn.textContent = 'Reintentar';
+    btn.onclick     = openFinger;
+    btn.style.display = 'block';
     return;
   }
-  alert('¡A jugar! Jugadores: ' + players.join(', '));
-  // Aquí irá la navegación a la siguiente pantalla
+
+  var winnerKey = keys[Math.floor(Math.random() * keys.length)];
+  var winnerT   = fingerTouches[winnerKey];
+
+  // Redibuja: ganador grande y brillante, resto apagados
+  var arena = document.getElementById('finger-arena');
+  arena.innerHTML = '';
+  Object.keys(fingerTouches).forEach(function(k) {
+    var t   = fingerTouches[k];
+    var win = (k === winnerKey);
+    var dot = document.createElement('div');
+    dot.style.cssText =
+      'position:absolute;border-radius:50%;pointer-events:none;' +
+      'transform:translate(-50%,-50%);transition:all .3s;' +
+      'background:' + t.color + ';' +
+      (win
+        ? 'width:88px;height:88px;opacity:1;box-shadow:0 0 32px ' + t.color + ';'
+        : 'width:64px;height:64px;opacity:0.2;') +
+      'left:' + t.x + 'px;top:' + t.y + 'px;';
+    if (win) {
+      dot.innerHTML = '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px">★</div>';
+    }
+    arena.appendChild(dot);
+  });
+
+  document.getElementById('finger-msg').textContent = '';
+  document.getElementById('finger-sub').textContent = '';
+
+  // Botón para continuar
+  var btn = document.getElementById('finger-start-btn');
+  btn.textContent   = 'Continuar a la partida →';
+  btn.style.display = 'block';
+  btn.onclick       = goToGame;
+}
+
+function goToGame() {
+  // Suena solo_quede_uno
+  var audio = new Audio('solo_quede_uno.mp3');
+  audio.volume = 0.85;
+  audio.play().catch(function() {});
+  buildGameTable();
+  showScreen('s-game');
+}
+
+// ═══════════════════════════════
+// TABLA DE JUEGO
+// ═══════════════════════════════
+function buildGameTable() {
+  var tbl = document.getElementById('score-table');
+  var n   = gamePlayers.length;
+
+  // Cabecera
+  var head = '<tr><th>#</th>';
+  gamePlayers.forEach(function(p) {
+    head += '<th>' + p.name + '</th>';
+  });
+  head += '</tr>';
+
+  // Filas de rondas
+  var rows = '';
+  for (var r = 0; r < TOTAL_ROUNDS; r++) {
+    rows += '<tr><td>' + (r + 1) + '</td>';
+    for (var p = 0; p < n; p++) {
+      rows += '<td><input class="score-input" id="c' + r + '_' + p + '"' +
+        ' type="number" min="0" max="999" inputmode="numeric"' +
+        ' onchange="updateTable()" onfocus="this.select()"></td>';
+    }
+    rows += '</tr>';
+  }
+
+  // Fila totales
+  var totRow = '<tr class="tot-row"><td style="font-size:10px;color:var(--gold)">∑</td>';
+  for (var p2 = 0; p2 < n; p2++) {
+    totRow += '<td id="tot' + p2 + '" class="tot-cell">0</td>';
+  }
+  totRow += '</tr>';
+
+  tbl.innerHTML = head + rows + totRow;
+}
+
+function updateTable() {
+  var n = gamePlayers.length;
+  var totals = [];
+
+  for (var p = 0; p < n; p++) {
+    var sum = 0;
+    for (var r = 0; r < TOTAL_ROUNDS; r++) {
+      var inp = document.getElementById('c' + r + '_' + p);
+      var v   = inp ? parseInt(inp.value) || 0 : 0;
+      sum += v;
+    }
+    totals.push(sum);
+  }
+
+  var minTot = Math.min.apply(null, totals);
+
+  // Actualiza celdas de totales
+  for (var p3 = 0; p3 < n; p3++) {
+    var el = document.getElementById('tot' + p3);
+    if (el) {
+      el.textContent = totals[p3];
+      el.className   = 'tot-cell' + (totals[p3] === minTot ? ' leader' : '');
+    }
+  }
+
+  // Colorea celdas por ronda (verde=ganador, rojo=peor)
+  for (var r2 = 0; r2 < TOTAL_ROUNDS; r2++) {
+    var rowVals = [];
+    var allFilled = true;
+    for (var p4 = 0; p4 < n; p4++) {
+      var inp2 = document.getElementById('c' + r2 + '_' + p4);
+      var raw  = inp2 ? inp2.value.trim() : '';
+      if (raw === '') { allFilled = false; break; }
+      rowVals.push(parseInt(raw) || 0);
+    }
+    if (!allFilled) continue;
+    var rowMin = Math.min.apply(null, rowVals);
+    var rowMax = Math.max.apply(null, rowVals);
+    for (var p5 = 0; p5 < n; p5++) {
+      var inp3 = document.getElementById('c' + r2 + '_' + p5);
+      if (!inp3) continue;
+      if (rowVals[p5] === rowMin) {
+        inp3.className = 'score-input win';
+      } else if (rowVals[p5] === rowMax && rowMax !== rowMin) {
+        inp3.className = 'score-input lose';
+      } else {
+        inp3.className = 'score-input';
+      }
+    }
+  }
+
+  // Ranking en tiempo real
+  var ranked = totals.map(function(t, i) {
+    return { name: gamePlayers[i].name, tot: t };
+  }).sort(function(a, b) { return a.tot - b.tot; });
+
+  var leader = ranked[0].tot;
+  var tbody  = document.getElementById('rank-body');
+  tbody.innerHTML = ranked.map(function(p6, i) {
+    var isFirst = (i === 0);
+    var gap     = isFirst ? '—' : '+' + (p6.tot - leader);
+    return '<tr>' +
+      '<td style="color:var(--w30)">' + (i + 1) + '</td>' +
+      '<td style="text-align:left;color:' + (isFirst ? 'var(--gold2)' : 'var(--w)') + '">' +
+        (isFirst ? '★ ' : '') + p6.name + '</td>' +
+      '<td style="color:' + (isFirst ? 'var(--gold2)' : 'var(--w60)') + '">' + p6.tot + '</td>' +
+      '<td style="font-size:11px;color:' + (isFirst ? 'var(--w30)' : 'var(--redtext)') + '">' + gap + '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function confirmLeave() {
+  if (confirm('¿Salir de la partida? Se perderán los puntos.')) {
+    showScreen('s-home');
+  }
 }
 </script>
 </body>
