@@ -296,6 +296,7 @@ var screenHistory = ['s-home'];
 function showScreen(id) {
   // Stop any playing audio when changing screen
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (id !== 's-hof') { stopHofMusic(); }
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   screenHistory.push(id);
@@ -807,6 +808,7 @@ openFinger = function() {
 
 // ═══════ HALL OF FAME ═══════
 function openHof() {
+  startHofMusic();
   var history = JSON.parse(localStorage.getItem('tm_history') || '[]');
   var official = history.filter(function(g){ return g.official; });
 
@@ -861,6 +863,38 @@ function openConstitution() {
   showScreen('s-constitution');
 }
 
+
+// ═══════ HOF MUSIC ═══════
+var _hofAudio = null;
+var _hofMuted = false;
+var _hofTracks = ['MEdal_Of_Honor.mp3', 'Soldado_-Ryan.mp3', 'black_Ops.mp3'];
+
+function startHofMusic() {
+  if (_hofAudio) { _hofAudio.pause(); _hofAudio = null; }
+  var track = _hofTracks[Math.floor(Math.random() * _hofTracks.length)];
+  _hofAudio = new Audio(track);
+  _hofAudio.loop = true;
+  _hofAudio.volume = _hofMuted ? 0 : 0.3;
+  _hofAudio.play().catch(function(){});
+}
+
+function stopHofMusic() {
+  if (_hofAudio) { _hofAudio.pause(); _hofAudio.currentTime = 0; _hofAudio = null; }
+}
+
+function toggleHofMusic() {
+  _hofMuted = !_hofMuted;
+  if (_hofAudio) _hofAudio.volume = _hofMuted ? 0 : 0.3;
+  var btn = document.getElementById('hof-mute-btn');
+  if (btn) {
+    if (_hofMuted) {
+      btn.innerHTML = '<span style="position:relative;display:inline-block">&#128266;<span style="position:absolute;top:-1px;left:0;font-size:14px;color:#e24b4a">&#10006;</span></span>';
+    } else {
+      btn.innerHTML = '&#128266;';
+    }
+  }
+}
+
 </script>
 
 <!-- HISTÓRICO -->
@@ -893,10 +927,11 @@ function openConstitution() {
   <div class="ph">
     <button class="back-btn" onclick="goBack()">‹</button>
     <span class="ph-title">Hall of Fame</span>
+    <button id="hof-mute-btn" onclick="toggleHofMusic()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;padding:4px 6px;color:var(--gold2);position:relative" title="Silenciar">&#128266;</button>
   </div>
-  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding:.75rem">
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding:.5rem .75rem .5rem;justify-content:center">
     <!-- Tabla -->
-    <div style="flex:1;overflow:auto;border-radius:12px;border:.5px solid var(--gbord2);margin-bottom:.75rem">
+    <div style="overflow:auto;border-radius:12px;border:.5px solid var(--gbord2);margin-bottom:.4rem">
       <table id="hof-table" style="border-collapse:collapse;min-width:700px;width:100%">
         <thead>
           <tr style="background:rgba(184,134,11,0.15)">
@@ -917,7 +952,7 @@ function openConstitution() {
       </table>
     </div>
     <!-- Leyenda -->
-    <div style="flex-shrink:0;background:rgba(184,134,11,0.06);border:.5px solid var(--gbord);border-radius:12px;padding:.6rem .75rem">
+    <div style="background:rgba(184,134,11,0.06);border:.5px solid var(--gbord);border-radius:12px;padding:.5rem .75rem">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px">
         <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">PJ</span> Partidas jugadas</div>
         <div style="font-size:10px;color:var(--w30)"><span style="color:var(--gold2);font-weight:600">V</span> Victorias</div>
