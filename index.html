@@ -80,11 +80,11 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
 .score-table th:first-child{color:var(--w30);width:20px;font-size:9px;}
 .score-table td{border:.5px solid rgba(184,134,11,0.15);padding:0;text-align:center;}
 .score-table td:first-child{font-size:9px;color:var(--w30);padding:3px 3px;}
-.score-cell{width:100%;background:transparent;color:var(--w);font-size:12px;text-align:center;padding:10px 0;font-family:'Inter',sans-serif;cursor:pointer;display:block;max-width:44px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
+.score-cell{width:100%;background:transparent;color:var(--w);font-size:13px;text-align:center;padding:14px 0;font-family:'Inter',sans-serif;cursor:pointer;display:block;max-width:46px;border:none;outline:none;-webkit-appearance:none;caret-color:transparent;}
 .score-cell.active{background:rgba(184,134,11,0.18);color:var(--gold2);font-weight:600;}
 .score-cell.win{background:var(--green);color:var(--greentext);font-weight:600;}
 .score-cell.lose{background:var(--red);color:var(--redtext);font-weight:600;}
-.tot-row td{padding:4px 2px;font-weight:600;font-size:11px;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
+.tot-row td{padding:8px 2px;font-weight:600;font-size:12px;border-top:1px solid var(--gbord2);border:.5px solid var(--gbord);}
 .tot-row td.leader{color:var(--gold2);}
 
 /* Ranking */
@@ -110,7 +110,8 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
   <div class="home-header">
     <img src="icon.png" alt="Logo" class="home-logo">
     <div class="home-title">TALMUT</div>
-    <div class="home-sub">HIC LUDUS ERROREM PUNIT</div>
+    <div class="home-sub" style="color:var(--gold2);letter-spacing:3px">HIC LUDUS ERROREM PUNIT</div>
+    <div style="width:180px;height:1px;background:linear-gradient(to right,transparent,var(--gold2),transparent);margin-top:.75rem"></div>
   </div>
   <div class="home-menu">
     <button class="talmut-card" onclick="openSetup('talmut')" style="margin-bottom:.6rem">
@@ -129,6 +130,14 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
       </div>
       <span class="card-arrow" style="color:rgba(100,220,200,0.8)">›</span>
     </button>
+    <button class="talmut-card" onclick="openHistory()" style="margin-top:.6rem;border-color:rgba(255,255,255,0.15)">
+      <div class="card-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px">📋</div>
+      <div style="flex:1;text-align:left">
+        <div class="card-label">Histórico</div>
+        <div class="card-desc">Partidas jugadas y estadísticas</div>
+      </div>
+      <span class="card-arrow" style="color:var(--w30)">›</span>
+    </button>
   </div>
 </div>
 
@@ -141,7 +150,7 @@ html,body{height:100%;overflow:hidden;background:var(--navy);color:var(--w);font
   <div class="setup-body">
     <div id="bl-note" style="display:none;background:rgba(10,100,120,0.18);border:.5px solid rgba(100,220,200,0.3);border-radius:14px;padding:.75rem 1rem;margin-bottom:.5rem;">
       <p style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:.4rem">El <strong style="color:#64dcc8">Blue Lagoon</strong> no figura en el histórico ni en las estadísticas. Su resultado es válido solo para quien estaba en la mesa ese día.</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#64dcc8;line-height:1.7">No existe para la historia. Pero ocurrió.</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#64dcc8;line-height:1.7">No existe para la historia.</p>
     </div>
     <div id="rounds-wrap" style="display:none;margin-bottom:.25rem">
       <div class="slabel">Número de rondas</div>
@@ -701,6 +710,100 @@ document.addEventListener('touchstart',function(e){
     updateTable();
   }
 },{passive:true});
+
+
+// ═══════ HISTORIAL ═══════
+function saveGame(players, isTie) {
+  // players: [{name, total}] sorted by total asc
+  var history = JSON.parse(localStorage.getItem('tm_history') || '[]');
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('es-ES', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+  var startTs = window._gameStart || now.getTime();
+  var durMin  = Math.round((now.getTime() - startTs) / 60000);
+  history.push({
+    date: dateStr,
+    duration: durMin,
+    players: players,
+    official: gameMode === 'talmut'
+  });
+  localStorage.setItem('tm_history', JSON.stringify(history));
+}
+
+function openHistory() {
+  var history = JSON.parse(localStorage.getItem('tm_history') || '[]');
+  var official = history.filter(function(g){ return g.official; });
+
+  // Odómetro
+  var padded = String(official.length).padStart(5, '0');
+  document.getElementById('odo-count').innerHTML =
+    '<span style="color:rgba(255,255,255,0.2)">' + padded.slice(0, 5 - String(official.length).length) + '</span>' +
+    '<span>' + String(official.length) + '</span>';
+
+  // Stat cards — todos los jugadores que aparecen
+  var playerMap = {};
+  official.forEach(function(g) {
+    g.players.forEach(function(p, idx) {
+      if (!playerMap[p.name]) playerMap[p.name] = {name:p.name, wins:0, games:0};
+      playerMap[p.name].games++;
+      if (idx === 0) playerMap[p.name].wins++;
+    });
+  });
+  var players = Object.values(playerMap).sort(function(a,b){ return a.name.localeCompare(b.name); });
+  var cardHTML = players.map(function(p) {
+    return '<div style="background:rgba(184,134,11,0.07);border:.5px solid var(--gbord);border-radius:12px;padding:.6rem .5rem;text-align:center">'
+      + '<div style="font-size:12px;font-weight:500;color:var(--w);margin-bottom:.2rem">' + p.name + '</div>'
+      + '<div style="font-size:20px;font-weight:600;color:var(--gold2)">' + p.wins + '</div>'
+      + '<div style="font-size:9px;color:var(--w30);margin-top:.1rem">' + (p.games===1?'1 partida':p.games+' partidas') + '</div>'
+      + '</div>';
+  }).join('');
+  document.getElementById('stat-cards').innerHTML = cardHTML || '<div style="color:var(--w30);font-size:13px">Sin datos aún</div>';
+
+  // Lista de partidas
+  var listHTML = official.slice().reverse().map(function(g) {
+    var winner = g.players[0];
+    var scores = g.players.map(function(p){ return p.name+' '+p.total; }).join(' · ');
+    return '<div style="border:.5px solid var(--gbord);border-radius:10px;padding:.6rem .75rem;margin-bottom:.5rem">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">'
+      + '<div style="font-size:11px;color:var(--w30)">' + g.date + '</div>'
+      + '<div style="font-size:10px;color:var(--w30)">' + (g.duration||0) + ' min</div>'
+      + '</div>'
+      + '<div style="font-size:14px;font-weight:600;color:var(--gold2);margin-bottom:.25rem">🏆 ' + winner.name + ' · ' + winner.total + ' pts</div>'
+      + '<div style="font-size:11px;color:var(--w30);line-height:1.6">' + scores + '</div>'
+      + '</div>';
+  }).join('');
+  document.getElementById('game-list').innerHTML = listHTML || '<div style="color:var(--w30);font-size:13px;text-align:center;padding:1rem">Aún no hay partidas registradas</div>';
+
+  showScreen('s-history');
+}
+
+// Guardar tiempo de inicio cuando empieza el juego del dedo
+var _origOpenFinger = openFinger;
+openFinger = function() {
+  window._gameStart = new Date().getTime();
+  _origOpenFinger();
+};
+
 </script>
+
+<!-- HISTÓRICO -->
+<div class="screen" id="s-history">
+  <div class="ph">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <span class="ph-title">Histórico</span>
+  </div>
+  <!-- Odómetro -->
+  <div style="text-align:center;padding:.75rem 1rem .5rem;flex-shrink:0;border-bottom:.5px solid var(--gbord)">
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2.5px;color:var(--w30);margin-bottom:.3rem">Partidas oficiales</div>
+    <div id="odo-count" style="font-family:'Courier New',monospace;font-size:28px;letter-spacing:8px;color:var(--gold2)">00000</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.75rem">
+    <!-- Stat cards -->
+    <div id="stat-cards" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1rem"></div>
+    <!-- Game list -->
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--gold2);font-weight:500;margin-bottom:.5rem">Registro de partidas</div>
+    <div id="game-list"></div>
+  </div>
+</div>
+
 </body>
 </html>
