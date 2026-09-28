@@ -1,4 +1,4 @@
-var CACHE = 'talmut-v1';
+var CACHE = 'talmut-v2';
 var ASSETS = [
   '/Talmut/',
   '/Talmut/index.html',
@@ -28,9 +28,32 @@ self.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
+  var req = e.request;
+  var isHTML = req.mode === 'navigate' || (req.headers.get('accept') || '').indexOf('text/html') !== -1;
+
+  if (isHTML) {
+    // El HTML de la app: red primero, para que cualquier actualización
+    // se vea en cuanto la subas. Si no hay conexión, se usa la última
+    // copia guardada como respaldo.
+    e.respondWith(
+      fetch(req).then(function(res) {
+        var copy = res.clone();
+        caches.open(CACHE).then(function(cache) { cache.put(req, copy); });
+        return res;
+      }).catch(function() {
+        return caches.match(req).then(function(cached) {
+          return cached || caches.match('/Talmut/index.html');
+        });
+      })
+    );
+    return;
+  }
+
+  // Resto de archivos (imágenes, manifest...): caché primero, y si no
+  // están guardados, se piden a la red.
   e.respondWith(
-    caches.match(e.request).then(function(cached) {
-      return cached || fetch(e.request);
+    caches.match(req).then(function(cached) {
+      return cached || fetch(req);
     })
   );
 });
