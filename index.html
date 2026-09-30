@@ -122,7 +122,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 <div id="screen-menu" class="screen active" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); align-items: center; padding: 52px 24px 32px; gap: 0">
 
   <!-- Logo emblem -->
-  <div style="width: 80px; height: 80px; border-radius: 14px; overflow: hidden; box-shadow: 0 3px 24px rgba(184,134,11,0.18), 0 0 0 1px rgba(184,134,11,0.2); background: rgba(184,134,11,0.08)">
+  <div id="logoEasterEgg" onclick="handleLogoClick()" style="width: 80px; height: 80px; border-radius: 14px; overflow: hidden; box-shadow: 0 3px 24px rgba(184,134,11,0.18), 0 0 0 1px rgba(184,134,11,0.2); background: rgba(184,134,11,0.08); cursor: pointer; -webkit-tap-highlight-color: transparent">
     <img src="Logo_Talmut.png" style="width: 100%; height: 100%; object-fit: cover; display: block" onerror="this.style.display='none'">
   </div>
 
@@ -208,6 +208,18 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
         <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Constituci&oacute;n oficial del juego</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="rgba(160,55,65,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+    </button>
+
+    <!-- Canciones — hidden Easter egg, shown after 42 logo clicks -->
+    <button id="cancionesBtn" onclick="showScreen('screen-canciones')" style="display: none; width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(90,50,120,0.15) 0%, rgba(70,30,100,0.08) 100%); border: 1px solid rgba(160,100,200,0.2); border-radius: 10px; cursor: pointer; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="10" cy="21" r="3" stroke="rgba(160,100,200,0.6)" stroke-width="1.2" fill="rgba(160,100,200,0.08)"/><circle cx="20" cy="19" r="3" stroke="rgba(160,100,200,0.6)" stroke-width="1.2" fill="rgba(160,100,200,0.08)"/><line x1="13" y1="21" x2="13" y2="6" stroke="rgba(160,100,200,0.5)" stroke-width="1.2"/><line x1="23" y1="19" x2="23" y2="4" stroke="rgba(160,100,200,0.5)" stroke-width="1.2"/><path d="M13 6l10-2" stroke="rgba(160,100,200,0.5)" stroke-width="1.2"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Canciones</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Banda sonora del TALMUT</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="rgba(160,100,200,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
     </button>
 
   </div>
@@ -419,13 +431,27 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
       <h1 id="scoreTitle" style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 15px; color: #E8DCC8; letter-spacing: 2px">TALMUT</h1>
       <p id="scoreSubtitle" style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.25)">Ronda 1 de 10</p>
     </div>
-    <button onclick="confirmExit()" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle cx="7" cy="3" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
-        <circle cx="7" cy="7" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
-        <circle cx="7" cy="11" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
-      </svg>
-    </button>
+    <div style="position: relative">
+      <button onclick="toggleScoreMenu()" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="3" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
+          <circle cx="7" cy="7" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
+          <circle cx="7" cy="11" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
+        </svg>
+      </button>
+      <!-- Dropdown menu -->
+      <div id="scoreDropdown" style="display: none; position: absolute; top: 38px; right: 0; min-width: 200px; background: linear-gradient(180deg, #162D50, #0E2545); border: 1px solid rgba(184,134,11,0.25); border-radius: 12px; padding: 6px; z-index: 50; box-shadow: 0 8px 32px rgba(0,0,0,0.5)">
+        <button onclick="confirmExit();closeScoreMenu()" style="width: 100%; padding: 10px 12px; background: none; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='none'">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M8 4v8" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-linecap="round" transform="rotate(45 8 8)"/></svg>
+          <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.6)">Salir y guardar</span>
+        </button>
+        <div style="height: 1px; background: rgba(255,255,255,0.06); margin: 2px 8px"></div>
+        <button onclick="confirmAbandon();closeScoreMenu()" style="width: 100%; padding: 10px 12px; background: none; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left" onmouseover="this.style.background='rgba(220,80,80,0.08)'" onmouseout="this.style.background='none'">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="rgba(220,80,80,0.6)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; color: rgba(220,80,80,0.7)">Abandonar partida</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 4px 0 0"></div>
@@ -628,7 +654,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 </div>
 
 <!-- ==================== LA MALTESA ==================== -->
-<div id="screen-maltesa" class="screen" style="background: linear-gradient(180deg, #1A0A10 0%, #0B1F3A 40%, #0E2545 100%); padding: 0; overflow-y: auto">
+<div id="screen-maltesa" class="screen" style="background: linear-gradient(180deg, #1A0A10 0%, #140E1E 30%, #120D1A 100%); padding: 0; overflow-y: auto">
 
   <!-- Top bar — centered -->
   <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
@@ -650,7 +676,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
       <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="6" width="40" height="48" rx="4" stroke="rgba(160,55,65,0.5)" stroke-width="1.5" fill="rgba(160,55,65,0.05)"/><line x1="18" y1="18" x2="42" y2="18" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="24" x2="42" y2="24" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="30" x2="38" y2="30" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="36" x2="42" y2="36" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="42" x2="34" y2="42" stroke="rgba(160,55,65,0.25)" stroke-width="1"/></svg>
     </div>
     <h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 900; font-size: 20px; color: #E8DCC8; letter-spacing: 5px; text-align: center">LA MALTESA</h2>
-    <p style="margin: 6px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 13px; color: rgba(160,55,65,0.5); letter-spacing: 1.5px; text-align: center">Ley Suprema del TALMUT</p>
+    <p style="margin: 6px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 13px; color: rgba(160,55,65,0.65); letter-spacing: 1.5px; text-align: center">Ley Suprema del TALMUT</p>
     <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-style: italic; font-size: 11px; color: rgba(184,134,11,0.4); letter-spacing: 2px; text-align: center; text-transform: uppercase">Hic Ludus Errorem Punit</p>
   </div>
 
@@ -663,11 +689,11 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 
   <!-- Preambulo -->
   <div style="padding: 0 16px; margin-bottom: 12px">
-    <div style="background: rgba(160,55,65,0.04); border: 1px solid rgba(160,55,65,0.1); border-radius: 10px; padding: 16px">
-      <p style="margin: 0 0 4px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1.5px; text-transform: uppercase; text-align: center">Pre&aacute;mbulo</p>
-      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.55; text-align: justify">El presente documento constituye la norma suprema e irrefutable que rige el juego conocido como TALMUT. Nace de la necesidad hist&oacute;rica de codificar las reglas, tradiciones, leyes y sanciones que han surgido de forma org&aacute;nica a lo largo de incontables partidas.</p>
-      <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 12px; color: rgba(184,134,11,0.35); line-height: 1.5; text-align: center">&laquo;Ning&uacute;n jugador, independientemente de su antig&uuml;edad, su racha de victorias o su vehemencia a la hora de argumentar, podr&aacute; invocar norma alguna que no est&eacute; contemplada en La Maltesa.&raquo;</p>
-      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.55; text-align: justify">El documento podr&aacute; ampliarse mediante consenso un&aacute;nime de los jugadores habituales, seg&uacute;n lo dispuesto en el Art&iacute;culo 9.</p>
+    <div style="background: rgba(160,55,65,0.06); border: 1px solid rgba(160,55,65,0.15); border-radius: 10px; padding: 16px">
+      <p style="margin: 0 0 4px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1.5px; text-transform: uppercase; text-align: center">Pre&aacute;mbulo</p>
+      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.55; text-align: justify">El presente documento constituye la norma suprema e irrefutable que rige el juego conocido como TALMUT. Nace de la necesidad hist&oacute;rica de codificar las reglas, tradiciones, leyes y sanciones que han surgido de forma org&aacute;nica a lo largo de incontables partidas.</p>
+      <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 12px; color: rgba(184,134,11,0.5); line-height: 1.5; text-align: center">&laquo;Ning&uacute;n jugador, independientemente de su antig&uuml;edad, su racha de victorias o su vehemencia a la hora de argumentar, podr&aacute; invocar norma alguna que no est&eacute; contemplada en La Maltesa.&raquo;</p>
+      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.55; text-align: justify">El documento podr&aacute; ampliarse mediante consenso un&aacute;nime de los jugadores habituales, seg&uacute;n lo dispuesto en el Art&iacute;culo 9.</p>
     </div>
   </div>
 
@@ -675,157 +701,157 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
   <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px">
 
     <!-- ARTICULO 1 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 1</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 1</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Juramento Fundacional</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">1.1</span> &middot; Antes de cualquier partida, todos los jugadores deber&aacute;n reunirse y prestar el juramento fundacional.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">1.2</span> &middot; Cada jugador extender&aacute; una mano al centro de la mesa. Las manos se apilar&aacute;n como s&iacute;mbolo de pacto colectivo. Todos pronunciar&aacute;n al un&iacute;sono: <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;HIC LUDUS ERROREM PUNIT&raquo;</span> &mdash; &laquo;Este juego castiga el error&raquo;.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">1.3</span> &middot; El jugador que reh&uacute;se participar, pronuncie el juramento de forma inaudible o se mofe del acto recibir&aacute; una carta de penalizaci&oacute;n antes de comenzar a jugar.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">1.1</span> &middot; Antes de cualquier partida, todos los jugadores deber&aacute;n reunirse y prestar el juramento fundacional.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">1.2</span> &middot; Cada jugador extender&aacute; una mano al centro de la mesa. Las manos se apilar&aacute;n como s&iacute;mbolo de pacto colectivo. Todos pronunciar&aacute;n al un&iacute;sono: <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;HIC LUDUS ERROREM PUNIT&raquo;</span> &mdash; &laquo;Este juego castiga el error&raquo;.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">1.3</span> &middot; El jugador que reh&uacute;se participar, pronuncie el juramento de forma inaudible o se mofe del acto recibir&aacute; una carta de penalizaci&oacute;n antes de comenzar a jugar.</p>
     </div>
 
     <!-- ARTICULO 2 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 2</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 2</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Orden de Juego</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.1</span> &middot; El jugador que abre la primera ronda se determinar&aacute; mediante un aleatorizador de dispositivo m&oacute;vil, en el cual cada jugador coloca simult&aacute;neamente su dedo &iacute;ndice sobre la pantalla.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.2</span> &middot; Alternativamente, se repartir&aacute; una carta boca abajo a cada jugador. Los jugadores la voltean simult&aacute;neamente; la carta m&aacute;s alta determina qui&eacute;n abre.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.3</span> &middot; A partir de la segunda ronda, abre el ganador de la ronda anterior. El sorteo inicial solo se aplica a la primera ronda.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.4</span> &middot; El orden de turno sigue la rotaci&oacute;n en sentido horario desde el jugador que abre.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.5</span> &middot; El jugador con la puntuaci&oacute;n m&aacute;s alta de la ronda anterior baraja y reparte las cartas de la siguiente ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.1</span> &middot; El jugador que abre la primera ronda se determinar&aacute; mediante un aleatorizador de dispositivo m&oacute;vil, en el cual cada jugador coloca simult&aacute;neamente su dedo &iacute;ndice sobre la pantalla.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.2</span> &middot; Alternativamente, se repartir&aacute; una carta boca abajo a cada jugador. Los jugadores la voltean simult&aacute;neamente; la carta m&aacute;s alta determina qui&eacute;n abre.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.3</span> &middot; A partir de la segunda ronda, abre el ganador de la ronda anterior. El sorteo inicial solo se aplica a la primera ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.4</span> &middot; El orden de turno sigue la rotaci&oacute;n en sentido horario desde el jugador que abre.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.5</span> &middot; El jugador con la puntuaci&oacute;n m&aacute;s alta de la ronda anterior baraja y reparte las cartas de la siguiente ronda.</p>
     </div>
 
     <!-- ARTICULO 3 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 3</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 3</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Reparto y la Observaci&oacute;n Inicial</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.1</span> &middot; El repartidor baraja la baraja completa. Otro jugador la corta. Se reparten cuatro cartas boca abajo a cada jugador en orden.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.2</span> &middot; Los jugadores colocan sus cartas seg&uacute;n su preferencia personal antes de la observaci&oacute;n inicial.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.3</span> &middot; Tras una cuenta atr&aacute;s colectiva (<span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;3&hellip; 2&hellip; 1&hellip;&raquo;</span>), cada jugador se echa hacia atr&aacute;s y levanta simult&aacute;neamente dos de sus cuatro cartas para observarlas. El tiempo m&aacute;ximo de observaci&oacute;n es de dos segundos. Las cartas deber&aacute;n devolverse boca abajo.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.4</span> &middot; Queda estrictamente prohibido volver a mirar las cartas propias durante el transcurso del juego, salvo que una carta especial lo permita. La infracci&oacute;n acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.1</span> &middot; El repartidor baraja la baraja completa. Otro jugador la corta. Se reparten cuatro cartas boca abajo a cada jugador en orden.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.2</span> &middot; Los jugadores colocan sus cartas seg&uacute;n su preferencia personal antes de la observaci&oacute;n inicial.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.3</span> &middot; Tras una cuenta atr&aacute;s colectiva (<span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;3&hellip; 2&hellip; 1&hellip;&raquo;</span>), cada jugador se echa hacia atr&aacute;s y levanta simult&aacute;neamente dos de sus cuatro cartas para observarlas. El tiempo m&aacute;ximo de observaci&oacute;n es de dos segundos. Las cartas deber&aacute;n devolverse boca abajo.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.4</span> &middot; Queda estrictamente prohibido volver a mirar las cartas propias durante el transcurso del juego, salvo que una carta especial lo permita. La infracci&oacute;n acarrea una carta de penalizaci&oacute;n.</p>
     </div>
 
     <!-- ARTICULO 4 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 4</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 4</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Turno de Juego</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.1</span> &middot; El jugador activo roba la carta superior del mazo y elige:</p>
-      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Opci&oacute;n A:</span> Quedarse la carta robada, descartando una de sus cuatro cartas boca abajo al mont&oacute;n de descarte.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Opci&oacute;n B:</span> Rechazar la carta robada, coloc&aacute;ndola boca arriba en el mont&oacute;n de descarte. Se aplican los efectos de cartas especiales si corresponde.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Descarte Cruzado:</span> Cuando se descarta una carta, cualquier jugador que posea cartas del mismo valor podr&aacute; descartarlas inmediatamente. Se pueden descartar dos cartas coincidentes juntas. <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;La velocidad es ley&raquo;</span> cuando se producen descartes simult&aacute;neos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.3</span> &middot; Ejecutar un Descarte Cruzado con cartas de valor no coincidente acarrea una carta de penalizaci&oacute;n.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La Ley de la Tortilla:</span> Cuando un jugador roba una carta que coincide con una propia boca abajo y ejecuta un Descarte Cruzado contra s&iacute; mismo, deber&aacute; manipular ambas cartas con la misma mano en un movimiento continuo. Usar manos diferentes viola esta ley y acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.1</span> &middot; El jugador activo roba la carta superior del mazo y elige:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Opci&oacute;n A:</span> Quedarse la carta robada, descartando una de sus cuatro cartas boca abajo al mont&oacute;n de descarte.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Opci&oacute;n B:</span> Rechazar la carta robada, coloc&aacute;ndola boca arriba en el mont&oacute;n de descarte. Se aplican los efectos de cartas especiales si corresponde.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Descarte Cruzado:</span> Cuando se descarta una carta, cualquier jugador que posea cartas del mismo valor podr&aacute; descartarlas inmediatamente. Se pueden descartar dos cartas coincidentes juntas. <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;La velocidad es ley&raquo;</span> cuando se producen descartes simult&aacute;neos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.3</span> &middot; Ejecutar un Descarte Cruzado con cartas de valor no coincidente acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La Ley de la Tortilla:</span> Cuando un jugador roba una carta que coincide con una propia boca abajo y ejecuta un Descarte Cruzado contra s&iacute; mismo, deber&aacute; manipular ambas cartas con la misma mano en un movimiento continuo. Usar manos diferentes viola esta ley y acarrea una carta de penalizaci&oacute;n.</p>
     </div>
 
     <!-- ARTICULO 5 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 5</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 5</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Cartas Especiales</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.1</span> &middot; Las cartas especiales se activan &uacute;nicamente cuando se descartan directamente del robo, boca arriba. Incorporarlas a la mano anula sus efectos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El DIEZ (10):</span> El jugador podr&aacute; mirar en secreto una de sus propias cartas boca abajo.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.3</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La JOTA (J):</span> El jugador podr&aacute; mirar en secreto una carta boca abajo de cualquier oponente. La tradici&oacute;n dicta pronunciar <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;puedes mirar una a&hellip;JJJJJ&hellip;jena&raquo;</span> &mdash; sin penalizaci&oacute;n por omisi&oacute;n, pero mal visto por la comunidad.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La REINA (Q):</span> El jugador elige entre dos modos de intercambio ciego:</p>
-      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 1:</span> Intercambiar una carta propia boca abajo por una carta boca abajo de un oponente, sin ver ninguna.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 2:</span> Intercambiar una carta boca abajo de un jugador por una carta boca abajo de otro jugador distinto.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El REY (K):</span> El jugador elige entre dos modos:</p>
-      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 1:</span> Mirar una carta boca abajo de un oponente e intercambiarla por una propia si lo desea.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 2:</span> Mirar una carta boca abajo de un oponente y transferirla a un tercer jugador sin qued&aacute;rsela.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El JOKER:</span> El valor del JOKER depende del resultado de la ronda: si el jugador que porta el JOKER gana la ronda, vale <span style="color: #6BBF7A; font-weight: 600">&minus;1 punto</span>. Si no gana: <span style="color: rgba(220,80,80,0.7); font-weight: 600">+50 puntos</span>.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">Excepci&oacute;n del Joker ganador:</span> El ganador de una ronda que posea un JOKER no punt&uacute;a cero seg&uacute;n el Art. 7.2, sino que punt&uacute;a &minus;1 punto, que se resta de su total acumulado.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.1</span> &middot; Las cartas especiales se activan &uacute;nicamente cuando se descartan directamente del robo, boca arriba. Incorporarlas a la mano anula sus efectos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El DIEZ (10):</span> El jugador podr&aacute; mirar en secreto una de sus propias cartas boca abajo.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.3</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La JOTA (J):</span> El jugador podr&aacute; mirar en secreto una carta boca abajo de cualquier oponente. La tradici&oacute;n dicta pronunciar <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;puedes mirar una a&hellip;JJJJJ&hellip;jena&raquo;</span> &mdash; sin penalizaci&oacute;n por omisi&oacute;n, pero mal visto por la comunidad.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La REINA (Q):</span> El jugador elige entre dos modos de intercambio ciego:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 1:</span> Intercambiar una carta propia boca abajo por una carta boca abajo de un oponente, sin ver ninguna.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 2:</span> Intercambiar una carta boca abajo de un jugador por una carta boca abajo de otro jugador distinto.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El REY (K):</span> El jugador elige entre dos modos:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 1:</span> Mirar una carta boca abajo de un oponente e intercambiarla por una propia si lo desea.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 2:</span> Mirar una carta boca abajo de un oponente y transferirla a un tercer jugador sin qued&aacute;rsela.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El JOKER:</span> El valor del JOKER depende del resultado de la ronda: si el jugador que porta el JOKER gana la ronda, vale <span style="color: #6BBF7A; font-weight: 600">&minus;1 punto</span>. Si no gana: <span style="color: rgba(220,80,80,0.7); font-weight: 600">+50 puntos</span>.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">Excepci&oacute;n del Joker ganador:</span> El ganador de una ronda que posea un JOKER no punt&uacute;a cero seg&uacute;n el Art. 7.2, sino que punt&uacute;a &minus;1 punto, que se resta de su total acumulado.</p>
     </div>
 
     <!-- ARTICULO 6 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 6</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 6</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Talmut</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.1</span> &middot; Un jugador declarar&aacute; TALMUT cuando crea que la suma de sus cuatro cartas es igual o inferior a cinco puntos. La declaraci&oacute;n se realiza durante su turno, antes de robar o inmediatamente despu&eacute;s de descartar.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.2</span> &middot; La declaraci&oacute;n de TALMUT es voluntaria; los jugadores pueden abstenerse aunque cumplan los requisitos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.3</span> &middot; Tras la declaraci&oacute;n de TALMUT, cada jugador restante dispone de exactamente un turno adicional. Todos los jugadores revelan entonces sus cartas y suman los puntos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.4</span> &middot; Durante el turno final tras la declaraci&oacute;n, el declarante conserva sus derechos de Descarte Cruzado.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT err&oacute;neo:</span> Si el jugador que declara TALMUT voltea sus cartas y la suma supera los cinco puntos, incurrir&aacute; en la sanci&oacute;n m&aacute;s severa: acumular&aacute; la suma de puntos de todos los dem&aacute;s jugadores en esa ronda.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT autom&aacute;tico:</span> Si un jugador descarta su &uacute;ltima carta boca abajo durante su turno, el TALMUT se declara autom&aacute;ticamente. El juego contin&uacute;a; cuando llegue el turno de este jugador, robar&aacute; una carta y la descartar&aacute; inmediatamente sin qued&aacute;rsela.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Intocable de Elliot Ness:</span> Tras la declaraci&oacute;n, el declarante de TALMUT obtiene inmunidad completa. Ninguna carta especial podr&aacute; dirigirse a &eacute;l: no podr&aacute; ser mirado, intercambiado ni transferido.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.1</span> &middot; Un jugador declarar&aacute; TALMUT cuando crea que la suma de sus cuatro cartas es igual o inferior a cinco puntos. La declaraci&oacute;n se realiza durante su turno, antes de robar o inmediatamente despu&eacute;s de descartar.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.2</span> &middot; La declaraci&oacute;n de TALMUT es voluntaria; los jugadores pueden abstenerse aunque cumplan los requisitos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.3</span> &middot; Tras la declaraci&oacute;n de TALMUT, cada jugador restante dispone de exactamente un turno adicional. Todos los jugadores revelan entonces sus cartas y suman los puntos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.4</span> &middot; Durante el turno final tras la declaraci&oacute;n, el declarante conserva sus derechos de Descarte Cruzado.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT err&oacute;neo:</span> Si el jugador que declara TALMUT voltea sus cartas y la suma supera los cinco puntos, incurrir&aacute; en la sanci&oacute;n m&aacute;s severa: acumular&aacute; la suma de puntos de todos los dem&aacute;s jugadores en esa ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT autom&aacute;tico:</span> Si un jugador descarta su &uacute;ltima carta boca abajo durante su turno, el TALMUT se declara autom&aacute;ticamente. El juego contin&uacute;a; cuando llegue el turno de este jugador, robar&aacute; una carta y la descartar&aacute; inmediatamente sin qued&aacute;rsela.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Intocable de Elliot Ness:</span> Tras la declaraci&oacute;n, el declarante de TALMUT obtiene inmunidad completa. Ninguna carta especial podr&aacute; dirigirse a &eacute;l: no podr&aacute; ser mirado, intercambiado ni transferido.</p>
     </div>
 
     <!-- ARTICULO 7 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 7</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 7</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De la Puntuaci&oacute;n</p>
-      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.1</span> &middot; Valores de las cartas:</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding: 8px 12px; background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">A</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">1 punto</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">2 &ndash; 10</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">Valor facial</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">J</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">20 puntos</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">Q</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">30 puntos</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">K</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">40 puntos</span>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.1</span> &middot; Valores de las cartas:</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding: 8px 12px; background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">A</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">1 punto</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">2 &ndash; 10</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">Valor facial</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">J</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">20 puntos</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">Q</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">30 puntos</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">K</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">40 puntos</span>
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #6BBF7A">JOKER (ganador)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #6BBF7A; text-align: right">&minus;1 punto</span>
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(220,80,80,0.7)">JOKER (no ganador)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(220,80,80,0.7); text-align: right">+50 puntos</span>
       </div>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.2</span> &middot; El jugador con la puntuaci&oacute;n total m&aacute;s baja gana la ronda y punt&uacute;a cero puntos en el global (excepto seg&uacute;n el Art. 5.7). Los dem&aacute;s punt&uacute;an sus totales reales de la ronda.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.3</span> &middot; En caso de empate con el declarante de TALMUT, gana el no declarante. El declarante punt&uacute;a sus puntos reales.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.4</span> &middot; Una partida completa consta de diez rondas. Gana el jugador con la puntuaci&oacute;n acumulada m&aacute;s baja tras la d&eacute;cima ronda. Un empate en la puntuaci&oacute;n final desencadena una ronda de desempate. Solo las partidas de diez rondas completas cuentan como oficiales. Las partidas que no lleguen a diez rondas se denominan <span style="color: #64A0DC; font-weight: 500">&laquo;Blue Lagoon&raquo;</span> y no afectan al ranking. <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;El Blue Lagoon no existe para la historia. Solo para el ganador.&raquo;</span></p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.2</span> &middot; El jugador con la puntuaci&oacute;n total m&aacute;s baja gana la ronda y punt&uacute;a cero puntos en el global (excepto seg&uacute;n el Art. 5.7). Los dem&aacute;s punt&uacute;an sus totales reales de la ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.3</span> &middot; En caso de empate con el declarante de TALMUT, gana el no declarante. El declarante punt&uacute;a sus puntos reales.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.4</span> &middot; Una partida completa consta de diez rondas. Gana el jugador con la puntuaci&oacute;n acumulada m&aacute;s baja tras la d&eacute;cima ronda. Un empate en la puntuaci&oacute;n final desencadena una ronda de desempate. Solo las partidas de diez rondas completas cuentan como oficiales. Las partidas que no lleguen a diez rondas se denominan <span style="color: #64A0DC; font-weight: 500">&laquo;Blue Lagoon&raquo;</span> y no afectan al ranking. <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;El Blue Lagoon no existe para la historia. Solo para el ganador.&raquo;</span></p>
     </div>
 
     <!-- ARTICULO 8 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 8</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 8</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Penalizaciones</p>
-      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">8.1</span> &middot; Seg&uacute;n el juramento fundacional, todos los errores reciben penalizaci&oacute;n. Penalizaci&oacute;n est&aacute;ndar: una carta adicional del mazo que el infractor no puede ver. Cualquier jugador de la mesa puede denunciar infracciones; no existe &aacute;rbitro designado.</p>
-      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">8.2</span> &middot; Tabla de infracciones:</p>
-      <div style="display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px">
-        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Juramento irrespetuoso / inaudible</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
-        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Mirar carta propia sin permiso</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
-        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Violaci&oacute;n Ley de la Tortilla</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
-        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Descarte Cruzado incorrecto</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
-        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Robar carta fuera de turno</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
-        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">TALMUT err&oacute;neo (m&aacute;s de 5 pts)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">Suma de todos</span></div>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">8.1</span> &middot; Seg&uacute;n el juramento fundacional, todos los errores reciben penalizaci&oacute;n. Penalizaci&oacute;n est&aacute;ndar: una carta adicional del mazo que el infractor no puede ver. Cualquier jugador de la mesa puede denunciar infracciones; no existe &aacute;rbitro designado.</p>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">8.2</span> &middot; Tabla de infracciones:</p>
+      <div style="display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px">
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Juramento irrespetuoso / inaudible</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Mirar carta propia sin permiso</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Violaci&oacute;n Ley de la Tortilla</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Descarte Cruzado incorrecto</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Robar carta fuera de turno</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">TALMUT err&oacute;neo (m&aacute;s de 5 pts)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">Suma de todos</span></div>
       </div>
     </div>
 
     <!-- ARTICULO 9 -->
-    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 9</span>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 9</span>
         <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Enmiendas</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">9.1</span> &middot; La Maltesa es un documento vivo. Las leyes acordadas por la comunidad se a&ntilde;adir&aacute;n aqu&iacute; como enmiendas numeradas.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">9.2</span> &middot; Cada enmienda requiere: n&uacute;mero, fecha de aprobaci&oacute;n, descripci&oacute;n clara de la norma y firmas de todos los jugadores presentes. Ninguna enmienda podr&aacute; contradecir los principios del Art&iacute;culo 1.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">9.3</span> &middot; Las disputas no contempladas en La Maltesa se resolver&aacute;n por votaci&oacute;n comunitaria. En caso de empate, prevalecer&aacute; <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;la interpretaci&oacute;n m&aacute;s perjudicial para el jugador que haya cometido el error&raquo;</span>.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">9.1</span> &middot; La Maltesa es un documento vivo. Las leyes acordadas por la comunidad se a&ntilde;adir&aacute;n aqu&iacute; como enmiendas numeradas.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">9.2</span> &middot; Cada enmienda requiere: n&uacute;mero, fecha de aprobaci&oacute;n, descripci&oacute;n clara de la norma y firmas de todos los jugadores presentes. Ninguna enmienda podr&aacute; contradecir los principios del Art&iacute;culo 1.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">9.3</span> &middot; Las disputas no contempladas en La Maltesa se resolver&aacute;n por votaci&oacute;n comunitaria. En caso de empate, prevalecer&aacute; <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;la interpretaci&oacute;n m&aacute;s perjudicial para el jugador que haya cometido el error&raquo;</span>.</p>
     </div>
   </div>
 
   <!-- Closing -->
   <div style="padding: 20px 24px 12px; text-align: center">
-    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 12px; color: rgba(255,255,255,0.2); line-height: 1.6; padding: 0 8px">&laquo;El presente documento ha sido redactado con plena autoridad y rigor para que jam&aacute;s pueda alegarse ignorancia ante el error cometido en la mesa.&raquo;</p>
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; padding: 0 8px">&laquo;El presente documento ha sido redactado con plena autoridad y rigor para que jam&aacute;s pueda alegarse ignorancia ante el error cometido en la mesa.&raquo;</p>
   </div>
 
   <!-- Seal -->
   <div style="padding: 8px 24px 36px; text-align: center">
-    <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 20px; background: rgba(160,55,65,0.04); border: 1px solid rgba(160,55,65,0.1); border-radius: 12px">
+    <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 20px; background: rgba(160,55,65,0.06); border: 1px solid rgba(160,55,65,0.15); border-radius: 12px">
       <p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 900; font-size: 12px; color: rgba(184,134,11,0.35); letter-spacing: 3px">HIC LUDUS ERROREM PUNIT</p>
       <div style="display: flex; align-items: center; gap: 6px">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(160,55,65,0.3)" stroke-width="1"/><path d="M6 3v3l2 1.5" stroke="rgba(160,55,65,0.3)" stroke-width="0.8" stroke-linecap="round"/></svg>
@@ -835,7 +861,44 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
   </div>
 </div>
 
+<!-- ==================== CANCIONES ==================== -->
+<div id="screen-canciones" class="screen" style="background: linear-gradient(180deg, #0D0A18 0%, #0B1F3A 40%, #0E2545 100%); padding: 0; overflow-y: auto">
+
+  <!-- Back bar -->
+  <div style="display: flex; align-items: center; padding: 52px 16px 12px; gap: 10px">
+    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="rgba(160,100,200,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+    </button>
+    <div style="flex-grow: 1; text-align: center">
+      <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; color: #E8DCC8; letter-spacing: 4px">CANCIONES</h1>
+      <p style="margin: 3px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 11px; color: rgba(160,100,200,0.5); letter-spacing: 1.5px">Banda sonora del TALMUT</p>
+    </div>
+    <div style="width: 32px"></div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,100,200,0.2), transparent); margin: 0 0 16px"></div>
+
+  <!-- Song list -->
+  <div id="songList" style="padding: 0 16px 32px; display: flex; flex-direction: column; gap: 8px"></div>
+</div>
+
 <!-- ==================== MODALS ==================== -->
+
+<!-- Abandon match confirmation -->
+<div id="abandonMatchModal" class="modal-overlay">
+  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0E2545, #0B1F3A); border: 1px solid rgba(220,80,80,0.25); border-radius: 16px; padding: 28px 24px; text-align: center">
+    <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #E8DCC8; letter-spacing: 1px">Abandonar partida</p>
+    <p style="margin: 0 0 24px; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.5">La partida se eliminar&aacute; permanentemente y no podr&aacute; recuperarse.</p>
+    <div style="display: flex; gap: 8px">
+      <button onclick="closeAbandonModal()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; cursor: pointer">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.4)">Cancelar</span>
+      </button>
+      <button onclick="abandonMatch()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, rgba(220,80,80,0.8), rgba(180,50,50,0.8)); border: none; border-radius: 10px; cursor: pointer">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: #FFFFFF">Eliminar</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Exit confirmation -->
 <div id="confirmExitModal" class="modal-overlay">
@@ -993,7 +1056,7 @@ function renderPlayerGrid(type){
     };
     card.innerHTML=`
       <div class="avatar"><span>${p.name.charAt(0)}</span></div>
-      <span class="pname">${p.name}</span>
+      <span class="pname" onclick="event.stopPropagation();playPlayerAudio('${p.name.replace(/'/g,"\\'")}')">${p.name}</span>
       ${isSelected?'<svg width="12" height="9" viewBox="0 0 12 9" fill="none" style="flex-shrink:0"><polyline points="1,4 4,8 11,1" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
     `;
     grid.appendChild(card);
@@ -1219,7 +1282,8 @@ function renderScoreScreen(){
   html+=`<div style="padding:10px 4px;text-align:center"><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(255,255,255,0.15);text-transform:uppercase;letter-spacing:0.5px">R</span></div>`;
   matchPlayers.forEach(p=>{
     const name=p.name.length>6?p.name.substring(0,5)+'.':p.name;
-    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04)"><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
+    const isFixed=FIXED_PLAYERS.includes(p.name);
+    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\');"':''}><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
   });
   html+=`</div>`;
 
@@ -1685,6 +1749,162 @@ function renderRecords(){
     </div>
   `;
 }
+
+// ==================== SCORE DROPDOWN MENU ====================
+function toggleScoreMenu(){
+  const dd=document.getElementById('scoreDropdown');
+  dd.style.display=dd.style.display==='none'?'block':'none';
+}
+function closeScoreMenu(){document.getElementById('scoreDropdown').style.display='none';}
+document.addEventListener('click',function(e){
+  const dd=document.getElementById('scoreDropdown');
+  if(dd&&dd.style.display==='block'){
+    if(!e.target.closest('#scoreDropdown')&&!e.target.closest('[onclick*="toggleScoreMenu"]')){
+      dd.style.display='none';
+    }
+  }
+});
+
+// ==================== ABANDON MATCH ====================
+function confirmAbandon(){document.getElementById('abandonMatchModal').classList.add('active');}
+function closeAbandonModal(){document.getElementById('abandonMatchModal').classList.remove('active');}
+async function abandonMatch(){
+  closeAbandonModal();
+  if(currentMatchId){
+    await sb.from('matches').delete().eq('id',currentMatchId);
+    currentMatchId=null;
+    activeMatchData=null;
+  }
+  document.getElementById('continueBtn').style.display='none';
+  showScreen('screen-menu');
+}
+
+// ==================== PLAYER AUDIO ====================
+const playerAudioCounts={};
+function playPlayerAudio(playerName){
+  if(!FIXED_PLAYERS.includes(playerName))return;
+  const key=playerName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if(!playerAudioCounts[key])playerAudioCounts[key]={max:20,failed:new Set()};
+  const info=playerAudioCounts[key];
+  const available=[];
+  for(let i=1;i<=info.max;i++){if(!info.failed.has(i))available.push(i);}
+  if(available.length===0)return;
+  const idx=available[Math.floor(Math.random()*available.length)];
+  const audio=new Audio('audios/'+key+'_'+idx+'.mp3');
+  audio.onerror=function(){
+    info.failed.add(idx);
+    const remaining=available.filter(x=>x!==idx&&!info.failed.has(x));
+    if(remaining.length>0){
+      const retry=remaining[Math.floor(Math.random()*remaining.length)];
+      const a2=new Audio('audios/'+key+'_'+retry+'.mp3');
+      a2.onerror=function(){info.failed.add(retry);};
+      a2.play().catch(()=>{});
+    }
+  };
+  audio.play().catch(()=>{});
+}
+
+// ==================== EASTER EGG: 42 CLICKS ====================
+let logoClickCount=0;
+let logoClickTimer=null;
+let cancionesUnlocked=false;
+function handleLogoClick(){
+  if(cancionesUnlocked)return;
+  logoClickCount++;
+  clearTimeout(logoClickTimer);
+  logoClickTimer=setTimeout(()=>{logoClickCount=0;},10000);
+  if(logoClickCount%10===0&&logoClickCount<42){
+    const logo=document.getElementById('logoEasterEgg');
+    logo.style.transform='scale(1.08)';
+    setTimeout(()=>{logo.style.transform='scale(1)';},200);
+  }
+  if(logoClickCount>=42){
+    cancionesUnlocked=true;
+    const btn=document.getElementById('cancionesBtn');
+    btn.style.display='flex';
+    btn.style.opacity='0';
+    btn.style.transform='translateY(-8px)';
+    setTimeout(()=>{
+      btn.style.transition='opacity 0.5s, transform 0.5s';
+      btn.style.opacity='1';
+      btn.style.transform='translateY(0)';
+    },50);
+    const logo=document.getElementById('logoEasterEgg');
+    logo.style.boxShadow='0 0 30px rgba(184,134,11,0.6), 0 0 60px rgba(184,134,11,0.3)';
+    setTimeout(()=>{logo.style.boxShadow='0 3px 24px rgba(184,134,11,0.18), 0 0 0 1px rgba(184,134,11,0.2)';},1500);
+    try{localStorage.setItem('talmut_canciones','1');}catch(e){}
+  }
+}
+try{if(localStorage.getItem('talmut_canciones')==='1'){cancionesUnlocked=true;document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('cancionesBtn');if(b)b.style.display='flex';});}}catch(e){}
+
+// ==================== CANCIONES PLAYER ====================
+const SONGS=[
+  {title:'Cancion 1',file:'canciones/1.mp3'},
+  {title:'Cancion 2',file:'canciones/2.mp3'},
+  {title:'Cancion 3',file:'canciones/3.mp3'},
+  {title:'Cancion 4',file:'canciones/4.mp3'},
+  {title:'Cancion 5',file:'canciones/5.mp3'},
+  {title:'Cancion 6',file:'canciones/6.mp3'},
+  {title:'Cancion 7',file:'canciones/7.mp3'},
+  {title:'Cancion 8',file:'canciones/8.mp3'}
+];
+let currentSongIdx=-1;
+let songAudio=null;
+let songPlaying=false;
+
+function renderSongList(){
+  const list=document.getElementById('songList');
+  list.innerHTML='';
+  SONGS.forEach((s,i)=>{
+    const isActive=i===currentSongIdx;
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;background:'+(isActive?'rgba(160,100,200,0.08)':'rgba(255,255,255,0.02)')+';border:1px solid '+(isActive?'rgba(160,100,200,0.2)':'rgba(255,255,255,0.04)')+';border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent';
+    div.onclick=function(){playSong(i);};
+    const playBtn=document.createElement('div');
+    playBtn.style.cssText='width:36px;height:36px;border-radius:50%;background:'+(isActive?'rgba(160,100,200,0.15)':'rgba(255,255,255,0.04)')+';border:1px solid '+(isActive?'rgba(160,100,200,0.3)':'rgba(255,255,255,0.08)')+';display:flex;align-items:center;justify-content:center;flex-shrink:0';
+    if(isActive&&songPlaying){
+      playBtn.innerHTML='<svg width="12" height="14" viewBox="0 0 12 14" fill="none"><rect x="1" y="1" width="3.5" height="12" rx="1" fill="rgba(160,100,200,0.8)"/><rect x="7.5" y="1" width="3.5" height="12" rx="1" fill="rgba(160,100,200,0.8)"/></svg>';
+    }else{
+      playBtn.innerHTML='<svg width="12" height="14" viewBox="0 0 12 14" fill="none"><polygon points="1,1 11,7 1,13" fill="'+(isActive?'rgba(160,100,200,0.8)':'rgba(255,255,255,0.3)')+'"/></svg>';
+    }
+    const info=document.createElement('div');
+    info.style.cssText='flex-grow:1;display:flex;flex-direction:column;gap:2px';
+    info.innerHTML='<span style="font-family:\'Inter\',sans-serif;font-weight:'+(isActive?'600':'500')+';font-size:14px;color:'+(isActive?'#E8DCC8':'rgba(255,255,255,0.5)')+'">'+s.title+'</span>';
+    const num=document.createElement('span');
+    num.style.cssText='font-family:\'Cinzel\',serif;font-weight:700;font-size:12px;color:'+(isActive?'rgba(160,100,200,0.6)':'rgba(255,255,255,0.15)')+';flex-shrink:0';
+    num.textContent=String(i+1).padStart(2,'0');
+    div.appendChild(playBtn);
+    div.appendChild(info);
+    div.appendChild(num);
+    list.appendChild(div);
+  });
+}
+
+function playSong(idx){
+  if(idx===currentSongIdx&&songAudio){
+    if(songPlaying){songAudio.pause();songPlaying=false;}
+    else{songAudio.play().catch(()=>{});songPlaying=true;}
+    renderSongList();
+    return;
+  }
+  if(songAudio){songAudio.pause();songAudio=null;}
+  currentSongIdx=idx;
+  songAudio=new Audio(SONGS[idx].file);
+  songAudio.onended=function(){
+    if(currentSongIdx<SONGS.length-1){playSong(currentSongIdx+1);}
+    else{songPlaying=false;currentSongIdx=-1;renderSongList();}
+  };
+  songAudio.onerror=function(){songPlaying=false;renderSongList();};
+  songAudio.play().then(()=>{songPlaying=true;renderSongList();}).catch(()=>{songPlaying=false;renderSongList();});
+  renderSongList();
+}
+
+// Override showScreen to render songs when entering Canciones
+const _origShowScreen=showScreen;
+showScreen=function(id){
+  _origShowScreen(id);
+  if(id==='screen-canciones')renderSongList();
+};
 
 // ==================== INIT ====================
 init();
