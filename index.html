@@ -1807,28 +1807,27 @@ async function abandonMatch(){
 }
 
 // ==================== PLAYER AUDIO ====================
-const playerAudioCounts={};
+const AUDIO_POOL=[
+  'Caja.mp3','Groove.m4a','africa.mp3','bastardo.mp3','basura_feo.mp3','billy.mp3',
+  'Cara_Al_Sol.mp3','cerdo_mixta.mp3','choza.mp3','Cilantro.mp3','Curazao.mp3','Daño_Tio.mp3',
+  'doblaos.mp3','esperare.m4a','Fanta1.mp3','Fieshta.mp3','frances.mp3','gij_rojbla.mp3',
+  'helikopter.mp3','Huele_Raro.mp3','juego_entero.mp3','kkk.mp3','lavate_manos.mp3','maraton.mp3',
+  'MARC.mp3','mlg_blaazu.mp3','Mosca_Fanta.mp3','negros.mp3','osasuna.mp3','oso_caja.mp3',
+  'palo.mp3','parche_hdp.mp3','parches_ofi.mp3','Pedro1.mp3','peinaguindillas.mp3','pes_verdad.mp3',
+  'pitapita.mp3','porra.mp3','rasgaprepucios.mp3','rocas.mp3','Rubiales.mp3','september.mp3',
+  'siuuu.mp3','Stelio_Kontos.mp3','tiki_taka.mp3','Vodka.mp3'
+];
+const audioFailedSet=new Set();
+let currentPlayerAudio=null;
 function playPlayerAudio(playerName){
-  if(!FIXED_PLAYERS.includes(playerName))return;
-  const key=playerName.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-  if(!playerAudioCounts[key])playerAudioCounts[key]={max:20,failed:new Set()};
-  const info=playerAudioCounts[key];
-  const available=[];
-  for(let i=1;i<=info.max;i++){if(!info.failed.has(i))available.push(i);}
+  const available=AUDIO_POOL.filter(f=>!audioFailedSet.has(f));
   if(available.length===0)return;
-  const idx=available[Math.floor(Math.random()*available.length)];
-  const audio=new Audio('audios/'+key+'_'+idx+'.mp3');
-  audio.onerror=function(){
-    info.failed.add(idx);
-    const remaining=available.filter(x=>x!==idx&&!info.failed.has(x));
-    if(remaining.length>0){
-      const retry=remaining[Math.floor(Math.random()*remaining.length)];
-      const a2=new Audio('audios/'+key+'_'+retry+'.mp3');
-      a2.onerror=function(){info.failed.add(retry);};
-      a2.play().catch(()=>{});
-    }
-  };
+  const file=available[Math.floor(Math.random()*available.length)];
+  if(currentPlayerAudio){currentPlayerAudio.pause();currentPlayerAudio=null;}
+  const audio=new Audio('audios/'+file);
+  audio.onerror=function(){audioFailedSet.add(file);};
   audio.play().catch(()=>{});
+  currentPlayerAudio=audio;
 }
 
 // ==================== EASTER EGG: 42 CLICKS ====================
