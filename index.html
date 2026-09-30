@@ -1083,7 +1083,7 @@ function renderPlayerGrid(type){
     };
     card.innerHTML=`
       <div class="avatar"><span>${p.name.charAt(0)}</span></div>
-      <span class="pname" onclick="event.stopPropagation();playPlayerAudio('${p.name.replace(/'/g,"\\'")}')">${p.name}</span>
+      <span class="pname" onclick="event.stopPropagation();playPlayerAudio('${p.name.replace(/'/g,"\\'")}',this)">${p.name}</span>
       ${isSelected?'<svg width="12" height="9" viewBox="0 0 12 9" fill="none" style="flex-shrink:0"><polyline points="1,4 4,8 11,1" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
     `;
     grid.appendChild(card);
@@ -1310,7 +1310,7 @@ function renderScoreScreen(){
   matchPlayers.forEach(p=>{
     const name=p.name.length>6?p.name.substring(0,5)+'.':p.name;
     const isFixed=FIXED_PLAYERS.includes(p.name);
-    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\');"':''}><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
+    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\',this.querySelector(\'span\'));"':''}><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
   });
   html+=`</div>`;
 
@@ -1809,7 +1809,7 @@ async function abandonMatch(){
 // ==================== PLAYER AUDIO ====================
 const AUDIO_POOL=[
   'Caja.mp3','Groove.m4a','africa.mp3','bastardo.mp3','basura_feo.mp3','billy.mp3',
-  'Cara_Al_Sol.mp3','cerdo_mixta.mp3','choza.mp3','Cilantro.mp3','Curazao.mp3','Daño_Tio.mp3',
+  'Cara_Al_Sol.mp3','cerdo_mixta.mp3','choza.mp3','Cilantro.mp3','Curazao.mp3',
   'doblaos.mp3','esperare.m4a','Fanta1.mp3','Fieshta.mp3','frances.mp3','gij_rojbla.mp3',
   'helikopter.mp3','Huele_Raro.mp3','juego_entero.mp3','kkk.mp3','lavate_manos.mp3','maraton.mp3',
   'MARC.mp3','mlg_blaazu.mp3','Mosca_Fanta.mp3','negros.mp3','osasuna.mp3','oso_caja.mp3',
@@ -1817,16 +1817,19 @@ const AUDIO_POOL=[
   'pitapita.mp3','porra.mp3','rasgaprepucios.mp3','rocas.mp3','Rubiales.mp3','september.mp3',
   'siuuu.mp3','Stelio_Kontos.mp3','tiki_taka.mp3','Vodka.mp3'
 ];
-const audioFailedSet=new Set();
 let currentPlayerAudio=null;
-function playPlayerAudio(playerName){
-  const available=AUDIO_POOL.filter(f=>!audioFailedSet.has(f));
-  if(available.length===0)return;
-  const file=available[Math.floor(Math.random()*available.length)];
-  if(currentPlayerAudio){currentPlayerAudio.pause();currentPlayerAudio=null;}
-  const audio=new Audio('Audios/'+encodeURIComponent(file));
-  audio.onerror=function(){audioFailedSet.add(file);};
-  audio.play().catch(()=>{});
+function playPlayerAudio(playerName,el){
+  // Visual flash to confirm tap registered
+  if(el){
+    el.style.color='#FFD700';
+    setTimeout(function(){el.style.color='';},300);
+  }
+  const file=AUDIO_POOL[Math.floor(Math.random()*AUDIO_POOL.length)];
+  if(currentPlayerAudio){try{currentPlayerAudio.pause();}catch(e){} currentPlayerAudio=null;}
+  const audio=new Audio('Audios/'+file);
+  audio.volume=1;
+  const p=audio.play();
+  if(p)p.catch(function(){});
   currentPlayerAudio=audio;
 }
 
