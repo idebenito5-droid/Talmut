@@ -2060,33 +2060,22 @@ function handleLogoClick(){
 }
 
 // ==================== COVER LOADER (prueba extensiones) ====================
-function loadCoverInto(imgEl,fbEl,base){
-  if(!base){imgEl.style.display='none';if(fbEl)fbEl.style.display='flex';return;}
-  // Prueba todas las combinaciones: base+ext y base+'.'+ext (para títulos que terminan en punto)
-  const exts=['.jpg','.jpeg','.png','.webp'];
-  const candidates=[];
-  exts.forEach(e=>{candidates.push(base+e);});         // sin punto extra
-  exts.forEach(e=>{candidates.push(base+'.'+e);});     // con punto extra (título termina en '.')
-  let idx=0;
-  const next=()=>{
-    if(idx>=candidates.length){imgEl.style.display='none';if(fbEl)fbEl.style.display='flex';return;}
-    const src=candidates[idx++];
-    imgEl.onerror=next;
-    imgEl.onload=()=>{imgEl.style.display='block';if(fbEl)fbEl.style.display='none';};
-    imgEl.src=src;
-  };
+function loadCoverInto(imgEl,fbEl,src){
+  if(!src){imgEl.style.display='none';if(fbEl)fbEl.style.display='flex';return;}
+  imgEl.onerror=()=>{imgEl.style.display='none';if(fbEl)fbEl.style.display='flex';};
+  imgEl.onload=()=>{imgEl.style.display='block';if(fbEl)fbEl.style.display='none';};
   imgEl.style.display='block';
   if(fbEl)fbEl.style.display='none';
-  next();
+  imgEl.src=src;
 }
 
 // ==================== CANCIONES PLAYER ====================
 const SONGS=[
-  {title:'Este juego penaliza el fallo.',   file:'Canciones/1.mp3', cover:'Canciones/Este juego penaliza el fallo'},
-  {title:'Talmutaje en Malta.',             file:'Canciones/2.mp3', cover:'Canciones/Talmutaje en Malta'},
-  {title:"Surfin' USA a veces es el KKK.", file:'Canciones/3.mp3', cover:"Canciones/Surfin' USA a veces es el KKK"},
-  {title:'Te va a machacar.',              file:'Canciones/4.mp3', cover:'Canciones/Te va a machacar'},
-  {title:'Velada de Talmut.',              file:'Canciones/5.mp3', cover:'Canciones/Velada de Talmut'}
+  {title:'Este juego penaliza el fallo.',   file:'Canciones/1.mp3', cover:'Canciones/Foto_1.png'},
+  {title:'Talmutaje en Malta.',             file:'Canciones/2.mp3', cover:'Canciones/Foto_2.jpeg'},
+  {title:"Surfin' USA a veces es el KKK.", file:'Canciones/3.mp3', cover:'Canciones/Foto_3.jpeg'},
+  {title:'Te va a machacar.',              file:'Canciones/4.mp3', cover:'Canciones/Foto_4.jpg'},
+  {title:'Velada de Talmut.',              file:'Canciones/5.mp3', cover:'Canciones/Foto_5.jpeg'}
 ];
 let currentSongIdx=-1;
 let songAudio=null;
