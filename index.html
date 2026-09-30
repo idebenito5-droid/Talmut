@@ -1076,14 +1076,16 @@ function renderPlayerGrid(type){
     const isSelected=sel.has(p.id);
     const card=document.createElement('button');
     card.className='player-card'+(isSelected?' selected':'');
-    card.onclick=()=>{
+    const isFixed=FIXED_PLAYERS.includes(p.name);
+    card.onclick=(e)=>{
       if(sel.has(p.id))sel.delete(p.id);else sel.add(p.id);
       renderPlayerGrid(type);
       updatePlayerCount(type);
+      if(isFixed) playPlayerAudio(p.name, null);
     };
     card.innerHTML=`
       <div class="avatar"><span>${p.name.charAt(0)}</span></div>
-      <span class="pname" onclick="event.stopPropagation();playPlayerAudio('${p.name.replace(/'/g,"\\'")}',this)">${p.name}</span>
+      <span class="pname">${p.name}</span>
       ${isSelected?'<svg width="12" height="9" viewBox="0 0 12 9" fill="none" style="flex-shrink:0"><polyline points="1,4 4,8 11,1" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
     `;
     grid.appendChild(card);
@@ -1310,7 +1312,7 @@ function renderScoreScreen(){
   matchPlayers.forEach(p=>{
     const name=p.name.length>6?p.name.substring(0,5)+'.':p.name;
     const isFixed=FIXED_PLAYERS.includes(p.name);
-    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\',this.querySelector(\'span\'));"':''}><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
+    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\');"':''}><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
   });
   html+=`</div>`;
 
@@ -1818,12 +1820,7 @@ const AUDIO_POOL=[
   'siuuu.mp3','Stelio_Kontos.mp3','tiki_taka.mp3','Vodka.mp3'
 ];
 let currentPlayerAudio=null;
-function playPlayerAudio(playerName,el){
-  // Visual flash to confirm tap registered
-  if(el){
-    el.style.color='#FFD700';
-    setTimeout(function(){el.style.color='';},300);
-  }
+function playPlayerAudio(playerName){
   const file=AUDIO_POOL[Math.floor(Math.random()*AUDIO_POOL.length)];
   if(currentPlayerAudio){try{currentPlayerAudio.pause();}catch(e){} currentPlayerAudio=null;}
   const audio=new Audio('Audios/'+file);
