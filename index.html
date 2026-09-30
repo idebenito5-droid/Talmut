@@ -2,928 +2,1692 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0B1F3A">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TALMUT</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--navy:#0B1F3A;--navy-light:#0E2545;--navy-dark:#071428;--gold:#B8860B;--gold-dim:rgba(184,134,11,0.4);--green:#6BBF7A;--blue:#64A0DC;--red:rgba(220,80,80,0.7);--burgundy:rgb(160,55,65);--cream:#E8DCC8;--text:rgba(255,255,255,0.85);--text-dim:rgba(255,255,255,0.5);--text-dimmer:rgba(255,255,255,0.3)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--navy);color:var(--text);min-height:100dvh;overflow-x:hidden}
-.screen{display:none;flex-direction:column;min-height:100dvh;padding-bottom:72px}
-.screen.active{display:flex}
-.screen.no-nav{padding-bottom:0}
+body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F3A; overflow-x: hidden; }
+*, *::before, *::after { box-sizing: border-box; }
 
-/* Header */
-.header{display:flex;align-items:center;padding:52px 16px 12px;gap:10px;position:sticky;top:0;background:var(--navy);z-index:10}
-.header h1{flex:1;text-align:center;font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px}
-.header .subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--text-dim);text-align:center;margin-top:2px}
-.btn-back{width:36px;height:36px;border:none;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.btn-back svg{width:8px;height:14px}
-.spacer{width:36px;flex-shrink:0}
+.screen { display: none; width: 100%; max-width: 430px; margin: 0 auto; min-height: 100dvh; }
+.screen.active { display: flex; flex-direction: column; }
 
-/* Buttons */
-.btn{border:none;border-radius:12px;padding:14px 24px;font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-align:center;width:100%}
-.btn-gold{background:linear-gradient(135deg,#B8860B,#DAA520);color:#1a0a00;box-shadow:0 4px 20px rgba(184,134,11,0.3)}
-.btn-gold:active{transform:scale(0.97)}
-.btn-blue{background:linear-gradient(135deg,#4A90D9,#64A0DC);color:#fff;box-shadow:0 4px 20px rgba(100,160,220,0.3)}
-.btn-blue:active{transform:scale(0.97)}
-.btn-burgundy{background:linear-gradient(135deg,rgb(140,45,55),rgb(160,55,65));color:#fff;box-shadow:0 4px 20px rgba(160,55,65,0.3)}
-.btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text-dim);font-family:'Inter',sans-serif;font-weight:500;font-size:12px;letter-spacing:1px}
-.btn-sm{padding:10px 16px;font-size:12px;border-radius:8px}
-.btn:disabled{opacity:0.3;cursor:not-allowed}
-.btn-danger{background:rgba(220,60,60,0.15);border:1px solid rgba(220,60,60,0.3);color:rgba(220,80,80,0.8);font-family:'Inter',sans-serif;font-weight:500;font-size:12px}
+/* Player cards */
+.player-card {
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+.player-card .avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.player-card .avatar span {
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: 13px;
+  color: rgba(255,255,255,0.25); line-height: 1;
+}
+.player-card .pname {
+  font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px;
+  color: rgba(255,255,255,0.3); flex-grow: 1;
+}
+.player-card.selected {
+  background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(18,40,68,0.4) 100%);
+  border: 1px solid rgba(184,134,11,0.35);
+}
+.player-card.selected .avatar {
+  background: linear-gradient(135deg, rgba(184,134,11,0.2) 0%, rgba(184,134,11,0.1) 100%);
+  border: 1px solid rgba(184,134,11,0.4);
+}
+.player-card.selected .avatar span { color: #B8860B; }
+.player-card.selected .pname { font-weight: 600; color: #FFFFFF; }
 
-/* Bottom Nav */
-.nav-bar{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(7,20,40,0.95);border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:100;backdrop-filter:blur(12px)}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;cursor:pointer;border:none;background:none;color:var(--text-dimmer);font-family:'Inter',sans-serif;font-size:9px;font-weight:500;letter-spacing:0.5px;transition:color .2s}
-.nav-item.active{color:var(--gold)}
-.nav-item svg{width:22px;height:22px;opacity:0.5;transition:opacity .2s}
-.nav-item.active svg{opacity:1}
+/* Guest cards */
+.guest-card {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(18,40,68,0.4) 100%);
+  border: 1px solid rgba(184,134,11,0.35);
+  border-radius: 10px;
+  display: flex; align-items: center; gap: 10px; position: relative;
+}
+.guest-card .avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(184,134,11,0.2) 0%, rgba(184,134,11,0.1) 100%);
+  border: 1px solid rgba(184,134,11,0.4);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.guest-card .avatar span { font-family: 'Cinzel', serif; font-weight: 700; font-size: 13px; color: #B8860B; line-height: 1; }
+.guest-card .pname { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: #FFFFFF; flex-grow: 1; }
+.guest-remove {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; padding: 0;
+}
+.add-guest-btn {
+  padding: 10px 12px; background: none;
+  border: 1px dashed rgba(184,134,11,0.25); border-radius: 10px;
+  cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left;
+}
+.add-guest-btn span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; color: rgba(184,134,11,0.5); }
+.add-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: none;
+  border: 1px dashed rgba(184,134,11,0.3);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
 
-/* Menu */
-.menu-logo{width:80px;height:80px;margin:0 auto 8px}
-.menu-title{font-family:'Cinzel',serif;font-weight:900;font-size:28px;color:var(--cream);letter-spacing:6px;text-align:center}
-.menu-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--gold-dim);text-align:center;margin-top:4px;letter-spacing:1.5px}
-.menu-buttons{display:flex;flex-direction:column;gap:12px;padding:0 32px;margin-top:32px}
-.menu-divider{display:flex;align-items:center;gap:12px;padding:24px 32px}
-.menu-divider span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--text-dimmer);letter-spacing:1px}
-.menu-divider::before,.menu-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06)}
+/* Confetti */
+.confetti {
+  position: absolute; top: -10px; border-radius: 1px;
+  animation: confettiFall linear forwards;
+  opacity: 0.7;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translateY(800px) rotate(720deg); opacity: 0; }
+}
 
-/* Player Selection */
-.player-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}
-.player-card{background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px 16px;text-align:center;cursor:pointer;transition:all .2s}
-.player-card.selected{border-color:var(--gold);background:rgba(184,134,11,0.08)}
-.player-card.selected-blue{border-color:var(--blue);background:rgba(100,160,220,0.08)}
-.player-card .name{font-family:'Cinzel',serif;font-weight:600;font-size:14px;color:var(--cream);letter-spacing:1px}
-.player-card .check{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.player-card.selected .check,.player-card.selected-blue .check{border-color:var(--gold);background:var(--gold)}
-.player-card.selected-blue .check{border-color:var(--blue);background:var(--blue)}
+/* Modals */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  z-index: 100; align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.active { display: flex; }
 
-/* Score Table */
-.round-info{text-align:center;padding:8px 16px;font-family:'Inter',sans-serif;font-size:12px;color:var(--text-dim)}
-.score-wrapper{flex:1;overflow-x:auto;padding:0 8px}
-.score-table{width:100%;border-collapse:collapse;min-width:320px}
-.score-table th{font-family:'Inter',sans-serif;font-weight:600;font-size:10px;color:var(--text-dim);letter-spacing:0.5px;padding:8px 4px;text-align:center;position:sticky;top:0;background:var(--navy);text-transform:uppercase}
-.score-table th:first-child{text-align:left;padding-left:8px;width:36px}
-.score-table td{padding:3px 2px;text-align:center;border-top:1px solid rgba(255,255,255,0.04)}
-.score-table td:first-child{text-align:left;padding-left:8px;font-size:11px;color:var(--text-dimmer);font-weight:500}
-.score-cell{width:100%;padding:8px 4px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-align:center;cursor:pointer;min-height:34px;display:flex;align-items:center;justify-content:center}
-.score-cell.empty{color:var(--text-dimmer);font-weight:400;font-size:11px}
-.score-cell.winner{color:var(--green);background:rgba(107,191,122,0.06)}
-.score-cell.zero{color:var(--green)}
-.score-cell.negative{color:var(--green)}
-.score-cell.high{color:var(--red)}
-.total-row td{border-top:2px solid rgba(255,255,255,0.1);font-family:'Inter',sans-serif;font-weight:700;font-size:14px;padding:10px 4px}
-.total-row .label{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px}
-.score-actions{padding:12px 16px;display:flex;gap:8px}
+/* Blink animation */
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* Score Input Modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.modal-overlay.active{display:flex}
-.modal{background:var(--navy-light);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:280px;text-align:center}
-.modal h3{font-family:'Cinzel',serif;font-size:14px;color:var(--cream);margin-bottom:4px}
-.modal .modal-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px}
-.modal input[type=number]{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:24px;font-weight:700;text-align:center;outline:none}
-.modal input:focus{border-color:var(--gold)}
-.modal-btns{display:flex;gap:8px;margin-top:16px}
-.modal-btns .btn{flex:1}
-
-/* Winner */
-.winner-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;flex:1}
-.winner-crown{font-size:48px;margin-bottom:8px}
-.winner-name{font-family:'Cinzel',serif;font-weight:900;font-size:32px;color:var(--gold);letter-spacing:4px;margin-bottom:4px}
-.winner-score{font-family:'Inter',sans-serif;font-size:14px;color:var(--text-dim)}
-.standings{width:100%;margin-top:24px;display:flex;flex-direction:column;gap:6px}
-.standing-row{display:flex;align-items:center;padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:10px;gap:10px}
-.standing-pos{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:var(--text-dimmer);width:24px}
-.standing-name{flex:1;font-family:'Cinzel',serif;font-weight:500;font-size:13px;color:var(--cream);text-align:left}
-.standing-pts{font-family:'Inter',sans-serif;font-weight:700;font-size:14px}
-
-/* Histórico */
-.historico-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
-.summary-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;text-align:center}
-.summary-card .value{font-family:'Inter',sans-serif;font-weight:800;font-size:24px;color:var(--gold)}
-.summary-card .label{font-family:'Inter',sans-serif;font-size:10px;color:var(--text-dimmer);letter-spacing:0.5px;margin-top:2px}
-.match-list{display:flex;flex-direction:column;gap:8px;padding:0 16px 16px}
-.match-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;cursor:pointer;transition:background .2s}
-.match-item:active{background:rgba(255,255,255,0.06)}
-.match-item .match-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.match-item .match-type{font-family:'Inter',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.5px;padding:3px 8px;border-radius:4px}
-.match-item .match-type.talmut{background:rgba(184,134,11,0.15);color:var(--gold)}
-.match-item .match-type.blue_lagoon{background:rgba(100,160,220,0.15);color:var(--blue)}
-.match-item .match-date{font-family:'Inter',sans-serif;font-size:10px;color:var(--text-dimmer)}
-.match-item .match-winner{font-family:'Cinzel',serif;font-size:13px;color:var(--cream);margin-top:2px}
-.match-item .match-players{font-family:'Inter',sans-serif;font-size:10px;color:var(--text-dimmer);margin-top:4px}
-
-/* Hall of Fame */
-.hall-sort{display:flex;gap:6px;padding:8px 16px}
-.sort-btn{padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text-dim);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
-.sort-btn.active{background:rgba(100,160,220,0.15);border-color:var(--blue);color:var(--blue)}
-.hall-table{width:100%;border-collapse:collapse;margin:0}
-.hall-table th{font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:var(--text-dimmer);letter-spacing:0.5px;padding:10px 4px;text-align:center;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:var(--navy)}
-.hall-table th:first-child{text-align:left;padding-left:16px}
-.hall-table td{padding:10px 4px;text-align:center;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--text-dim);border-bottom:1px solid rgba(255,255,255,0.03)}
-.hall-table td:first-child{text-align:left;padding-left:16px;font-family:'Cinzel',serif;font-weight:500;font-size:12px;color:var(--cream)}
-.hall-table tr:first-child td{color:var(--text)}
-.hall-table .highlight{color:var(--gold);font-weight:700}
-
-/* La Maltesa */
-.maltesa-content{flex:1;padding:0 16px 24px;overflow-y:auto}
-.maltesa-header-block{text-align:center;padding:20px 24px}
-.maltesa-title{font-family:'Cinzel',serif;font-weight:900;font-size:20px;color:var(--cream);letter-spacing:5px}
-.maltesa-subtitle{font-family:'Cormorant Garamond',serif;font-weight:500;font-style:italic;font-size:13px;color:rgba(160,55,65,0.5);letter-spacing:1.5px;margin-top:6px}
-.maltesa-latin{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;font-size:11px;color:var(--gold-dim);letter-spacing:2px;text-transform:uppercase;margin-top:10px}
-.maltesa-divider{display:flex;align-items:center;gap:12px;padding:0 24px;margin:12px 0}
-.maltesa-divider::before,.maltesa-divider::after{content:'';flex:1;height:1px;background:rgba(160,55,65,0.12)}
-.article-block{background:rgba(160,55,65,0.03);border:1px solid rgba(160,55,65,0.08);border-radius:10px;padding:14px 16px;margin-bottom:10px}
-.article-num{font-family:'Cinzel',serif;font-weight:700;font-size:11px;color:rgba(160,55,65,0.6);letter-spacing:1px}
-.article-title{font-family:'Cinzel',serif;font-weight:600;font-size:12px;color:var(--cream);letter-spacing:0.5px;margin:6px 0 8px}
-.article-text{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:13px;color:rgba(255,255,255,0.35);line-height:1.55;margin-bottom:6px}
-.article-text:last-child{margin-bottom:0}
-.article-text .num{color:rgba(160,55,65,0.5);font-weight:600}
-.article-text .term{color:var(--cream);font-weight:500}
-.article-text .latin{color:var(--gold-dim);font-style:italic}
-.article-text .opt{color:var(--gold-dim);font-weight:600}
-.preamble-block{background:rgba(160,55,65,0.04);border:1px solid rgba(160,55,65,0.1);border-radius:10px;padding:16px;margin-bottom:12px}
-.preamble-title{font-family:'Cinzel',serif;font-weight:700;font-size:11px;color:rgba(160,55,65,0.6);letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:8px}
-.preamble-text{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:13px;color:rgba(255,255,255,0.35);line-height:1.55;text-align:justify}
-.preamble-quote{font-family:'Cormorant Garamond',serif;font-weight:500;font-style:italic;font-size:12px;color:rgba(184,134,11,0.35);line-height:1.5;text-align:center;margin-top:10px}
-.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;padding:8px 12px;background:rgba(160,55,65,0.03);border:1px solid rgba(160,55,65,0.06);border-radius:8px;margin:6px 0}
-.values-grid span{font-family:'Inter',sans-serif;font-weight:500;font-size:11px;color:var(--text-dimmer)}
-.values-grid .right{text-align:right}
-.values-grid .pos{color:var(--green)}
-.values-grid .neg{color:var(--red)}
-.infractions-grid{display:flex;flex-direction:column;gap:3px;padding:8px 10px;background:rgba(160,55,65,0.03);border:1px solid rgba(160,55,65,0.06);border-radius:8px;margin:6px 0}
-.infraction-row{display:flex;justify-content:space-between;gap:8px}
-.infraction-row .desc{font-family:'Inter',sans-serif;font-weight:400;font-size:10px;color:var(--text-dimmer);flex:1}
-.infraction-row .pen{font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(220,80,80,0.5);white-space:nowrap}
-.maltesa-seal{text-align:center;padding:20px 24px;margin-top:8px}
-.seal-box{display:inline-flex;flex-direction:column;align-items:center;gap:6px;padding:12px 20px;background:rgba(160,55,65,0.04);border:1px solid rgba(160,55,65,0.1);border-radius:12px}
-.seal-text{font-family:'Cinzel',serif;font-weight:900;font-size:12px;color:rgba(184,134,11,0.35);letter-spacing:3px}
-.seal-edition{font-family:'Cormorant Garamond',serif;font-weight:500;font-style:italic;font-size:10px;color:rgba(160,55,65,0.3);letter-spacing:1px}
-
-/* Loading */
-.loading{text-align:center;padding:40px;color:var(--text-dim);font-size:13px}
-.empty-state{text-align:center;padding:40px 24px;color:var(--text-dimmer);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px}
-
-/* Continue match banner */
-.continue-banner{margin:0 32px 12px;padding:14px 16px;background:rgba(184,134,11,0.08);border:1px solid rgba(184,134,11,0.2);border-radius:12px;cursor:pointer;text-align:center;transition:background .2s}
-.continue-banner:active{background:rgba(184,134,11,0.12)}
-.continue-banner .cb-title{font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:var(--gold);letter-spacing:0.5px}
-.continue-banner .cb-sub{font-family:'Inter',sans-serif;font-size:10px;color:var(--text-dimmer);margin-top:2px}
-
-/* Confirm modal */
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.confirm-overlay.active{display:flex}
+/* Finger game touch pulse */
+@keyframes touchPulse {
+  0%,100% { box-shadow: 0 0 20px rgba(184,134,11,0.15), 0 0 40px rgba(184,134,11,0.05); }
+  50% { box-shadow: 0 0 30px rgba(184,134,11,0.25), 0 0 60px rgba(184,134,11,0.1); }
+}
+@keyframes selectedPulse {
+  0%,100% { box-shadow: 0 0 30px rgba(184,134,11,0.35), 0 0 60px rgba(184,134,11,0.12), 0 0 90px rgba(184,134,11,0.05); }
+  50% { box-shadow: 0 0 40px rgba(184,134,11,0.5), 0 0 70px rgba(184,134,11,0.2), 0 0 100px rgba(184,134,11,0.08); }
+}
 </style>
 </head>
 <body>
 
-<!-- ===== SCREENS ===== -->
-<div id="app"></div>
+<!-- ==================== MENU ==================== -->
+<div id="screen-menu" class="screen active" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); align-items: center; padding: 52px 24px 32px; gap: 0">
 
-<!-- Score Input Modal -->
-<div class="modal-overlay" id="scoreModal">
-  <div class="modal">
-    <h3 id="modalPlayerName"></h3>
-    <div class="modal-sub" id="modalRoundInfo"></div>
-    <input type="number" id="modalInput" inputmode="numeric" placeholder="0" autocomplete="off">
-    <div class="modal-btns">
-      <button class="btn btn-outline btn-sm" onclick="closeScoreModal()">Cancelar</button>
-      <button class="btn btn-gold btn-sm" onclick="saveScoreModal()">OK</button>
+  <!-- Logo emblem -->
+  <div style="width: 80px; height: 80px; border-radius: 14px; overflow: hidden; box-shadow: 0 3px 24px rgba(184,134,11,0.18), 0 0 0 1px rgba(184,134,11,0.2); background: rgba(184,134,11,0.08)">
+    <img src="Logo_Talmut.png" style="width: 100%; height: 100%; object-fit: cover; display: block" onerror="this.style.display='none'">
+  </div>
+
+  <!-- Title -->
+  <h1 style="margin: 14px 0 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 26px; color: #E8DCC8; letter-spacing: 8px; text-align: center">TALMUT</h1>
+
+  <!-- Subtitle -->
+  <p style="margin: 4px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: normal; font-size: 12px; color: #B8860B; letter-spacing: 2.5px; text-align: center; text-transform: uppercase">&middot; HIC LUDUS ERROREM PUNIT &middot;</p>
+
+  <!-- Divider -->
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.3), transparent); margin: 20px 0 22px"></div>
+
+  <!-- Menu items -->
+  <div style="width: 100%; display: flex; flex-direction: column; gap: 8px">
+
+    <!-- Continuar partida — hidden by default -->
+    <button id="continueBtn" onclick="continueGame()" style="display:none; width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(40,85,55,0.2) 0%, rgba(30,70,45,0.1) 100%); border: 1px solid rgba(61,139,79,0.35); border-radius: 10px; cursor: pointer; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="18" height="20" viewBox="0 0 18 20" fill="none"><polygon points="2,1 16,10 2,19" fill="#4CAF65" opacity="0.85"></polygon></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Continuar partida</span>
+        <span id="continueDesc" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Retomar la partida en curso</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#4CAF65" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"></polyline></svg>
+    </button>
+
+    <!-- Talmut -->
+    <button onclick="startNewGame('talmut')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(18,40,68,0.5) 0%, rgba(12,30,55,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <img src="Logo_Talmut.png" style="width: 32px; height: 32px; object-fit: contain; display: block" onerror="this.outerHTML='<svg width=&quot;28&quot; height=&quot;28&quot; viewBox=&quot;0 0 28 28&quot; fill=&quot;none&quot;><rect x=&quot;4&quot; y=&quot;2&quot; width=&quot;16&quot; height=&quot;22&quot; rx=&quot;2&quot; stroke=&quot;#B8860B&quot; stroke-width=&quot;1.2&quot; fill=&quot;rgba(184,134,11,0.08)&quot;/><rect x=&quot;8&quot; y=&quot;4&quot; width=&quot;16&quot; height=&quot;22&quot; rx=&quot;2&quot; stroke=&quot;#B8860B&quot; stroke-width=&quot;1.2&quot; fill=&quot;rgba(184,134,11,0.05)&quot;/></svg>'">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Talmut</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Partida oficial &middot; 10 rondas</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
+    </button>
+
+    <!-- Blue Lagoon -->
+    <button onclick="startNewGame('blue_lagoon')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(18,40,68,0.5) 0%, rgba(12,30,55,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <img src="Blue_Lagoon.png" style="width: 34px; height: 34px; object-fit: contain; display: block" onerror="this.outerHTML='<svg width=&quot;28&quot; height=&quot;28&quot; viewBox=&quot;0 0 28 28&quot; fill=&quot;none&quot;><path d=&quot;M14 4c-2 0-4 6-4 10s2 10 4 10 4-6 4-10-2-10-4-10z&quot; stroke=&quot;#B8860B&quot; stroke-width=&quot;1.2&quot; fill=&quot;rgba(184,134,11,0.08)&quot;/><circle cx=&quot;14&quot; cy=&quot;8&quot; r=&quot;2&quot; fill=&quot;rgba(184,134,11,0.3)&quot;/></svg>'">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Blue Lagoon</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Partida r&aacute;pida &middot; rondas libres</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
+    </button>
+
+    <!-- Historico -->
+    <button onclick="loadHistorico();showScreen('screen-historico')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(18,40,68,0.5) 0%, rgba(12,30,55,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="#B8860B" stroke-width="1.2" fill="rgba(184,134,11,0.05)"/><path d="M16 9v7l4.5 3" stroke="#B8860B" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Hist&oacute;rico</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Partidas jugadas y estad&iacute;sticas</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
+    </button>
+
+    <!-- Hall of Fame -->
+    <button onclick="loadHallOfFame();showScreen('screen-hof')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(20,48,85,0.5) 0%, rgba(15,38,70,0.3) 100%); border: 1px solid rgba(100,160,220,0.15); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(184,134,11,0.35); border-radius: 6px; background: rgba(184,134,11,0.05)"><span style="font-family: 'Cinzel', serif; font-weight: 900; font-size: 22px; color: #B8860B; line-height: 1; letter-spacing: -0.5px">42</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Hall of Fame</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Estad&iacute;sticas y clasificaci&oacute;n general</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#64A0DC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"></polyline></svg>
+    </button>
+
+    <!-- La Maltesa -->
+    <button onclick="showScreen('screen-maltesa')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(65,20,28,0.15) 0%, rgba(50,12,20,0.08) 100%); border: 1px solid rgba(160,55,65,0.2); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+      <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="5" y="3" width="18" height="22" rx="2" stroke="rgba(160,55,65,0.6)" stroke-width="1.2" fill="rgba(160,55,65,0.06)"/><line x1="9" y1="9" x2="19" y2="9" stroke="rgba(160,55,65,0.3)" stroke-width="1"/><line x1="9" y1="13" x2="19" y2="13" stroke="rgba(160,55,65,0.3)" stroke-width="1"/><line x1="9" y1="17" x2="15" y2="17" stroke="rgba(160,55,65,0.3)" stroke-width="1"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">La Maltesa</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Constituci&oacute;n oficial del juego</span>
+      </div>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="rgba(160,55,65,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+    </button>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top: auto; padding-top: 28px; text-align: center">
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 10px; color: rgba(184,134,11,0.18); letter-spacing: 2px; text-transform: uppercase">Primera edici&oacute;n oficial &middot; v1.0</p>
+  </div>
+</div>
+
+<!-- ==================== TALMUT PLAYER SELECTION ==================== -->
+<div id="screen-select-talmut" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+
+  <!-- Top bar — left aligned -->
+  <div style="display: flex; align-items: center; padding: 52px 20px 10px; gap: 12px">
+    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div style="flex-grow: 1">
+      <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; color: #E8DCC8; letter-spacing: 2.5px">TALMUT</h1>
+      <p style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.3)">Partida oficial &middot; 10 rondas</p>
+    </div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 6px 0 0"></div>
+
+  <div style="padding: 22px 24px 6px">
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 14px; color: #B8860B; letter-spacing: 1px">Seleccionar jugadores</p>
+    <p style="margin: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.25)">M&iacute;nimo 2 jugadores para empezar</p>
+  </div>
+
+  <div id="talmutPlayerGrid" style="padding: 14px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px"></div>
+
+  <div style="padding: 4px 24px 0; text-align: right">
+    <button onclick="selectAllPlayers('talmut')" style="background: none; border: none; cursor: pointer; padding: 4px 0">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(184,134,11,0.45); text-decoration: underline; text-underline-offset: 2px">Seleccionar todos</span>
+    </button>
+  </div>
+
+  <div style="flex-grow: 1"></div>
+
+  <div style="padding: 0 24px 44px; display: flex; flex-direction: column; gap: 10px">
+    <div style="text-align: center">
+      <span id="talmutPlayerCount" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3)">0 de 6 seleccionados</span>
+    </div>
+    <button id="talmutStartBtn" onclick="startMatch('talmut')" disabled style="width: 100%; padding: 14px; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 16px rgba(184,134,11,0.25); opacity: 1">
+      <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; color: #FFFFFF; letter-spacing: 2.5px; text-transform: uppercase">Empezar Partida</span>
+    </button>
+  </div>
+</div>
+
+<!-- ==================== BLUE LAGOON PLAYER SELECTION ==================== -->
+<div id="screen-select-bl" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+
+  <!-- Top bar — left aligned -->
+  <div style="display: flex; align-items: center; padding: 52px 20px 10px; gap: 12px">
+    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+    </button>
+    <div style="flex-grow: 1">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <img src="Blue_Lagoon.png" style="width: 22px; height: 22px; object-fit: contain" alt="" onerror="this.style.display='none'">
+        <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; color: #E8DCC8; letter-spacing: 2.5px">BLUE LAGOON</h1>
+      </div>
+      <p style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.3)">Partida r&aacute;pida</p>
+    </div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 6px 0 0"></div>
+
+  <!-- No stats badge -->
+  <div style="padding: 14px 24px 0; display: flex; justify-content: center">
+    <div style="display: flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(255,165,0,0.06); border: 1px solid rgba(255,165,0,0.15); border-radius: 20px">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(255,165,0,0.5)" stroke-width="1"></circle><line x1="6" y1="3.5" x2="6" y2="6.5" stroke="rgba(255,165,0,0.5)" stroke-width="1.2" stroke-linecap="round"></line><circle cx="6" cy="8.2" r="0.6" fill="rgba(255,165,0,0.5)"></circle></svg>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(255,165,0,0.6); letter-spacing: 0.5px">Los resultados no afectan al Hist&oacute;rico ni al Hall of Fame</span>
+    </div>
+  </div>
+
+  <div style="padding: 18px 24px 6px">
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 14px; color: #B8860B; letter-spacing: 1px">Seleccionar jugadores</p>
+  </div>
+
+  <div id="blPlayerGrid" style="padding: 14px 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px"></div>
+
+  <div style="padding: 4px 24px 0; text-align: right">
+    <button onclick="selectAllPlayers('bl')" style="background: none; border: none; cursor: pointer; padding: 4px 0">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(184,134,11,0.45); text-decoration: underline; text-underline-offset: 2px">Seleccionar todos</span>
+    </button>
+  </div>
+
+  <!-- Extras divider -->
+  <div style="padding: 18px 24px 0; display: flex; align-items: center; gap: 10px">
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent)"></div>
+    <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 1.5px; text-transform: uppercase">EXTRAS</span>
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08))"></div>
+  </div>
+
+  <div id="guestGrid" style="padding: 12px 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px"></div>
+
+  <div style="flex-grow: 1"></div>
+
+  <!-- Rounds selector -->
+  <div style="padding: 0 24px 12px">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; color: rgba(255,255,255,0.35)">N&uacute;mero de rondas</span>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <button onclick="changeRounds(-1)" style="width: 26px; height: 26px; border-radius: 6px; background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0">
+          <svg width="10" height="2" viewBox="0 0 10 2" fill="none"><line x1="1" y1="1" x2="9" y2="1" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round"></line></svg>
+        </button>
+        <span id="roundsValue" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #B8860B; width: 24px; text-align: center">5</span>
+        <button onclick="changeRounds(1)" style="width: 26px; height: 26px; border-radius: 6px; background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round"></line><line x1="1" y1="5" x2="9" y2="5" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round"></line></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 24px 44px; display: flex; flex-direction: column; gap: 10px">
+    <div style="text-align: center">
+      <span id="blPlayerCount" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3)">0 jugadores seleccionados</span>
+    </div>
+    <button id="blStartBtn" onclick="startMatch('blue_lagoon')" disabled style="width: 100%; padding: 14px; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 16px rgba(184,134,11,0.25)">
+      <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; color: #FFFFFF; letter-spacing: 2.5px; text-transform: uppercase">Empezar Partida</span>
+    </button>
+  </div>
+</div>
+
+<!-- ==================== OATH SCREEN ==================== -->
+<div id="screen-juramento" class="screen" style="background: linear-gradient(180deg, #060E1A 0%, #0B1F3A 40%, #0E2545 100%); align-items: center; justify-content: center; padding: 48px 32px; position: relative; overflow: hidden">
+
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%); width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 70%); pointer-events: none"></div>
+
+  <!-- Top flourish -->
+  <div style="position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin-bottom: 32px">
+    <div style="width: 40px; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.4))"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0 L9.5 6.5 L16 8 L9.5 9.5 L8 16 L6.5 9.5 L0 8 L6.5 6.5 Z" fill="#B8860B" opacity="0.35"></path></svg>
+    <div style="width: 40px; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,0.4), transparent)"></div>
+  </div>
+
+  <p style="position: relative; z-index: 1; margin: 0 0 6px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(184,134,11,0.35); letter-spacing: 3px; text-transform: uppercase">Art&iacute;culo I &middot; La Maltesa</p>
+  <p style="position: relative; z-index: 1; margin: 0 0 28px; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 15px; color: rgba(255,255,255,0.3); letter-spacing: 1px">El Juramento</p>
+
+  <div style="position: relative; z-index: 1; text-align: center; padding: 0 8px">
+    <p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 28px; color: #B8860B; letter-spacing: 5px; line-height: 1.35; text-shadow: 0 0 40px rgba(184,134,11,0.15)">HIC LUDUS</p>
+    <p style="margin: 4px 0 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 28px; color: #B8860B; letter-spacing: 5px; line-height: 1.35; text-shadow: 0 0 40px rgba(184,134,11,0.15)">ERROREM</p>
+    <p style="margin: 4px 0 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 28px; color: #B8860B; letter-spacing: 5px; line-height: 1.35; text-shadow: 0 0 40px rgba(184,134,11,0.15)">PUNIT</p>
+  </div>
+
+  <p style="position: relative; z-index: 1; margin: 18px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 13px; color: rgba(255,255,255,0.2); letter-spacing: 1px; text-align: center">&laquo;Este juego penaliza el fallo&raquo;</p>
+
+  <!-- Bottom flourish -->
+  <div style="position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin-top: 32px">
+    <div style="width: 40px; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.4))"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0 L9.5 6.5 L16 8 L9.5 9.5 L8 16 L6.5 9.5 L0 8 L6.5 6.5 Z" fill="#B8860B" opacity="0.35"></path></svg>
+    <div style="width: 40px; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,0.4), transparent)"></div>
+  </div>
+
+  <p style="position: relative; z-index: 1; margin: 40px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.2); text-align: center; line-height: 1.5">Todos los jugadores deben pronunciar<br>el juramento en voz alta</p>
+
+  <button onclick="showScreen('screen-finger')" style="position: relative; z-index: 1; margin-top: 24px; width: 100%; padding: 14px; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 16px rgba(184,134,11,0.25)">
+    <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; color: #FFFFFF; letter-spacing: 2.5px; text-transform: uppercase">Hemos Jurado</span>
+  </button>
+
+  <p id="dealerInfo" style="position: relative; z-index: 1; margin: 16px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.15); text-align: center">Empieza: <span style="color: rgba(184,134,11,0.5); font-weight: 600">---</span></p>
+</div>
+
+<!-- ==================== FINGER GAME ==================== -->
+<div id="screen-finger" class="screen" style="background: #050505; position: relative; overflow: hidden">
+
+  <!-- Star dots -->
+  <div style="position: absolute; inset: 0; opacity: 0.15">
+    <div style="position: absolute; width: 2px; height: 2px; background: #B8860B; border-radius: 50%; top: 120px; left: 45px"></div>
+    <div style="position: absolute; width: 1px; height: 1px; background: #B8860B; border-radius: 50%; top: 200px; left: 310px"></div>
+    <div style="position: absolute; width: 2px; height: 2px; background: #B8860B; border-radius: 50%; top: 380px; left: 80px"></div>
+    <div style="position: absolute; width: 1px; height: 1px; background: #B8860B; border-radius: 50%; top: 500px; left: 260px"></div>
+    <div style="position: absolute; width: 2px; height: 2px; background: #B8860B; border-radius: 50%; top: 650px; left: 150px"></div>
+    <div style="position: absolute; width: 1px; height: 1px; background: #B8860B; border-radius: 50%; top: 300px; left: 350px"></div>
+  </div>
+
+  <!-- Title -->
+  <div style="position: relative; z-index: 2; text-align: center; padding: 64px 32px 0">
+    <p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; color: rgba(184,134,11,0.7); letter-spacing: 3px; text-transform: uppercase">&iquest;QUI&Eacute;N EMPIEZA?</p>
+  </div>
+
+  <!-- Touch zone -->
+  <div id="fingerZone" style="position: relative; z-index: 1; flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 20px; touch-action: none">
+    <div style="position: relative; width: 300px; height: 420px" id="touchArea">
+      <!-- Touch points rendered dynamically or shown as placeholders -->
+    </div>
+  </div>
+
+  <!-- Skip -->
+  <div style="position: relative; z-index: 2; padding: 0 32px 48px; text-align: center">
+    <button onclick="skipFingerGame()" style="background: none; border: none; cursor: pointer; padding: 10px 16px">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255,255,255,0.1)">Continuar sin poner los dedos</span>
+    </button>
+  </div>
+</div>
+
+<!-- ==================== SCORE TABLE ==================== -->
+<div id="screen-score" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+
+  <!-- Top bar -->
+  <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
+    <button onclick="confirmExit()" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+    </button>
+    <div style="flex-grow: 1">
+      <h1 id="scoreTitle" style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 15px; color: #E8DCC8; letter-spacing: 2px">TALMUT</h1>
+      <p id="scoreSubtitle" style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.25)">Ronda 1 de 10</p>
+    </div>
+    <button onclick="confirmExit()" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="3" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
+        <circle cx="7" cy="7" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
+        <circle cx="7" cy="11" r="1.2" fill="rgba(255,255,255,0.3)"></circle>
+      </svg>
+    </button>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 4px 0 0"></div>
+
+  <!-- Score grid -->
+  <div id="scoreGrid" style="flex-grow: 1; overflow-y: auto; padding: 0"></div>
+
+  <!-- Numpad -->
+  <div style="background: #070F1D; border-top: 1px solid rgba(184,134,11,0.15); padding: 10px 12px 32px">
+    <div id="numpadContext" style="text-align: center; margin-bottom: 8px">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.2)">Puntuaci&oacute;n de </span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 11px; color: #B8860B">---</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.2)"> &middot; Ronda 1</span>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px">
+      <button onclick="numpadInput('1')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">1</span></button>
+      <button onclick="numpadInput('2')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">2</span></button>
+      <button onclick="numpadInput('3')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">3</span></button>
+      <button onclick="numpadInput('back')" style="padding: 12px 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.04); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center">
+        <svg width="20" height="16" viewBox="0 0 20 16" fill="none"><path d="M7 1L1 8l6 7h12V1H7z" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-linejoin="round"></path><line x1="10" y1="5" x2="15" y2="11" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-linecap="round"></line><line x1="15" y1="5" x2="10" y2="11" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-linecap="round"></line></svg>
+      </button>
+      <button onclick="numpadInput('4')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">4</span></button>
+      <button onclick="numpadInput('5')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">5</span></button>
+      <button onclick="numpadInput('6')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">6</span></button>
+      <button onclick="numpadInput('-1')" style="padding: 12px 0; background: rgba(61,139,79,0.12); border: 1px solid rgba(61,139,79,0.25); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 16px; color: #6BBF7A">-1</span></button>
+      <button onclick="numpadInput('7')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">7</span></button>
+      <button onclick="numpadInput('8')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">8</span></button>
+      <button onclick="numpadInput('9')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">9</span></button>
+      <div></div>
+      <button onclick="numpadInput('0')" style="padding: 12px 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; cursor: pointer; text-align: center; grid-column: span 2"><span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; color: rgba(255,255,255,0.7)">0</span></button>
+      <button onclick="numpadConfirm()" style="padding: 12px 0; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 8px; cursor: pointer; text-align: center; grid-column: span 2; box-shadow: 0 2px 10px rgba(184,134,11,0.2)"><span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 13px; color: #FFFFFF; letter-spacing: 2px; text-transform: uppercase">OK</span></button>
     </div>
   </div>
 </div>
 
-<!-- Confirm Modal -->
-<div class="confirm-overlay" id="confirmModal">
-  <div class="modal">
-    <h3 id="confirmTitle"></h3>
-    <div class="modal-sub" id="confirmMsg" style="margin-bottom:0"></div>
-    <div class="modal-btns" style="margin-top:16px">
-      <button class="btn btn-outline btn-sm" onclick="closeConfirm()">Cancelar</button>
-      <button class="btn btn-danger btn-sm" id="confirmBtn" onclick="">Confirmar</button>
+<!-- ==================== WINNER SCREEN ==================== -->
+<div id="screen-winner" class="screen" style="background: linear-gradient(180deg, #060E1A 0%, #0B1F3A 35%, #0E2545 100%); align-items: center; padding: 0; position: relative; overflow: hidden">
+
+  <div id="confettiContainer" style="position: absolute; inset: 0; pointer-events: none; z-index: 1"></div>
+
+  <!-- Radial glow -->
+  <div style="position: absolute; top: 220px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(184,134,11,0.08) 0%, transparent 65%); pointer-events: none"></div>
+
+  <div style="position: relative; z-index: 2; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 32px; margin-top: -30px">
+
+    <!-- Trophy -->
+    <div style="width: 90px; height: 90px; border-radius: 50%; background: rgba(184,134,11,0.06); border: 1.5px solid rgba(184,134,11,0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 0 40px rgba(184,134,11,0.08)">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <path d="M14 8h16v14c0 5-3.5 9-8 9s-8-4-8-9V8z" stroke="#B8860B" stroke-width="1.5" fill="rgba(184,134,11,0.08)"></path>
+        <path d="M14 12H10c-2 0-3.5 1.5-3.5 3.5S8 19 10 19h4" stroke="#B8860B" stroke-width="1.2" fill="none"></path>
+        <path d="M30 12h4c2 0 3.5 1.5 3.5 3.5S36 19 34 19h-4" stroke="#B8860B" stroke-width="1.2" fill="none"></path>
+        <line x1="22" y1="31" x2="22" y2="36" stroke="#B8860B" stroke-width="1.5"></line>
+        <path d="M16 36h12v2H16z" fill="#B8860B" opacity="0.5"></path>
+        <path d="M22 14l1.5 3 3.5 0.5-2.5 2.5 0.5 3.5L22 22l-3 1.5 0.5-3.5-2.5-2.5 3.5-0.5z" fill="#B8860B" opacity="0.4"></path>
+      </svg>
+    </div>
+
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: normal; font-size: 14px; color: rgba(255,255,255,0.25); letter-spacing: 2px; text-transform: uppercase">El ganador es</p>
+    <h1 id="winnerName" style="margin: 10px 0 0; font-family: Poppins, sans-serif; font-weight: 900; font-size: 38px; color: #B8860B; letter-spacing: 4px; text-shadow: 0 0 30px rgba(184,134,11,0.2)">---</h1>
+
+    <div style="margin: 16px 0 0; display: flex; align-items: baseline; gap: 6px">
+      <span id="winnerScoreVal" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 48px; color: #E8DCC8; line-height: 1; text-shadow: 0 2px 20px rgba(232,220,200,0.1)">0</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.2)">puntos</span>
+    </div>
+
+    <div style="width: 60px; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.3), transparent); margin: 28px 0"></div>
+
+    <div id="standingsList" style="width: 100%; display: flex; flex-direction: column; gap: 0"></div>
+  </div>
+
+  <!-- Bottom buttons -->
+  <div style="position: relative; z-index: 2; width: 100%; padding: 0 24px 44px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box">
+    <button onclick="shareResults()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 16px rgba(184,134,11,0.25); display: flex; align-items: center; justify-content: center; gap: 8px">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 10a2 2 0 100-4 2 2 0 000 4zM12 6a2 2 0 100-4 2 2 0 000 4zM12 14a2 2 0 100-4 2 2 0 000 4z" stroke="#FFF" stroke-width="1.2"></path><line x1="5.8" y1="8.9" x2="10.2" y2="11.1" stroke="#FFF" stroke-width="1.2"></line><line x1="10.2" y1="4.9" x2="5.8" y2="7.1" stroke="#FFF" stroke-width="1.2"></line></svg>
+      <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 13px; color: #FFFFFF; letter-spacing: 2px; text-transform: uppercase">Compartir</span>
+    </button>
+    <div style="display: flex; gap: 8px">
+      <button onclick="showScreen('screen-menu');checkActiveMatch()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.15); border-radius: 10px; cursor: pointer; text-align: center">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: rgba(255,255,255,0.35)">Nueva partida</span>
+      </button>
+      <button onclick="showScreen('screen-menu');checkActiveMatch()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.15); border-radius: 10px; cursor: pointer; text-align: center">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: rgba(255,255,255,0.35)">Men&uacute; principal</span>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- Bottom Navigation -->
-<nav class="nav-bar" id="navBar">
-  <button class="nav-item active" onclick="navigate('menu')" data-nav="menu">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-8 9 8M5 10v9a1 1 0 001 1h3v-5h6v5h3a1 1 0 001-1v-9"/></svg>
-    Inicio
-  </button>
-  <button class="nav-item" onclick="navigate('historico')" data-nav="historico">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-    Histórico
-  </button>
-  <button class="nav-item" onclick="navigate('hall')" data-nav="hall">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 6h6l-5 4 2 7-6-4-6 4 2-7-5-4h6z"/></svg>
-    Hall of Fame
-  </button>
-  <button class="nav-item" onclick="navigate('maltesa')" data-nav="maltesa">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h12a2 2 0 012 2v14l-7-3-7 3V6a2 2 0 012-2z"/></svg>
-    La Maltesa
-  </button>
-</nav>
+<!-- ==================== HISTORICO ==================== -->
+<div id="screen-historico" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+
+  <!-- Top bar — centered -->
+  <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
+    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div style="flex-grow: 1; text-align: center">
+      <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; color: #E8DCC8; letter-spacing: 3px">HIST&Oacute;RICO</h1>
+      <p style="margin: 2px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 11px; color: rgba(184,134,11,0.5)">Partidas oficiales TALMUT</p>
+    </div>
+    <div style="width: 32px; height: 32px; flex-shrink: 0"></div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 4px 0 0"></div>
+
+  <!-- Medal + counter -->
+  <div style="display: flex; flex-direction: column; align-items: center; padding: 24px 16px 16px">
+    <div style="width: 64px; height: 64px; margin-bottom: 12px">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="28" r="16" stroke="#B8860B" stroke-width="1.5" fill="rgba(184,134,11,0.06)"/><path d="M32 12l2 5 5 0.5-3.5 3.5 0.8 5L32 23.5 27.7 26l0.8-5L25 17.5 30 17z" fill="#B8860B" opacity="0.3"/><path d="M24 42l4-10h8l4 10" stroke="#B8860B" stroke-width="1.2" fill="rgba(184,134,11,0.05)"/><line x1="28" y1="48" x2="36" y2="48" stroke="#B8860B" stroke-width="1.2"/></svg>
+    </div>
+    <div style="display: flex; align-items: baseline; gap: 6px">
+      <span id="totalMatches" style="font-family: 'Cinzel', serif; font-weight: 900; font-size: 42px; color: #B8860B; line-height: 1">0</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.25)">partidas jugadas</span>
+    </div>
+    <p id="historicoSince" style="margin: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.15)"></p>
+  </div>
+
+  <!-- Victorias divider -->
+  <div style="display: flex; align-items: center; gap: 12px; padding: 0 24px; margin: 4px 0 16px">
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.15))"></div>
+    <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 11px; color: rgba(184,134,11,0.3); letter-spacing: 2px; text-transform: uppercase">Victorias</span>
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,0.15), transparent)"></div>
+  </div>
+
+  <div id="winList" style="flex-grow: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 6px"></div>
+
+  <!-- Last match -->
+  <div style="padding: 16px 16px 40px">
+    <div id="lastMatchCard" style="display:none; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 14px 16px">
+      <p style="margin: 0 0 6px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(255,255,255,0.15); text-transform: uppercase; letter-spacing: 1px">&Uacute;ltima partida</p>
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <div>
+          <p style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.5)">Ganador: <span id="lmWinner" style="color: #B8860B; font-weight: 700">---</span></p>
+          <p id="lmDate" style="margin: 2px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.15)"></p>
+        </div>
+        <span id="lmScore" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 20px; color: rgba(184,134,11,0.3)">0</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== HALL OF FAME ==================== -->
+<div id="screen-hof" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+
+  <!-- Top bar — centered -->
+  <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
+    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="#64A0DC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+    </button>
+    <div style="flex-grow: 1; text-align: center">
+      <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; color: #E8DCC8; letter-spacing: 3px">HALL OF FAME</h1>
+      <p style="margin: 2px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 11px; color: rgba(100,160,220,0.5)">Estad&iacute;sticas completas</p>
+    </div>
+    <div style="width: 32px; height: 32px; flex-shrink: 0"></div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(100,160,220,0.2), transparent); margin: 4px 0 0"></div>
+
+  <!-- 42 emblem -->
+  <div style="display: flex; flex-direction: column; align-items: center; padding: 20px 16px 12px">
+    <div style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border: 1.5px solid #B8860B; border-radius: 12px; background: rgba(100,160,220,0.04); box-shadow: 0 0 30px rgba(100,160,220,0.06)">
+      <span style="font-family: 'Cinzel', serif; font-weight: 900; font-size: 34px; color: #B8860B; line-height: 1; letter-spacing: -1px">42</span>
+    </div>
+    <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 12px; color: rgba(100,160,220,0.35); letter-spacing: 1.5px; text-transform: uppercase">La cifra m&aacute;gica</p>
+  </div>
+
+  <!-- Sort buttons -->
+  <div style="display: flex; gap: 6px; padding: 0 12px; margin-bottom: 8px">
+    <button id="sortPtBtn" onclick="sortHof('pt')" style="flex: 1; padding: 7px 0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; background: rgba(100,160,220,0.12); border: 1px solid rgba(100,160,220,0.25)">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: #64A0DC; letter-spacing: 0.3px">&#9660; Puntos Totales</span>
+    </button>
+    <button id="sortWBtn" onclick="sortHof('w')" style="flex: 1; padding: 7px 0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; background: transparent; border: 1px solid rgba(255,255,255,0.06)">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.3px">&#9660; Victorias</span>
+    </button>
+  </div>
+
+  <div style="padding: 0 12px; overflow-y: auto; flex-grow: 1">
+    <div id="hofTable"></div>
+
+    <!-- Legend -->
+    <div style="display: flex; gap: 10px; justify-content: center; padding: 12px 0 4px; flex-wrap: wrap">
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">PJ = Partidas jugadas</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">PT = Puntos totales</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">W = Victorias</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">Mejor = Mejor puntuaci&oacute;n</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">Media = Media por partida</span>
+    </div>
+
+    <!-- Records -->
+    <div style="padding: 16px 0 0">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 0 4px; margin-bottom: 10px">
+        <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(100,160,220,0.12))"></div>
+        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 11px; color: rgba(100,160,220,0.25); letter-spacing: 2px; text-transform: uppercase">R&eacute;cords</span>
+        <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(100,160,220,0.12), transparent)"></div>
+      </div>
+      <div id="recordsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"></div>
+    </div>
+
+    <div style="height: 40px; flex-shrink: 0"></div>
+  </div>
+</div>
+
+<!-- ==================== LA MALTESA ==================== -->
+<div id="screen-maltesa" class="screen" style="background: linear-gradient(180deg, #1A0A10 0%, #0B1F3A 40%, #0E2545 100%); padding: 0; overflow-y: auto">
+
+  <!-- Top bar — centered -->
+  <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
+    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="rgba(160,55,65,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div style="flex-grow: 1; text-align: center">
+      <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; color: #E8DCC8; letter-spacing: 3px">LA MALTESA</h1>
+      <p style="margin: 2px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 11px; color: rgba(160,55,65,0.5)">Constituci&oacute;n oficial</p>
+    </div>
+    <div style="width: 32px; height: 32px; flex-shrink: 0"></div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,55,65,0.2), transparent); margin: 4px 0 0"></div>
+
+  <!-- Header -->
+  <div style="display: flex; flex-direction: column; align-items: center; padding: 24px 24px 16px">
+    <div style="width: 60px; height: 60px; margin-bottom: 14px">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="6" width="40" height="48" rx="4" stroke="rgba(160,55,65,0.5)" stroke-width="1.5" fill="rgba(160,55,65,0.05)"/><line x1="18" y1="18" x2="42" y2="18" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="24" x2="42" y2="24" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="30" x2="38" y2="30" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="36" x2="42" y2="36" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="42" x2="34" y2="42" stroke="rgba(160,55,65,0.25)" stroke-width="1"/></svg>
+    </div>
+    <h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 900; font-size: 20px; color: #E8DCC8; letter-spacing: 5px; text-align: center">LA MALTESA</h2>
+    <p style="margin: 6px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 13px; color: rgba(160,55,65,0.5); letter-spacing: 1.5px; text-align: center">Ley Suprema del TALMUT</p>
+    <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-style: italic; font-size: 11px; color: rgba(184,134,11,0.4); letter-spacing: 2px; text-align: center; text-transform: uppercase">Hic Ludus Errorem Punit</p>
+  </div>
+
+  <!-- Ornament -->
+  <div style="display: flex; align-items: center; gap: 12px; padding: 0 24px; margin: 0 0 12px">
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,55,65,0.12))"></div>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3 3.5 0.5-2.5 2.5 0.5 3.5L7 9l-3 1.5 0.5-3.5L2 4.5 5.5 4z" fill="rgba(160,55,65,0.25)"/></svg>
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(160,55,65,0.12), transparent)"></div>
+  </div>
+
+  <!-- Preambulo -->
+  <div style="padding: 0 16px; margin-bottom: 12px">
+    <div style="background: rgba(160,55,65,0.04); border: 1px solid rgba(160,55,65,0.1); border-radius: 10px; padding: 16px">
+      <p style="margin: 0 0 4px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1.5px; text-transform: uppercase; text-align: center">Pre&aacute;mbulo</p>
+      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.55; text-align: justify">El presente documento constituye la norma suprema e irrefutable que rige el juego conocido como TALMUT. Nace de la necesidad hist&oacute;rica de codificar las reglas, tradiciones, leyes y sanciones que han surgido de forma org&aacute;nica a lo largo de incontables partidas.</p>
+      <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 12px; color: rgba(184,134,11,0.35); line-height: 1.5; text-align: center">&laquo;Ning&uacute;n jugador, independientemente de su antig&uuml;edad, su racha de victorias o su vehemencia a la hora de argumentar, podr&aacute; invocar norma alguna que no est&eacute; contemplada en La Maltesa.&raquo;</p>
+      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.55; text-align: justify">El documento podr&aacute; ampliarse mediante consenso un&aacute;nime de los jugadores habituales, seg&uacute;n lo dispuesto en el Art&iacute;culo 9.</p>
+    </div>
+  </div>
+
+  <!-- Articles -->
+  <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px">
+
+    <!-- ARTICULO 1 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 1</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Juramento Fundacional</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">1.1</span> &middot; Antes de cualquier partida, todos los jugadores deber&aacute;n reunirse y prestar el juramento fundacional.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">1.2</span> &middot; Cada jugador extender&aacute; una mano al centro de la mesa. Las manos se apilar&aacute;n como s&iacute;mbolo de pacto colectivo. Todos pronunciar&aacute;n al un&iacute;sono: <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;HIC LUDUS ERROREM PUNIT&raquo;</span> &mdash; &laquo;Este juego castiga el error&raquo;.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">1.3</span> &middot; El jugador que reh&uacute;se participar, pronuncie el juramento de forma inaudible o se mofe del acto recibir&aacute; una carta de penalizaci&oacute;n antes de comenzar a jugar.</p>
+    </div>
+
+    <!-- ARTICULO 2 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 2</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Orden de Juego</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.1</span> &middot; El jugador que abre la primera ronda se determinar&aacute; mediante un aleatorizador de dispositivo m&oacute;vil, en el cual cada jugador coloca simult&aacute;neamente su dedo &iacute;ndice sobre la pantalla.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.2</span> &middot; Alternativamente, se repartir&aacute; una carta boca abajo a cada jugador. Los jugadores la voltean simult&aacute;neamente; la carta m&aacute;s alta determina qui&eacute;n abre.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.3</span> &middot; A partir de la segunda ronda, abre el ganador de la ronda anterior. El sorteo inicial solo se aplica a la primera ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.4</span> &middot; El orden de turno sigue la rotaci&oacute;n en sentido horario desde el jugador que abre.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">2.5</span> &middot; El jugador con la puntuaci&oacute;n m&aacute;s alta de la ronda anterior baraja y reparte las cartas de la siguiente ronda.</p>
+    </div>
+
+    <!-- ARTICULO 3 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 3</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Reparto y la Observaci&oacute;n Inicial</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.1</span> &middot; El repartidor baraja la baraja completa. Otro jugador la corta. Se reparten cuatro cartas boca abajo a cada jugador en orden.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.2</span> &middot; Los jugadores colocan sus cartas seg&uacute;n su preferencia personal antes de la observaci&oacute;n inicial.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.3</span> &middot; Tras una cuenta atr&aacute;s colectiva (<span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;3&hellip; 2&hellip; 1&hellip;&raquo;</span>), cada jugador se echa hacia atr&aacute;s y levanta simult&aacute;neamente dos de sus cuatro cartas para observarlas. El tiempo m&aacute;ximo de observaci&oacute;n es de dos segundos. Las cartas deber&aacute;n devolverse boca abajo.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">3.4</span> &middot; Queda estrictamente prohibido volver a mirar las cartas propias durante el transcurso del juego, salvo que una carta especial lo permita. La infracci&oacute;n acarrea una carta de penalizaci&oacute;n.</p>
+    </div>
+
+    <!-- ARTICULO 4 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 4</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Turno de Juego</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.1</span> &middot; El jugador activo roba la carta superior del mazo y elige:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Opci&oacute;n A:</span> Quedarse la carta robada, descartando una de sus cuatro cartas boca abajo al mont&oacute;n de descarte.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Opci&oacute;n B:</span> Rechazar la carta robada, coloc&aacute;ndola boca arriba en el mont&oacute;n de descarte. Se aplican los efectos de cartas especiales si corresponde.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Descarte Cruzado:</span> Cuando se descarta una carta, cualquier jugador que posea cartas del mismo valor podr&aacute; descartarlas inmediatamente. Se pueden descartar dos cartas coincidentes juntas. <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;La velocidad es ley&raquo;</span> cuando se producen descartes simult&aacute;neos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.3</span> &middot; Ejecutar un Descarte Cruzado con cartas de valor no coincidente acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">4.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La Ley de la Tortilla:</span> Cuando un jugador roba una carta que coincide con una propia boca abajo y ejecuta un Descarte Cruzado contra s&iacute; mismo, deber&aacute; manipular ambas cartas con la misma mano en un movimiento continuo. Usar manos diferentes viola esta ley y acarrea una carta de penalizaci&oacute;n.</p>
+    </div>
+
+    <!-- ARTICULO 5 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 5</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Cartas Especiales</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.1</span> &middot; Las cartas especiales se activan &uacute;nicamente cuando se descartan directamente del robo, boca arriba. Incorporarlas a la mano anula sus efectos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El DIEZ (10):</span> El jugador podr&aacute; mirar en secreto una de sus propias cartas boca abajo.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.3</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La JOTA (J):</span> El jugador podr&aacute; mirar en secreto una carta boca abajo de cualquier oponente. La tradici&oacute;n dicta pronunciar <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;puedes mirar una a&hellip;JJJJJ&hellip;jena&raquo;</span> &mdash; sin penalizaci&oacute;n por omisi&oacute;n, pero mal visto por la comunidad.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La REINA (Q):</span> El jugador elige entre dos modos de intercambio ciego:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 1:</span> Intercambiar una carta propia boca abajo por una carta boca abajo de un oponente, sin ver ninguna.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 2:</span> Intercambiar una carta boca abajo de un jugador por una carta boca abajo de otro jugador distinto.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El REY (K):</span> El jugador elige entre dos modos:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 1:</span> Mirar una carta boca abajo de un oponente e intercambiarla por una propia si lo desea.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.4); font-weight: 600">Modo 2:</span> Mirar una carta boca abajo de un oponente y transferirla a un tercer jugador sin qued&aacute;rsela.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El JOKER:</span> El valor del JOKER depende del resultado de la ronda: si el jugador que porta el JOKER gana la ronda, vale <span style="color: #6BBF7A; font-weight: 600">&minus;1 punto</span>. Si no gana: <span style="color: rgba(220,80,80,0.7); font-weight: 600">+50 puntos</span>.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">5.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">Excepci&oacute;n del Joker ganador:</span> El ganador de una ronda que posea un JOKER no punt&uacute;a cero seg&uacute;n el Art. 7.2, sino que punt&uacute;a &minus;1 punto, que se resta de su total acumulado.</p>
+    </div>
+
+    <!-- ARTICULO 6 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 6</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Talmut</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.1</span> &middot; Un jugador declarar&aacute; TALMUT cuando crea que la suma de sus cuatro cartas es igual o inferior a cinco puntos. La declaraci&oacute;n se realiza durante su turno, antes de robar o inmediatamente despu&eacute;s de descartar.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.2</span> &middot; La declaraci&oacute;n de TALMUT es voluntaria; los jugadores pueden abstenerse aunque cumplan los requisitos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.3</span> &middot; Tras la declaraci&oacute;n de TALMUT, cada jugador restante dispone de exactamente un turno adicional. Todos los jugadores revelan entonces sus cartas y suman los puntos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.4</span> &middot; Durante el turno final tras la declaraci&oacute;n, el declarante conserva sus derechos de Descarte Cruzado.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT err&oacute;neo:</span> Si el jugador que declara TALMUT voltea sus cartas y la suma supera los cinco puntos, incurrir&aacute; en la sanci&oacute;n m&aacute;s severa: acumular&aacute; la suma de puntos de todos los dem&aacute;s jugadores en esa ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT autom&aacute;tico:</span> Si un jugador descarta su &uacute;ltima carta boca abajo durante su turno, el TALMUT se declara autom&aacute;ticamente. El juego contin&uacute;a; cuando llegue el turno de este jugador, robar&aacute; una carta y la descartar&aacute; inmediatamente sin qued&aacute;rsela.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">6.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Intocable de Elliot Ness:</span> Tras la declaraci&oacute;n, el declarante de TALMUT obtiene inmunidad completa. Ninguna carta especial podr&aacute; dirigirse a &eacute;l: no podr&aacute; ser mirado, intercambiado ni transferido.</p>
+    </div>
+
+    <!-- ARTICULO 7 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 7</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De la Puntuaci&oacute;n</p>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.1</span> &middot; Valores de las cartas:</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding: 8px 12px; background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">A</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">1 punto</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">2 &ndash; 10</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">Valor facial</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">J</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">20 puntos</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">Q</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">30 puntos</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3)">K</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.3); text-align: right">40 puntos</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #6BBF7A">JOKER (ganador)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #6BBF7A; text-align: right">&minus;1 punto</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(220,80,80,0.7)">JOKER (no ganador)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(220,80,80,0.7); text-align: right">+50 puntos</span>
+      </div>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.2</span> &middot; El jugador con la puntuaci&oacute;n total m&aacute;s baja gana la ronda y punt&uacute;a cero puntos en el global (excepto seg&uacute;n el Art. 5.7). Los dem&aacute;s punt&uacute;an sus totales reales de la ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.3</span> &middot; En caso de empate con el declarante de TALMUT, gana el no declarante. El declarante punt&uacute;a sus puntos reales.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">7.4</span> &middot; Una partida completa consta de diez rondas. Gana el jugador con la puntuaci&oacute;n acumulada m&aacute;s baja tras la d&eacute;cima ronda. Un empate en la puntuaci&oacute;n final desencadena una ronda de desempate. Solo las partidas de diez rondas completas cuentan como oficiales. Las partidas que no lleguen a diez rondas se denominan <span style="color: #64A0DC; font-weight: 500">&laquo;Blue Lagoon&raquo;</span> y no afectan al ranking. <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;El Blue Lagoon no existe para la historia. Solo para el ganador.&raquo;</span></p>
+    </div>
+
+    <!-- ARTICULO 8 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 8</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Penalizaciones</p>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">8.1</span> &middot; Seg&uacute;n el juramento fundacional, todos los errores reciben penalizaci&oacute;n. Penalizaci&oacute;n est&aacute;ndar: una carta adicional del mazo que el infractor no puede ver. Cualquier jugador de la mesa puede denunciar infracciones; no existe &aacute;rbitro designado.</p>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">8.2</span> &middot; Tabla de infracciones:</p>
+      <div style="display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px">
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Juramento irrespetuoso / inaudible</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Mirar carta propia sin permiso</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Violaci&oacute;n Ley de la Tortilla</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Descarte Cruzado incorrecto</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">Robar carta fuera de turno</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">1 carta</span></div>
+        <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.3); flex: 1">TALMUT err&oacute;neo (m&aacute;s de 5 pts)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.5); white-space: nowrap">Suma de todos</span></div>
+      </div>
+    </div>
+
+    <!-- ARTICULO 9 -->
+    <div style="background: rgba(160,55,65,0.03); border: 1px solid rgba(160,55,65,0.08); border-radius: 10px; padding: 14px 16px">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.6); letter-spacing: 1px">ART&Iacute;CULO 9</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+      </div>
+      <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Enmiendas</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">9.1</span> &middot; La Maltesa es un documento vivo. Las leyes acordadas por la comunidad se a&ntilde;adir&aacute;n aqu&iacute; como enmiendas numeradas.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">9.2</span> &middot; Cada enmienda requiere: n&uacute;mero, fecha de aprobaci&oacute;n, descripci&oacute;n clara de la norma y firmas de todos los jugadores presentes. Ninguna enmienda podr&aacute; contradecir los principios del Art&iacute;culo 1.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5"><span style="color: rgba(160,55,65,0.5); font-weight: 600">9.3</span> &middot; Las disputas no contempladas en La Maltesa se resolver&aacute;n por votaci&oacute;n comunitaria. En caso de empate, prevalecer&aacute; <span style="color: rgba(184,134,11,0.4); font-style: italic">&laquo;la interpretaci&oacute;n m&aacute;s perjudicial para el jugador que haya cometido el error&raquo;</span>.</p>
+    </div>
+  </div>
+
+  <!-- Closing -->
+  <div style="padding: 20px 24px 12px; text-align: center">
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 12px; color: rgba(255,255,255,0.2); line-height: 1.6; padding: 0 8px">&laquo;El presente documento ha sido redactado con plena autoridad y rigor para que jam&aacute;s pueda alegarse ignorancia ante el error cometido en la mesa.&raquo;</p>
+  </div>
+
+  <!-- Seal -->
+  <div style="padding: 8px 24px 36px; text-align: center">
+    <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 20px; background: rgba(160,55,65,0.04); border: 1px solid rgba(160,55,65,0.1); border-radius: 12px">
+      <p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 900; font-size: 12px; color: rgba(184,134,11,0.35); letter-spacing: 3px">HIC LUDUS ERROREM PUNIT</p>
+      <div style="display: flex; align-items: center; gap: 6px">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(160,55,65,0.3)" stroke-width="1"/><path d="M6 3v3l2 1.5" stroke="rgba(160,55,65,0.3)" stroke-width="0.8" stroke-linecap="round"/></svg>
+        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 10px; color: rgba(160,55,65,0.3); letter-spacing: 1px">Primera edici&oacute;n &middot; MMXXIV</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Exit confirmation -->
+<div id="confirmExitModal" class="modal-overlay">
+  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0E2545, #0B1F3A); border: 1px solid rgba(184,134,11,0.2); border-radius: 16px; padding: 28px 24px; text-align: center">
+    <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #E8DCC8; letter-spacing: 1px">Salir de la partida</p>
+    <p style="margin: 0 0 24px; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.5">La partida se guardar&aacute; y podr&aacute;s continuarla desde el men&uacute; principal.</p>
+    <div style="display: flex; gap: 8px">
+      <button onclick="closeConfirmExit()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; cursor: pointer">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.4)">Cancelar</span>
+      </button>
+      <button onclick="exitToMenu()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #B8860B, #9A7209); border: none; border-radius: 10px; cursor: pointer">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: #FFFFFF">Salir</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Name modal -->
+<div id="nameModal" class="modal-overlay">
+  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0E2545, #0B1F3A); border: 1px solid rgba(184,134,11,0.2); border-radius: 16px; padding: 28px 24px; text-align: center">
+    <p style="margin: 0 0 16px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #E8DCC8; letter-spacing: 1px">Nuevo jugador</p>
+    <input id="guestNameInput" type="text" placeholder="Nombre" maxlength="20" onkeydown="if(event.key==='Enter')addGuest()" style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.2); border-radius: 10px; color: #E8DCC8; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; box-sizing: border-box; margin-bottom: 16px">
+    <div style="display: flex; gap: 8px">
+      <button onclick="closeNameModal()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; cursor: pointer">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.4)">Cancelar</span>
+      </button>
+      <button onclick="addGuest()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #B8860B, #9A7209); border: none; border-radius: 10px; cursor: pointer">
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: #FFFFFF">A&ntilde;adir</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ===== SUPABASE INIT =====
-const SUPABASE_URL = 'https://wndfzzubnxeulkffwfbv.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduZGZ6enVibnhldWxrZmZ3ZmJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NTM0MzUsImV4cCI6MjEwNjIyOTQzNX0.0t8XN22FbkDyU3BN7RmjXsfP3RTFmV0V81_xsO1TB9I';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ==================== SUPABASE ====================
+const SUPABASE_URL='https://wndfzzubnxeulkffwfbv.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduZGZ6enVibnhldWxrZmZ3ZmJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NTM0MzUsImV4cCI6MjEwNjIyOTQzNX0.0t8XN22FbkDyU3BN7RmjXsfP3RTFmV0V81_xsO1TB9I';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-// ===== STATE =====
-let state = {
-  screen: 'menu',
-  players: [],
-  selectedPlayers: [],
-  matchType: 'talmut',
-  activeMatch: null,
-  scores: {},       // { roundNum: { playerId: score } }
-  currentRound: 1,
-  totalRounds: 10,
-  matches: [],
-  hallSort: 'pt',
-  unfinishedMatch: null
-};
+// ==================== STATE ====================
+let players=[];
+let currentMatchType='talmut';
+let currentMatchId=null;
+let matchPlayers=[];
+let totalRounds=10;
+let scores={};
+let currentRound=1;
+let currentPlayerIdx=0;
+let numpadValue='';
+let blRounds=5;
+let guests=[];
+let hofSort='pt';
+let activeMatchData=null;
 
-// ===== HELPERS =====
-const $ = id => document.getElementById(id);
-const app = () => $('app');
-const abbr = name => name.substring(0, 3).toUpperCase();
-function fmtDate(d) {
-  const dt = new Date(d);
-  return dt.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+const FIXED_PLAYERS=['Adrián','Arnau','Aleix','Edu','Marc','Nacho'];
+let selectedTalmut=new Set();
+let selectedBL=new Set();
+
+// ==================== INIT ====================
+async function init(){
+  const{data}=await sb.from('players').select('*').order('id');
+  if(data)players=data;
+  checkActiveMatch();
 }
 
-// ===== NAVIGATION =====
-function navigate(screen) {
-  state.screen = screen;
-  render();
-  window.scrollTo(0, 0);
-}
-
-function showNav(show) {
-  $('navBar').style.display = show ? 'flex' : 'none';
-}
-
-function setActiveNav(name) {
-  document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.toggle('active', n.dataset.nav === name);
-  });
-}
-
-// ===== RENDER =====
-function render() {
-  switch (state.screen) {
-    case 'menu': renderMenu(); showNav(true); setActiveNav('menu'); break;
-    case 'select': renderSelect(); showNav(false); break;
-    case 'score': renderScore(); showNav(false); break;
-    case 'winner': renderWinner(); showNav(false); break;
-    case 'historico': renderHistorico(); showNav(true); setActiveNav('historico'); break;
-    case 'detail': renderDetail(); showNav(false); break;
-    case 'hall': renderHall(); showNav(true); setActiveNav('hall'); break;
-    case 'maltesa': renderMaltesa(); showNav(true); setActiveNav('maltesa'); break;
+async function checkActiveMatch(){
+  const{data}=await sb.from('matches').select('*').eq('is_finished',false).order('created_at',{ascending:false}).limit(1);
+  if(data&&data.length>0){
+    activeMatchData=data[0];
+    const btn=document.getElementById('continueBtn');
+    btn.style.display='flex';
+    const type=data[0].match_type==='talmut'?'TALMUT':'BLUE LAGOON';
+    document.getElementById('continueDesc').textContent=type+' · Ronda en curso';
   }
 }
 
-// ===== MENU =====
-function renderMenu() {
-  let continueHtml = '';
-  if (state.unfinishedMatch) {
-    const m = state.unfinishedMatch;
-    const typeLabel = m.match_type === 'talmut' ? 'TALMUT' : 'BLUE LAGOON';
-    continueHtml = `<div class="continue-banner" onclick="continueMatch()">
-      <div class="cb-title">▶ Continuar partida</div>
-      <div class="cb-sub">${typeLabel} · Ronda ${m.currentRound}/${m.total_rounds}</div>
-    </div>`;
+// ==================== NAVIGATION ====================
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ==================== MENU ====================
+function startNewGame(type){
+  currentMatchType=type;
+  if(type==='talmut'){
+    renderPlayerGrid('talmut');
+    showScreen('screen-select-talmut');
+  }else{
+    renderPlayerGrid('bl');
+    guests=[];
+    renderGuests();
+    showScreen('screen-select-bl');
   }
-  app().innerHTML = `<div class="screen active" style="justify-content:center;padding-top:60px">
-    <div style="text-align:center;padding:0 32px">
-      <div style="font-size:48px;margin-bottom:8px">🃏</div>
-      <div class="menu-title">TALMUT</div>
-      <div class="menu-subtitle">Hic Ludus Errorem Punit</div>
-    </div>
-    <div class="menu-buttons" style="margin-top:40px">
-      ${continueHtml}
-      <button class="btn btn-gold" onclick="startMatch('talmut')">TALMUT</button>
-      <button class="btn btn-blue" onclick="startMatch('blue_lagoon')">BLUE LAGOON</button>
-    </div>
-    <div class="menu-divider"><span>partida oficial · 10 rondas</span></div>
-  </div>`;
 }
 
-// ===== PLAYER SELECTION =====
-function startMatch(type) {
-  state.matchType = type;
-  state.selectedPlayers = [];
-  state.screen = 'select';
-  render();
+async function continueGame(){
+  if(!activeMatchData)return;
+  currentMatchId=activeMatchData.id;
+  currentMatchType=activeMatchData.match_type;
+  totalRounds=activeMatchData.total_rounds;
+  const{data:mp}=await sb.from('match_players').select('player_id').eq('match_id',currentMatchId);
+  if(!mp)return;
+  matchPlayers=[];
+  for(const m of mp){
+    const p=players.find(x=>x.id===m.player_id);
+    if(p)matchPlayers.push(p);
+  }
+  const{data:rs}=await sb.from('round_scores').select('*').eq('match_id',currentMatchId);
+  scores={};
+  let maxRound=0;
+  if(rs){
+    for(const r of rs){
+      if(!scores[r.round_number])scores[r.round_number]={};
+      scores[r.round_number][r.player_id]=r.score;
+      if(r.round_number>maxRound)maxRound=r.round_number;
+    }
+  }
+  if(maxRound>0){
+    const lastRoundComplete=scores[maxRound]&&Object.keys(scores[maxRound]).length===matchPlayers.length;
+    currentRound=lastRoundComplete?maxRound+1:maxRound;
+  }else{
+    currentRound=1;
+  }
+  if(currentRound>totalRounds){
+    await finishMatch();
+    return;
+  }
+  currentPlayerIdx=0;
+  if(scores[currentRound]){
+    const entered=Object.keys(scores[currentRound]).length;
+    currentPlayerIdx=Math.min(entered,matchPlayers.length-1);
+    if(entered>=matchPlayers.length){currentRound++;currentPlayerIdx=0;}
+  }
+  numpadValue='';
+  renderScoreScreen();
+  showScreen('screen-score');
 }
 
-function renderSelect() {
-  const isBlue = state.matchType === 'blue_lagoon';
-  const title = isBlue ? 'BLUE LAGOON' : 'TALMUT';
-  const selClass = isBlue ? 'selected-blue' : 'selected';
-  const btnClass = isBlue ? 'btn-blue' : 'btn-gold';
-  const cards = state.players.map(p => {
-    const sel = state.selectedPlayers.includes(p.id);
-    return `<div class="player-card ${sel ? selClass : ''}" onclick="togglePlayer(${p.id})">
-      <div class="check">${sel ? '<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>' : ''}</div>
-      <div class="name">${p.name}</div>
-    </div>`;
-  }).join('');
-  const canStart = state.selectedPlayers.length >= 2;
-  app().innerHTML = `<div class="screen active no-nav">
-    <div class="header">
-      <button class="btn-back" onclick="navigate('menu')"><svg viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="${isBlue ? 'var(--blue)' : 'var(--gold)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">${title}</h1>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--text-dim);margin-top:2px">Selección de jugadores</div></div>
-      <div class="spacer"></div>
-    </div>
-    <div class="player-grid">${cards}</div>
-    <div style="padding:16px 16px 24px"><button class="btn ${btnClass}" ${canStart ? '' : 'disabled'} onclick="createNewMatch()">EMPEZAR</button></div>
-  </div>`;
-}
-
-function togglePlayer(id) {
-  const idx = state.selectedPlayers.indexOf(id);
-  if (idx >= 0) state.selectedPlayers.splice(idx, 1);
-  else state.selectedPlayers.push(id);
-  renderSelect();
-}
-
-// ===== CREATE MATCH =====
-async function createNewMatch() {
-  const totalRounds = state.matchType === 'talmut' ? 10 : 99;
-  const { data: match, error } = await sb.from('matches').insert({ match_type: state.matchType, total_rounds: totalRounds }).select().single();
-  if (error) { alert('Error: ' + error.message); return; }
-  const mpRows = state.selectedPlayers.map(pid => ({ match_id: match.id, player_id: pid }));
-  await sb.from('match_players').insert(mpRows);
-  state.activeMatch = match;
-  state.scores = {};
-  state.currentRound = 1;
-  state.totalRounds = totalRounds;
-  state.screen = 'score';
-  render();
-}
-
-// ===== CONTINUE MATCH =====
-async function continueMatch() {
-  const m = state.unfinishedMatch;
-  state.activeMatch = m;
-  state.matchType = m.match_type;
-  state.totalRounds = m.total_rounds;
-  state.selectedPlayers = m.playerIds;
-  // Load existing scores
-  const { data: rs } = await sb.from('round_scores').select('*').eq('match_id', m.id);
-  state.scores = {};
-  let maxRound = 0;
-  (rs || []).forEach(r => {
-    if (!state.scores[r.round_number]) state.scores[r.round_number] = {};
-    state.scores[r.round_number][r.player_id] = r.score;
-    if (r.round_number > maxRound) maxRound = r.round_number;
+// ==================== PLAYER SELECTION ====================
+function renderPlayerGrid(type){
+  const gridId=type==='talmut'?'talmutPlayerGrid':'blPlayerGrid';
+  const grid=document.getElementById(gridId);
+  const sel=type==='talmut'?selectedTalmut:selectedBL;
+  grid.innerHTML='';
+  players.forEach(p=>{
+    const isSelected=sel.has(p.id);
+    const card=document.createElement('button');
+    card.className='player-card'+(isSelected?' selected':'');
+    card.onclick=()=>{
+      if(sel.has(p.id))sel.delete(p.id);else sel.add(p.id);
+      renderPlayerGrid(type);
+      updatePlayerCount(type);
+    };
+    card.innerHTML=`
+      <div class="avatar"><span>${p.name.charAt(0)}</span></div>
+      <span class="pname">${p.name}</span>
+      ${isSelected?'<svg width="12" height="9" viewBox="0 0 12 9" fill="none" style="flex-shrink:0"><polyline points="1,4 4,8 11,1" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
+    `;
+    grid.appendChild(card);
   });
-  // Check if last round is complete
-  const lastComplete = maxRound > 0 && state.selectedPlayers.every(pid => state.scores[maxRound]?.[pid] !== undefined);
-  state.currentRound = lastComplete ? maxRound + 1 : (maxRound || 1);
-  state.screen = 'score';
-  render();
+  updatePlayerCount(type);
 }
 
-// ===== SCORE TABLE =====
-function renderScore() {
-  const isBlue = state.matchType === 'blue_lagoon';
-  const title = isBlue ? 'BLUE LAGOON' : 'TALMUT';
-  const accentColor = isBlue ? 'var(--blue)' : 'var(--gold)';
-  const players = state.players.filter(p => state.selectedPlayers.includes(p.id));
-  const maxRound = isBlue ? Math.max(state.currentRound, Object.keys(state.scores).length + 1) : state.totalRounds;
-  const roundLabel = isBlue ? `Ronda ${state.currentRound}` : `Ronda ${state.currentRound}/${state.totalRounds}`;
+function updatePlayerCount(type){
+  const sel=type==='talmut'?selectedTalmut:selectedBL;
+  const extra=type==='bl'?guests.length:0;
+  const total=sel.size+extra;
+  if(type==='talmut'){
+    document.getElementById('talmutPlayerCount').textContent=`${sel.size} de 6 seleccionados`;
+    document.getElementById('talmutStartBtn').disabled=sel.size<2;
+    document.getElementById('talmutStartBtn').style.opacity=sel.size<2?'0.4':'1';
+  }else{
+    document.getElementById('blPlayerCount').textContent=`${total} jugadores seleccionados`;
+    document.getElementById('blStartBtn').disabled=total<2;
+    document.getElementById('blStartBtn').style.opacity=total<2?'0.4':'1';
+  }
+}
 
-  // Build table headers
-  let ths = `<th>R</th>` + players.map(p => `<th>${abbr(p.name)}</th>`).join('');
+function selectAllPlayers(type){
+  const sel=type==='talmut'?selectedTalmut:selectedBL;
+  if(sel.size===players.length){sel.clear();}else{players.forEach(p=>sel.add(p.id));}
+  renderPlayerGrid(type);
+}
 
-  // Build rows
-  let rows = '';
-  for (let r = 1; r <= Math.max(state.currentRound, Object.keys(state.scores).length); r++) {
-    let cells = `<td>${r}</td>`;
-    players.forEach(p => {
-      const val = state.scores[r]?.[p.id];
-      if (val !== undefined) {
-        let cls = '';
-        if (val === 0) cls = 'zero';
-        else if (val < 0) cls = 'negative';
-        else if (val >= 40) cls = 'high';
-        cells += `<td><div class="score-cell ${cls}" onclick="openScoreModal(${r},${p.id},'${p.name}')">${val}</div></td>`;
-      } else if (r <= state.currentRound) {
-        cells += `<td><div class="score-cell empty" onclick="openScoreModal(${r},${p.id},'${p.name}')">—</div></td>`;
-      } else {
-        cells += `<td><div class="score-cell empty">—</div></td>`;
+// ==================== BLUE LAGOON EXTRAS ====================
+function changeRounds(delta){
+  blRounds=Math.max(1,Math.min(20,blRounds+delta));
+  document.getElementById('roundsValue').textContent=blRounds;
+}
+
+function renderGuests(){
+  const grid=document.getElementById('guestGrid');
+  grid.innerHTML='';
+  guests.forEach((g,i)=>{
+    const div=document.createElement('div');
+    div.className='guest-card';
+    div.innerHTML=`
+      <div class="avatar"><span>${g.charAt(0).toUpperCase()}</span></div>
+      <span class="pname">${g}</span>
+      <button class="guest-remove" onclick="removeGuest(${i})">
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><line x1="1" y1="1" x2="7" y2="7" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round"/><line x1="7" y1="1" x2="1" y2="7" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </button>
+    `;
+    grid.appendChild(div);
+  });
+  const addBtn=document.createElement('button');
+  addBtn.className='add-guest-btn';
+  addBtn.onclick=()=>openNameModal();
+  addBtn.innerHTML=`
+    <div class="add-avatar">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="rgba(184,134,11,0.5)" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="rgba(184,134,11,0.5)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span>Añadir invitado</span>
+  `;
+  grid.appendChild(addBtn);
+  updatePlayerCount('bl');
+}
+
+function openNameModal(){
+  document.getElementById('nameModal').classList.add('active');
+  document.getElementById('guestNameInput').value='';
+  setTimeout(()=>document.getElementById('guestNameInput').focus(),100);
+}
+function closeNameModal(){document.getElementById('nameModal').classList.remove('active')}
+function addGuest(){
+  const name=document.getElementById('guestNameInput').value.trim();
+  if(name){guests.push(name);renderGuests();}
+  closeNameModal();
+}
+function removeGuest(i){guests.splice(i,1);renderGuests();}
+
+// ==================== FINGER GAME ====================
+function skipFingerGame(){
+  afterOath();
+}
+
+// Touch handling for finger game
+(function(){
+  const touches = {};
+  let selectedId = null;
+  let countdown = null;
+
+  function renderTouches(){
+    const area = document.getElementById('touchArea');
+    if(!area) return;
+    const ids = Object.keys(touches);
+    area.innerHTML = '';
+    ids.forEach(id => {
+      const t = touches[id];
+      const isSelected = id == selectedId;
+      const div = document.createElement('div');
+      div.style.cssText = `position:absolute;left:${t.x-40}px;top:${t.y-40}px;width:80px;height:80px;border-radius:50%;
+        border:${isSelected?'2.5px solid #B8860B':'2px solid rgba(184,134,11,0.5)'};
+        background:radial-gradient(circle,rgba(184,134,11,${isSelected?0.25:0.12}) 0%,rgba(184,134,11,${isSelected?0.08:0.03}) 60%,transparent 100%);
+        box-shadow:0 0 ${isSelected?30:20}px rgba(184,134,11,${isSelected?0.35:0.15}),0 0 ${isSelected?60:40}px rgba(184,134,11,${isSelected?0.12:0.05});
+        display:flex;align-items:center;justify-content:center;animation:${isSelected?'selectedPulse':'touchPulse'} 2s ease-in-out infinite;transition:all 0.3s`;
+      const inner = document.createElement('div');
+      inner.style.cssText = `width:${isSelected?35:30}px;height:${isSelected?35:30}px;border-radius:50%;
+        background:radial-gradient(circle,rgba(184,134,11,${isSelected?0.55:0.3}) 0%,rgba(184,134,11,${isSelected?0.2:0.1}) 100%);
+        border:${isSelected?'1.5px solid #B8860B':'1px solid rgba(184,134,11,0.4)'};
+        ${isSelected?'box-shadow:0 0 12px rgba(184,134,11,0.4)':''}`;
+      div.appendChild(inner);
+      area.appendChild(div);
+    });
+  }
+
+  document.getElementById('screen-finger')?.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    const zone = document.getElementById('fingerZone');
+    const rect = document.getElementById('touchArea').getBoundingClientRect();
+    for(const t of e.changedTouches){
+      touches[t.identifier] = {x: t.clientX - rect.left, y: t.clientY - rect.top};
+    }
+    renderTouches();
+    // After a delay, pick random
+    clearTimeout(countdown);
+    const ids = Object.keys(touches);
+    if(ids.length >= 2){
+      countdown = setTimeout(()=>{
+        const keys = Object.keys(touches);
+        if(keys.length >= 2){
+          selectedId = keys[Math.floor(Math.random()*keys.length)];
+          renderTouches();
+          // Then go to score after brief pause
+          setTimeout(()=>{
+            Object.keys(touches).forEach(k=>delete touches[k]);
+            selectedId=null;
+            afterOath();
+          },1500);
+        }
+      },2000);
+    }
+  },{passive:false});
+
+  document.getElementById('screen-finger')?.addEventListener('touchend', function(e){
+    for(const t of e.changedTouches){
+      delete touches[t.identifier];
+    }
+    if(Object.keys(touches).length < 2){
+      clearTimeout(countdown);
+      selectedId = null;
+    }
+    renderTouches();
+  },{passive:false});
+
+  document.getElementById('screen-finger')?.addEventListener('touchcancel', function(e){
+    for(const t of e.changedTouches){
+      delete touches[t.identifier];
+    }
+    renderTouches();
+  },{passive:false});
+})();
+
+// ==================== START MATCH ====================
+async function startMatch(type){
+  const sel=type==='talmut'?selectedTalmut:selectedBL;
+  totalRounds=type==='talmut'?10:blRounds;
+
+  const{data:match,error}=await sb.from('matches').insert({match_type:type,total_rounds:totalRounds}).select().single();
+  if(error||!match){alert('Error al crear partida');return;}
+  currentMatchId=match.id;
+
+  matchPlayers=[];
+  for(const pid of sel){
+    const p=players.find(x=>x.id===pid);
+    if(p){matchPlayers.push(p);await sb.from('match_players').insert({match_id:currentMatchId,player_id:pid});}
+  }
+  for(const g of guests){
+    const{data:np}=await sb.from('players').insert({name:g}).select().single();
+    if(np){matchPlayers.push(np);players.push(np);await sb.from('match_players').insert({match_id:currentMatchId,player_id:np.id});}
+  }
+
+  scores={};
+  currentRound=1;
+  currentPlayerIdx=0;
+  numpadValue='';
+
+  const dealerIdx=Math.floor(Math.random()*matchPlayers.length);
+  document.getElementById('dealerInfo').innerHTML='Empieza: <span style="color:rgba(184,134,11,0.5);font-weight:600">'+matchPlayers[dealerIdx].name+'</span>';
+
+  if(type==='talmut'){
+    showScreen('screen-juramento');
+  }else{
+    renderScoreScreen();
+    showScreen('screen-score');
+  }
+}
+
+function afterOath(){
+  renderScoreScreen();
+  showScreen('screen-score');
+}
+
+// ==================== SCORE SCREEN ====================
+function renderScoreScreen(){
+  const isBL=currentMatchType==='blue_lagoon';
+  document.getElementById('scoreTitle').textContent=isBL?'BLUE LAGOON':'TALMUT';
+  document.getElementById('scoreSubtitle').textContent='Ronda '+currentRound+' de '+totalRounds;
+
+  const grid=document.getElementById('scoreGrid');
+  const nPlayers=matchPlayers.length;
+  const colTemplate=`36px repeat(${nPlayers},1fr)`;
+
+  // Calculate totals and find minimum
+  const playerTotals={};
+  matchPlayers.forEach(p=>{
+    let total=0;
+    for(let r=1;r<=totalRounds;r++){
+      if(scores[r]&&scores[r][p.id]!==undefined)total+=scores[r][p.id];
+    }
+    playerTotals[p.id]=total;
+  });
+  const minTotal=Math.min(...Object.values(playerTotals));
+
+  let html='';
+
+  // Header
+  html+=`<div style="display:grid;grid-template-columns:${colTemplate};position:sticky;top:0;background:#0A1B33;z-index:3;border-bottom:1px solid rgba(184,134,11,0.12)">`;
+  html+=`<div style="padding:10px 4px;text-align:center"><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(255,255,255,0.15);text-transform:uppercase;letter-spacing:0.5px">R</span></div>`;
+  matchPlayers.forEach(p=>{
+    const name=p.name.length>6?p.name.substring(0,5)+'.':p.name;
+    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04)"><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
+  });
+  html+=`</div>`;
+
+  // Rows
+  for(let r=1;r<=totalRounds;r++){
+    const isActiveRow=r===currentRound;
+    const isFutureRow=r>currentRound;
+    const rowBg=isActiveRow?'background:rgba(184,134,11,0.04);':'';
+    const rowBorder=isActiveRow?'border-bottom:1px solid rgba(184,134,11,0.15);':'border-bottom:1px solid rgba(255,255,255,0.03);';
+
+    html+=`<div style="display:grid;grid-template-columns:${colTemplate};${rowBg}${rowBorder}">`;
+
+    // Round number
+    const rnBg=isActiveRow?'background:rgba(184,134,11,0.06)':'background:rgba(184,134,11,0.03)';
+    const rnColor=isActiveRow?'color:#B8860B;font-weight:700':'color:rgba(255,255,255,'+(isFutureRow?'0.12':'0.2')+');font-weight:600';
+    html+=`<div style="padding:9px 4px;text-align:center;${rnBg}"><span style="font-family:'Inter',sans-serif;font-size:10px;${rnColor}">${r}</span></div>`;
+
+    matchPlayers.forEach((p,pi)=>{
+      const hasScore=scores[r]&&scores[r][p.id]!==undefined;
+      const isActive=r===currentRound&&pi===currentPlayerIdx&&!hasScore;
+      const score=hasScore?scores[r][p.id]:null;
+      const borderLeft=isActiveRow?'border-left:1px solid rgba(184,134,11,0.08)':'border-left:1px solid rgba(255,255,255,0.03)';
+
+      if(isActive){
+        // Active cell with cursor
+        html+=`<div style="padding:9px 4px;text-align:center;${borderLeft};border:2px solid rgba(184,134,11,0.4);border-radius:4px;margin:2px">`;
+        if(numpadValue){
+          const isNeg=parseInt(numpadValue)<0;
+          html+=`<span style="font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:${isNeg?'#6BBF7A':'#B8860B'}">${numpadValue}</span>`;
+        }else{
+          html+=`<span style="font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:#B8860B;animation:blink 1s infinite">_</span>`;
+        }
+        html+=`</div>`;
+      }else if(hasScore){
+        const isNeg=score<0;
+        const isRoundWinner=score===0&&isActiveRow;
+        const scoreColor=isNeg?'#6BBF7A':(isActiveRow?'#FFFFFF':'rgba(255,255,255,0.6)');
+        const scoreFw=isActiveRow?'700':'600';
+        const cellBg=(score===0&&!isActiveRow)?'background:rgba(184,134,11,0.02)':'';
+        html+=`<div style="padding:9px 4px;text-align:center;${borderLeft};${cellBg}"><span style="font-family:'Inter',sans-serif;font-weight:${scoreFw};font-size:13px;color:${scoreColor}">${score}</span></div>`;
+      }else{
+        // Empty cell
+        html+=`<div style="padding:9px 4px;text-align:center;${borderLeft}"><span style="font-family:'Inter',sans-serif;font-weight:500;font-size:13px;color:rgba(255,255,255,0.08)">—</span></div>`;
       }
     });
-    rows += `<tr>${cells}</tr>`;
+    html+=`</div>`;
   }
 
-  // Totals
-  let totals = `<td class="label">TOTAL</td>`;
-  players.forEach(p => {
-    let total = 0;
-    Object.values(state.scores).forEach(rs => { if (rs[p.id] !== undefined) total += rs[p.id]; });
-    totals += `<td style="color:${total <= 0 ? 'var(--green)' : 'var(--text)'}">${total}</td>`;
+  // Total row
+  html+=`<div style="display:grid;grid-template-columns:${colTemplate};border-top:1.5px solid rgba(184,134,11,0.25);background:rgba(184,134,11,0.04)">`;
+  html+=`<div style="padding:10px 4px;text-align:center"><span style="font-family:'Inter',sans-serif;font-weight:700;font-size:9px;color:rgba(184,134,11,0.5);text-transform:uppercase;letter-spacing:0.5px">TOT</span></div>`;
+  matchPlayers.forEach(p=>{
+    const total=playerTotals[p.id];
+    const isMin=total===minTotal;
+    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(184,134,11,0.08)"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:16px;color:${isMin?'#6BBF7A':'#B8860B'}">${total}</span></div>`;
   });
+  html+=`</div>`;
 
-  // Check if current round is complete
-  const roundComplete = players.every(p => state.scores[state.currentRound]?.[p.id] !== undefined);
+  grid.innerHTML=html;
+  updateNumpadContext();
+}
 
-  // Determine if match can finish
-  const canFinish = state.matchType === 'talmut' ? (state.currentRound > state.totalRounds || (state.currentRound === state.totalRounds && roundComplete)) : roundComplete;
-
-  let actions = '';
-  if (roundComplete && !(state.matchType === 'talmut' && state.currentRound >= state.totalRounds)) {
-    actions += `<button class="btn ${isBlue ? 'btn-blue' : 'btn-gold'} btn-sm" onclick="nextRound()">SIGUIENTE RONDA</button>`;
+function updateNumpadContext(){
+  if(currentPlayerIdx<matchPlayers.length){
+    const p=matchPlayers[currentPlayerIdx];
+    document.getElementById('numpadContext').innerHTML=
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.2)">Puntuación de </span>'+
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:700;font-size:11px;color:#B8860B">'+p.name+'</span>'+
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.2)"> · Ronda '+currentRound+'</span>';
   }
-  if (isBlue && roundComplete) {
-    actions += `<button class="btn btn-outline btn-sm" onclick="finishCurrentMatch()" style="margin-top:6px">ACABAR PARTIDA</button>`;
+}
+
+// ==================== NUMPAD ====================
+function numpadInput(key){
+  if(key==='back'){
+    numpadValue=numpadValue.slice(0,-1);
+  }else if(key==='-1'){
+    numpadValue='-1';
+  }else{
+    if(numpadValue==='-1')numpadValue='';
+    if(numpadValue.length<3)numpadValue+=key;
   }
-  if (state.matchType === 'talmut' && state.currentRound >= state.totalRounds && roundComplete) {
-    actions += `<button class="btn btn-gold btn-sm" onclick="finishCurrentMatch()">VER GANADOR</button>`;
+  renderScoreScreen();
+}
+
+async function numpadConfirm(){
+  if(numpadValue===''&&numpadValue!=='0')return;
+  const val=parseInt(numpadValue,10);
+  if(isNaN(val))return;
+
+  const playerId=matchPlayers[currentPlayerIdx].id;
+
+  await sb.from('round_scores').upsert({
+    match_id:currentMatchId,
+    round_number:currentRound,
+    player_id:playerId,
+    score:val,
+    is_winner:val<=0
+  },{onConflict:'match_id,round_number,player_id'});
+
+  if(!scores[currentRound])scores[currentRound]={};
+  scores[currentRound][playerId]=val;
+
+  numpadValue='';
+  currentPlayerIdx++;
+
+  if(currentPlayerIdx>=matchPlayers.length){
+    currentPlayerIdx=0;
+    currentRound++;
+    if(currentRound>totalRounds){
+      await finishMatch();
+      return;
+    }
   }
 
-  app().innerHTML = `<div class="screen active no-nav">
-    <div class="header">
-      <button class="btn-back" onclick="confirmLeaveMatch()"><svg viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="${accentColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">${title}</h1></div>
-      <div class="spacer"></div>
-    </div>
-    <div class="round-info">${roundLabel}</div>
-    <div class="score-wrapper">
-      <table class="score-table">
-        <thead><tr>${ths}</tr></thead>
-        <tbody>${rows}<tr class="total-row">${totals}</tr></tbody>
-      </table>
-    </div>
-    <div class="score-actions" style="flex-direction:column">${actions}</div>
-  </div>`;
+  renderScoreScreen();
 }
 
-function confirmLeaveMatch() {
-  showConfirm('¿Salir de la partida?', 'La partida quedará guardada y podrás continuarla después.', () => {
-    checkUnfinished().then(() => navigate('menu'));
+// ==================== FINISH MATCH ====================
+async function finishMatch(){
+  await sb.from('matches').update({is_finished:true,finished_at:new Date().toISOString()}).eq('id',currentMatchId);
+
+  const totals=matchPlayers.map(p=>{
+    let total=0;
+    for(let r=1;r<=totalRounds;r++){
+      if(scores[r]&&scores[r][p.id]!==undefined)total+=scores[r][p.id];
+    }
+    return{player:p,total};
   });
-}
+  totals.sort((a,b)=>a.total-b.total);
 
-function nextRound() {
-  state.currentRound++;
-  renderScore();
-}
+  const winner=totals[0];
+  document.getElementById('winnerName').textContent=winner.player.name.toUpperCase();
+  document.getElementById('winnerScoreVal').textContent=winner.total;
 
-// ===== SCORE MODAL =====
-let modalRound = 0, modalPlayerId = 0;
-function openScoreModal(round, playerId, playerName) {
-  modalRound = round;
-  modalPlayerId = playerId;
-  $('modalPlayerName').textContent = playerName;
-  $('modalRoundInfo').textContent = `Ronda ${round}`;
-  const existing = state.scores[round]?.[playerId];
-  $('modalInput').value = existing !== undefined ? existing : '';
-  $('scoreModal').classList.add('active');
-  setTimeout(() => $('modalInput').focus(), 100);
-}
+  const list=document.getElementById('standingsList');
+  list.innerHTML='';
+  totals.forEach((t,i)=>{
+    const isFirst=i===0;
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;padding:8px 14px;gap:10px';
 
-function closeScoreModal() {
-  $('scoreModal').classList.remove('active');
-}
-
-async function saveScoreModal() {
-  const val = parseInt($('modalInput').value);
-  if (isNaN(val)) return;
-  if (!state.scores[modalRound]) state.scores[modalRound] = {};
-  state.scores[modalRound][modalPlayerId] = val;
-  // Save to Supabase
-  const { error } = await sb.from('round_scores').upsert({
-    match_id: state.activeMatch.id,
-    round_number: modalRound,
-    player_id: modalPlayerId,
-    score: val,
-    is_winner: val === 0 || val < 0
-  }, { onConflict: 'match_id,round_number,player_id' });
-  if (error) console.error('Save error:', error);
-  closeScoreModal();
-  renderScore();
-}
-
-$('modalInput').addEventListener('keydown', e => { if (e.key === 'Enter') saveScoreModal(); });
-
-// ===== FINISH MATCH =====
-async function finishCurrentMatch() {
-  // Update actual round count for Blue Lagoon
-  const actualRounds = Object.keys(state.scores).length;
-  await sb.from('matches').update({
-    is_finished: true,
-    finished_at: new Date().toISOString(),
-    total_rounds: actualRounds
-  }).eq('id', state.activeMatch.id);
-  state.unfinishedMatch = null;
-  state.screen = 'winner';
-  render();
-}
-
-// ===== WINNER =====
-function renderWinner() {
-  const players = state.players.filter(p => state.selectedPlayers.includes(p.id));
-  const isBlue = state.matchType === 'blue_lagoon';
-  const accentColor = isBlue ? 'var(--blue)' : 'var(--gold)';
-
-  // Calculate totals
-  const totals = players.map(p => {
-    let total = 0;
-    Object.values(state.scores).forEach(rs => { if (rs[p.id] !== undefined) total += rs[p.id]; });
-    return { ...p, total };
-  }).sort((a, b) => a.total - b.total);
-
-  const winner = totals[0];
-  const standings = totals.map((p, i) => {
-    const color = i === 0 ? 'var(--green)' : (i === totals.length - 1 ? 'var(--red)' : 'var(--text-dim)');
-    return `<div class="standing-row">
-      <div class="standing-pos">#${i + 1}</div>
-      <div class="standing-name">${p.name}</div>
-      <div class="standing-pts" style="color:${color}">${p.total} pts</div>
-    </div>`;
-  }).join('');
-
-  app().innerHTML = `<div class="screen active no-nav">
-    <div class="winner-screen">
-      <div class="winner-crown">👑</div>
-      <div class="winner-name" style="color:${accentColor}">${winner.name}</div>
-      <div class="winner-score">${winner.total} puntos · ${isBlue ? 'Blue Lagoon' : 'TALMUT'}</div>
-      <div class="standings">${standings}</div>
-      <div style="width:100%;margin-top:24px">
-        <button class="btn ${isBlue ? 'btn-blue' : 'btn-gold'}" onclick="checkUnfinished().then(()=>navigate('menu'))">VOLVER AL MENÚ</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-// ===== HISTÓRICO =====
-async function loadHistorico() {
-  // Load finished matches with their scores
-  const { data: matches } = await sb.from('matches').select('*, match_players(player_id), round_scores(player_id, score, round_number)').eq('is_finished', true).order('finished_at', { ascending: false });
-  state.matches = (matches || []).map(m => {
-    const playerIds = m.match_players.map(mp => mp.player_id);
-    const playerTotals = {};
-    playerIds.forEach(pid => { playerTotals[pid] = 0; });
-    m.round_scores.forEach(rs => { playerTotals[rs.player_id] = (playerTotals[rs.player_id] || 0) + rs.score; });
-    const sorted = Object.entries(playerTotals).sort((a, b) => a[1] - b[1]);
-    const winnerId = sorted.length > 0 ? parseInt(sorted[0][0]) : null;
-    return { ...m, playerIds, playerTotals, winnerId };
-  });
-}
-
-async function renderHistorico() {
-  app().innerHTML = `<div class="screen active"><div class="header"><div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">HISTÓRICO</h1></div></div><div class="loading">Cargando...</div></div>`;
-  await loadHistorico();
-
-  const talmutCount = state.matches.filter(m => m.match_type === 'talmut').length;
-  const blCount = state.matches.filter(m => m.match_type === 'blue_lagoon').length;
-
-  // Per-player wins (TALMUT only)
-  const winCounts = {};
-  state.players.forEach(p => { winCounts[p.id] = 0; });
-  state.matches.filter(m => m.match_type === 'talmut').forEach(m => {
-    if (m.winnerId) winCounts[m.winnerId] = (winCounts[m.winnerId] || 0) + 1;
+    if(isFirst){
+      row.innerHTML=`
+        <span style="font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:#B8860B;width:20px;text-align:center">${i+1}</span>
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(184,134,11,0.15);border:1px solid rgba(184,134,11,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:#B8860B">${t.player.name.charAt(0)}</span></div>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:13px;color:#B8860B;flex-grow:1">${t.player.name}</span>
+        <span style="font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:#B8860B">${t.total}</span>
+      `;
+    }else{
+      row.innerHTML=`
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.2);width:20px;text-align:center">${i+1}</span>
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.25)">${t.player.name.charAt(0)}</span></div>
+        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:13px;color:rgba(255,255,255,0.4);flex-grow:1">${t.player.name}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.3)">${t.total}</span>
+      `;
+    }
+    list.appendChild(row);
   });
 
-  const matchItems = state.matches.map(m => {
-    const winner = state.players.find(p => p.id === m.winnerId);
-    const playerNames = m.playerIds.map(pid => state.players.find(p => p.id === pid)?.name).filter(Boolean).join(', ');
-    return `<div class="match-item" onclick="showMatchDetail(${m.id})">
-      <div class="match-header">
-        <span class="match-type ${m.match_type}">${m.match_type === 'talmut' ? 'TALMUT' : 'BLUE LAGOON'}</span>
-        <span class="match-date">${fmtDate(m.finished_at || m.created_at)}</span>
-      </div>
-      <div class="match-winner">🏆 ${winner?.name || '—'}</div>
-      <div class="match-players">${playerNames}</div>
-    </div>`;
-  }).join('');
-
-  app().innerHTML = `<div class="screen active">
-    <div class="header"><div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">HISTÓRICO</h1></div></div>
-    <div class="historico-summary">
-      <div class="summary-card"><div class="value">${talmutCount}</div><div class="label">PARTIDAS TALMUT</div></div>
-      <div class="summary-card"><div class="value" style="color:var(--blue)">${blCount}</div><div class="label">BLUE LAGOON</div></div>
-    </div>
-    ${state.matches.length === 0 ? '<div class="empty-state">Aún no hay partidas registradas</div>' : `<div class="match-list">${matchItems}</div>`}
-  </div>`;
+  createConfetti();
+  showScreen('screen-winner');
+  activeMatchData=null;
+  document.getElementById('continueBtn').style.display='none';
 }
 
-// ===== MATCH DETAIL =====
-async function showMatchDetail(matchId) {
-  state.detailMatch = state.matches.find(m => m.id === matchId);
-  state.screen = 'detail';
-  render();
+function createConfetti(){
+  const container=document.getElementById('confettiContainer');
+  container.innerHTML='';
+  const colors=['#B8860B','#E8DCC8','#1E4D7A','#D4A83A','#6BBF7A','#64A0DC','#9A7209','#2A6094'];
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(4+Math.random()*8)+'px';
+    c.style.height=(4+Math.random()*8)+'px';
+    c.style.animationDuration=(2+Math.random()*3)+'s';
+    c.style.animationDelay=Math.random()*2+'s';
+    c.style.transform='rotate('+Math.random()*360+'deg)';
+    container.appendChild(c);
+  }
 }
 
-function renderDetail() {
-  const m = state.detailMatch;
-  if (!m) return navigate('historico');
-  const players = state.players.filter(p => m.playerIds.includes(p.id));
-  const isBlue = m.match_type === 'blue_lagoon';
-  const accentColor = isBlue ? 'var(--blue)' : 'var(--gold)';
-
-  // Group scores by round
-  const rounds = {};
-  m.round_scores.forEach(rs => {
-    if (!rounds[rs.round_number]) rounds[rs.round_number] = {};
-    rounds[rs.round_number][rs.player_id] = rs.score;
+// ==================== SHARE ====================
+function shareResults(){
+  const name=document.getElementById('winnerName').textContent;
+  const score=document.getElementById('winnerScoreVal').textContent;
+  const standings=document.getElementById('standingsList');
+  let text='⚔️ TALMUT — Resultado\n\n';
+  text+='🏆 Ganador: '+name+' ('+score+' pts)\n\n';
+  const rows=standings.querySelectorAll('div[style]');
+  let pos=1;
+  rows.forEach(row=>{
+    const spans=row.querySelectorAll('span');
+    if(spans.length>=3){
+      text+=pos+'. '+spans[spans.length-2].textContent+' — '+spans[spans.length-1].textContent+' pts\n';
+      pos++;
+    }
   });
-  const numRounds = Math.max(...Object.keys(rounds).map(Number), 0);
+  text+='\nHic Ludus Errorem Punit';
 
-  let ths = `<th>R</th>` + players.map(p => `<th>${abbr(p.name)}</th>`).join('');
-  let rows = '';
-  for (let r = 1; r <= numRounds; r++) {
-    let cells = `<td>${r}</td>`;
-    players.forEach(p => {
-      const val = rounds[r]?.[p.id] ?? '—';
-      let cls = '';
-      if (val === 0) cls = 'zero';
-      else if (val < 0) cls = 'negative';
-      else if (val >= 40) cls = 'high';
-      cells += `<td><div class="score-cell ${cls}" style="cursor:default">${val}</div></td>`;
+  if(navigator.share){
+    navigator.share({title:'TALMUT',text:text}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(text).then(()=>{
+      alert('Resultado copiado al portapapeles');
+    }).catch(()=>{});
+  }
+}
+
+// ==================== CONFIRM EXIT ====================
+function confirmExit(){document.getElementById('confirmExitModal').classList.add('active')}
+function closeConfirmExit(){document.getElementById('confirmExitModal').classList.remove('active')}
+function exitToMenu(){closeConfirmExit();showScreen('screen-menu');checkActiveMatch();}
+
+// ==================== HISTORICO ====================
+async function loadHistorico(){
+  const{data:matches}=await sb.from('matches').select('*').eq('match_type','talmut').eq('is_finished',true).order('created_at',{ascending:true});
+  if(!matches||matches.length===0){
+    document.getElementById('totalMatches').textContent='0';
+    document.getElementById('winList').innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-size:13px">No hay partidas oficiales todavía</div>';
+    return;
+  }
+
+  document.getElementById('totalMatches').textContent=matches.length;
+  const firstDate=new Date(matches[0].created_at);
+  document.getElementById('historicoSince').textContent='Desde el '+firstDate.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+
+  const matchIds=matches.map(m=>m.id);
+  const{data:allScores}=await sb.from('round_scores').select('*').in('match_id',matchIds);
+
+  const wins={};
+  players.forEach(p=>wins[p.id]=0);
+
+  for(const m of matches){
+    const mScores=allScores?allScores.filter(s=>s.match_id===m.id):[];
+    const playerTotals={};
+    mScores.forEach(s=>{
+      if(!playerTotals[s.player_id])playerTotals[s.player_id]=0;
+      playerTotals[s.player_id]+=s.score;
     });
-    rows += `<tr>${cells}</tr>`;
+    let minScore=Infinity,winnerId=null;
+    for(const[pid,total]of Object.entries(playerTotals)){
+      if(total<minScore){minScore=total;winnerId=parseInt(pid);}
+    }
+    if(winnerId&&wins[winnerId]!==undefined)wins[winnerId]++;
   }
-  let totals = `<td class="label">TOTAL</td>`;
-  players.forEach(p => {
-    const t = m.playerTotals[p.id] || 0;
-    totals += `<td style="color:${t <= 0 ? 'var(--green)' : 'var(--text)'}; font-weight:700">${t}</td>`;
+
+  const sorted=FIXED_PLAYERS.map(name=>{
+    const p=players.find(x=>x.name===name);
+    return p?{player:p,wins:wins[p.id]||0}:null;
+  }).filter(Boolean).sort((a,b)=>b.wins-a.wins);
+
+  const maxWins=sorted[0]?sorted[0].wins:1;
+  const list=document.getElementById('winList');
+  list.innerHTML='';
+  sorted.forEach((s,i)=>{
+    const isLeader=i===0&&s.wins>0;
+    const pct=matches.length>0?Math.round(s.wins/matches.length*100):0;
+    const barW=maxWins>0?Math.round(s.wins/maxWins*100):0;
+    const row=document.createElement('div');
+
+    if(isLeader){
+      row.style.cssText='display:flex;align-items:center;padding:12px 14px;background:rgba(184,134,11,0.06);border:1px solid rgba(184,134,11,0.15);border-radius:12px;gap:12px';
+      row.innerHTML=`
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(184,134,11,0.12);border:1.5px solid rgba(184,134,11,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:13px;color:#B8860B">${s.player.name.charAt(0)}</span></div>
+        <div style="flex-grow:1"><p style="margin:0;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:#B8860B">${s.player.name}</p><p style="margin:1px 0 0;font-family:'Inter',sans-serif;font-weight:400;font-size:10px;color:rgba(255,255,255,0.2)">${pct}% winrate</p></div>
+        <div style="width:80px;display:flex;flex-direction:column;align-items:flex-end;gap:3px"><div style="width:100%;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden"><div style="width:100%;height:100%;background:linear-gradient(90deg,#B8860B,#D4A83A);border-radius:2px"></div></div></div>
+        <div style="display:flex;align-items:baseline;gap:2px;min-width:28px;justify-content:flex-end"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:18px;color:#B8860B">${s.wins}</span></div>
+      `;
+    }else{
+      row.style.cssText='display:flex;align-items:center;padding:12px 14px;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.05);border-radius:12px;gap:12px';
+      row.innerHTML=`
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:13px;color:rgba(255,255,255,0.3)">${s.player.name.charAt(0)}</span></div>
+        <div style="flex-grow:1"><p style="margin:0;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.55)">${s.player.name}</p><p style="margin:1px 0 0;font-family:'Inter',sans-serif;font-weight:400;font-size:10px;color:rgba(255,255,255,0.15)">${pct}% winrate</p></div>
+        <div style="width:80px;display:flex;flex-direction:column;align-items:flex-end;gap:3px"><div style="width:100%;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden"><div style="width:${barW}%;height:100%;background:rgba(255,255,255,0.15);border-radius:2px"></div></div></div>
+        <div style="display:flex;align-items:baseline;gap:2px;min-width:28px;justify-content:flex-end"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:18px;color:rgba(255,255,255,0.4)">${s.wins}</span></div>
+      `;
+    }
+    list.appendChild(row);
   });
 
-  const winner = state.players.find(p => p.id === m.winnerId);
-  app().innerHTML = `<div class="screen active no-nav">
-    <div class="header">
-      <button class="btn-back" onclick="navigate('historico')"><svg viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="${accentColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">${isBlue ? 'BLUE LAGOON' : 'TALMUT'}</h1>
-      <div style="font-family:'Inter',sans-serif;font-size:10px;color:var(--text-dimmer);margin-top:2px">${fmtDate(m.finished_at || m.created_at)} · 🏆 ${winner?.name || '—'}</div></div>
-      <div class="spacer"></div>
-    </div>
-    <div class="score-wrapper">
-      <table class="score-table"><thead><tr>${ths}</tr></thead><tbody>${rows}<tr class="total-row">${totals}</tr></tbody></table>
-    </div>
-    <div style="padding:16px">
-      <button class="btn btn-danger btn-sm" onclick="confirmDeleteMatch(${m.id})">Eliminar partida</button>
-    </div>
-  </div>`;
+  // Last match
+  const lastMatch=matches[matches.length-1];
+  const lastScores=allScores?allScores.filter(s=>s.match_id===lastMatch.id):[];
+  const lastTotals={};
+  lastScores.forEach(s=>{if(!lastTotals[s.player_id])lastTotals[s.player_id]=0;lastTotals[s.player_id]+=s.score;});
+  let lmMin=Infinity,lmWinner=null,lmPlayers=0;
+  for(const[pid,total]of Object.entries(lastTotals)){
+    lmPlayers++;
+    if(total<lmMin){lmMin=total;lmWinner=parseInt(pid);}
+  }
+  if(lmWinner){
+    const wp=players.find(x=>x.id===lmWinner);
+    document.getElementById('lastMatchCard').style.display='block';
+    document.getElementById('lmWinner').textContent=wp?wp.name:'—';
+    const d=new Date(lastMatch.created_at);
+    document.getElementById('lmDate').textContent=d.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})+' · '+lmPlayers+' jugadores';
+    document.getElementById('lmScore').textContent=lmMin;
+  }
 }
 
-function confirmDeleteMatch(id) {
-  showConfirm('¿Eliminar partida?', 'Esta acción no se puede deshacer.', async () => {
-    await sb.from('matches').delete().eq('id', id);
-    navigate('historico');
+// ==================== HALL OF FAME ====================
+async function loadHallOfFame(){
+  const{data:matches}=await sb.from('matches').select('*').eq('match_type','talmut').eq('is_finished',true);
+  if(!matches||matches.length===0){
+    document.getElementById('hofTable').innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-size:13px">No hay datos todavía</div>';
+    return;
+  }
+  const matchIds=matches.map(m=>m.id);
+  const{data:allScores}=await sb.from('round_scores').select('*').in('match_id',matchIds);
+  if(!allScores)return;
+
+  const stats={};
+  FIXED_PLAYERS.forEach(name=>{
+    const p=players.find(x=>x.name===name);
+    if(p)stats[p.id]={player:p,pj:0,pt:0,w:0,best:Infinity,scores:[]};
   });
-}
 
-// ===== HALL OF FAME =====
-async function renderHall() {
-  app().innerHTML = `<div class="screen active"><div class="header"><div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">HALL OF FAME</h1></div></div><div class="loading">Cargando...</div></div>`;
-
-  // Load all finished TALMUT matches with scores
-  const { data: matches } = await sb.from('matches').select('id, match_players(player_id), round_scores(player_id, score)').eq('is_finished', true).eq('match_type', 'talmut');
-
-  const stats = state.players.map(p => {
-    let pj = 0, totalPts = 0, wins = 0, best = null, scores = [];
-    (matches || []).forEach(m => {
-      const inMatch = m.match_players.some(mp => mp.player_id === p.id);
-      if (!inMatch) return;
-      pj++;
-      let matchTotal = 0;
-      m.round_scores.filter(rs => rs.player_id === p.id).forEach(rs => { matchTotal += rs.score; });
-      totalPts += matchTotal;
-      scores.push(matchTotal);
-      // Check if winner (lowest total)
-      const playerTotals = {};
-      m.match_players.forEach(mp => { playerTotals[mp.player_id] = 0; });
-      m.round_scores.forEach(rs => { playerTotals[rs.player_id] = (playerTotals[rs.player_id] || 0) + rs.score; });
-      const minTotal = Math.min(...Object.values(playerTotals));
-      if (matchTotal === minTotal) wins++;
-      if (best === null || matchTotal < best) best = matchTotal;
+  for(const m of matches){
+    const mScores=allScores.filter(s=>s.match_id===m.id);
+    const playerTotals={};
+    mScores.forEach(s=>{
+      if(!playerTotals[s.player_id])playerTotals[s.player_id]=0;
+      playerTotals[s.player_id]+=s.score;
     });
-    const avg = pj > 0 ? (totalPts / pj).toFixed(1) : '—';
-    const winPct = pj > 0 ? Math.round((wins / pj) * 100) : 0;
-    return { id: p.id, name: p.name, pj, pt: totalPts, w: wins, winPct, best: best ?? '—', avg };
+    let minScore=Infinity,winnerId=null;
+    for(const[pid,total]of Object.entries(playerTotals)){
+      if(total<minScore){minScore=total;winnerId=parseInt(pid);}
+    }
+    for(const[pid,total]of Object.entries(playerTotals)){
+      const id=parseInt(pid);
+      if(!stats[id])continue;
+      stats[id].pj++;
+      stats[id].pt+=total;
+      stats[id].scores.push(total);
+      if(total<stats[id].best)stats[id].best=total;
+      if(id===winnerId)stats[id].w++;
+    }
+  }
+
+  window._hofStats=Object.values(stats);
+  renderHofTable();
+  renderRecords();
+}
+
+function sortHof(mode){
+  hofSort=mode;
+  const ptBtn=document.getElementById('sortPtBtn');
+  const wBtn=document.getElementById('sortWBtn');
+  if(mode==='pt'){
+    ptBtn.style.background='rgba(100,160,220,0.12)';
+    ptBtn.style.border='1px solid rgba(100,160,220,0.25)';
+    ptBtn.querySelector('span').style.color='#64A0DC';
+    wBtn.style.background='transparent';
+    wBtn.style.border='1px solid rgba(255,255,255,0.06)';
+    wBtn.querySelector('span').style.color='rgba(255,255,255,0.2)';
+  }else{
+    wBtn.style.background='rgba(100,160,220,0.12)';
+    wBtn.style.border='1px solid rgba(100,160,220,0.25)';
+    wBtn.querySelector('span').style.color='#64A0DC';
+    ptBtn.style.background='transparent';
+    ptBtn.style.border='1px solid rgba(255,255,255,0.06)';
+    ptBtn.querySelector('span').style.color='rgba(255,255,255,0.2)';
+  }
+  renderHofTable();
+}
+
+function renderHofTable(){
+  if(!window._hofStats)return;
+  const data=[...window._hofStats];
+  if(hofSort==='pt')data.sort((a,b)=>b.pt-a.pt);
+  else data.sort((a,b)=>b.w-a.w);
+
+  const table=document.getElementById('hofTable');
+  const cols='1fr 26px 42px 26px 30px 36px 36px';
+  const ptHdrColor=hofSort==='pt'?'#64A0DC':'rgba(100,160,220,0.5)';
+  const wHdrColor=hofSort==='w'?'#64A0DC':'rgba(100,160,220,0.5)';
+
+  let html=`<div style="display:grid;grid-template-columns:${cols};background:rgba(100,160,220,0.04);border:1px solid rgba(100,160,220,0.1);border-radius:10px 10px 0 0;padding:10px 10px">
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(100,160,220,0.5);text-transform:uppercase;letter-spacing:0.5px">Jugador</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(100,160,220,0.5);text-transform:uppercase;letter-spacing:0.3px;text-align:center">PJ</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:${ptHdrColor};text-transform:uppercase;letter-spacing:0.3px;text-align:center">PT</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:${wHdrColor};text-transform:uppercase;letter-spacing:0.3px;text-align:center">W</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(100,160,220,0.5);text-transform:uppercase;letter-spacing:0.3px;text-align:center">W%</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(100,160,220,0.5);text-transform:uppercase;letter-spacing:0.3px;text-align:center">Mejor</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(100,160,220,0.5);text-transform:uppercase;letter-spacing:0.3px;text-align:center">Media</span>
+  </div>`;
+
+  data.forEach((s,i)=>{
+    const isLeader=i===0;
+    const avg=s.pj>0?Math.round(s.pt/s.pj):0;
+    const wpct=s.pj>0?Math.round(s.w/s.pj*100):0;
+    const best=s.best===Infinity?'-':s.best;
+    const isLast=i===data.length-1;
+    const borderRadius=isLast?'border-radius:0 0 10px 10px;':'';
+
+    if(isLeader){
+      html+=`<div style="display:grid;grid-template-columns:${cols};border:1px solid rgba(100,160,220,0.08);border-top:none;padding:10px 10px;background:rgba(100,160,220,0.03);align-items:center;${borderRadius}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(100,160,220,0.1);border:1.5px solid rgba(100,160,220,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:#64A0DC">${s.player.name.charAt(0)}</span></div>
+          <p style="margin:0;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;color:#64A0DC">${s.player.name}</p>
+        </div>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.4);text-align:center">${s.pj}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:12px;color:${hofSort==='pt'?'#64A0DC':'rgba(255,255,255,0.5)'};text-align:center">${s.pt}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:${hofSort==='w'?'700':'600'};font-size:12px;color:${hofSort==='w'?'#64A0DC':'rgba(255,255,255,0.4)'};text-align:center">${s.w}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:${hofSort==='w'?'rgba(100,160,220,0.6)':'rgba(255,255,255,0.25)'};text-align:center">${wpct}%</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:#6BBF7A;text-align:center">${best}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.35);text-align:center">${avg}</span>
+      </div>`;
+    }else{
+      html+=`<div style="display:grid;grid-template-columns:${cols};border:1px solid rgba(255,255,255,0.04);border-top:none;padding:10px 10px;align-items:center;${borderRadius}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.25)">${s.player.name.charAt(0)}</span></div>
+          <p style="margin:0;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.5)">${s.player.name}</p>
+        </div>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.4);text-align:center">${s.pj}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.5);text-align:center">${s.pt}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.4);text-align:center">${s.w}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25);text-align:center">${wpct}%</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:#6BBF7A;text-align:center">${best}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.35);text-align:center">${avg}</span>
+      </div>`;
+    }
+  });
+  table.innerHTML=html;
+}
+
+function renderRecords(){
+  if(!window._hofStats)return;
+  const data=window._hofStats;
+  let bestScore=Infinity,bestPlayer='',worstScore=-Infinity,worstPlayer='',topWins=0,topWinsPlayer='',bestAvg=Infinity,bestAvgPlayer='';
+  data.forEach(s=>{
+    if(s.best<bestScore){bestScore=s.best;bestPlayer=s.player.name;}
+    const maxS=Math.max(...s.scores,0);
+    if(maxS>worstScore){worstScore=maxS;worstPlayer=s.player.name;}
+    if(s.w>topWins){topWins=s.w;topWinsPlayer=s.player.name;}
+    if(s.pj>0){const avg=s.pt/s.pj;if(avg<bestAvg){bestAvg=avg;bestAvgPlayer=s.player.name;}}
   });
 
-  // Sort
-  if (state.hallSort === 'pt') stats.sort((a, b) => a.pt - b.pt);
-  else stats.sort((a, b) => b.w - a.w || a.pt - b.pt);
-
-  const rows = stats.map(s => `<tr>
-    <td>${s.name}</td>
-    <td>${s.pj}</td>
-    <td class="highlight">${s.pt}</td>
-    <td>${s.w}</td>
-    <td>${s.winPct}%</td>
-    <td style="color:var(--green)">${s.best}</td>
-    <td>${s.avg}</td>
-  </tr>`).join('');
-
-  app().innerHTML = `<div class="screen active">
-    <div class="header"><div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">HALL OF FAME</h1></div></div>
-    <div class="hall-sort">
-      <button class="sort-btn ${state.hallSort === 'pt' ? 'active' : ''}" onclick="state.hallSort='pt';renderHall()">Puntos Totales</button>
-      <button class="sort-btn ${state.hallSort === 'w' ? 'active' : ''}" onclick="state.hallSort='w';renderHall()">Victorias</button>
+  const grid=document.getElementById('recordsGrid');
+  grid.innerHTML=`
+    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Mejor partida</p>
+      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:#6BBF7A;line-height:1">${bestScore===Infinity?'-':bestScore}</p>
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${bestPlayer||'-'}</p>
     </div>
-    <div style="overflow-x:auto;padding:0 8px">
-      <table class="hall-table">
-        <thead><tr><th>Jugador</th><th>PJ</th><th>PT</th><th>W</th><th>W%</th><th>Mejor</th><th>Media</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
+    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Peor partida</p>
+      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:rgba(220,80,80,0.7);line-height:1">${worstScore===-Infinity?'-':worstScore}</p>
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${worstPlayer||'-'}</p>
     </div>
-    ${stats.every(s => s.pj === 0) ? '<div class="empty-state">Aún no hay estadísticas</div>' : ''}
-  </div>`;
+    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Más victorias</p>
+      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:#64A0DC;line-height:1">${topWins}</p>
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${topWinsPlayer||'-'}</p>
+    </div>
+    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Mejor media</p>
+      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:#B8860B;line-height:1">${bestAvg===Infinity?'-':Math.round(bestAvg)}</p>
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${bestAvgPlayer||'-'}</p>
+    </div>
+  `;
 }
 
-// ===== LA MALTESA =====
-function renderMaltesa() {
-  app().innerHTML = `<div class="screen active" style="background:linear-gradient(180deg,#1A0A10 0%,#0B1F3A 40%,#0E2545 100%)">
-    <div class="header" style="background:transparent">
-      <div style="flex:1;text-align:center"><h1 style="font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--cream);letter-spacing:2px">LA MALTESA</h1>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(160,55,65,0.5);margin-top:2px">Constitución oficial</div></div>
-    </div>
-    <div class="maltesa-header-block">
-      <div class="maltesa-title">LA MALTESA</div>
-      <div class="maltesa-subtitle">Ley Suprema del TALMUT</div>
-      <div class="maltesa-latin">Hic Ludus Errorem Punit</div>
-    </div>
-    <div class="maltesa-divider"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3 3.5 0.5-2.5 2.5 0.5 3.5L7 9l-3 1.5 0.5-3.5L2 4.5 5.5 4z" fill="rgba(160,55,65,0.25)"/></svg></div>
-    <div class="maltesa-content">
-      <div class="preamble-block">
-        <div class="preamble-title">Preámbulo</div>
-        <p class="preamble-text">El presente documento constituye la norma suprema e irrefutable que rige el juego conocido como TALMUT. Nace de la necesidad histórica de codificar las reglas, tradiciones, leyes y sanciones que han surgido de forma orgánica a lo largo de incontables partidas.</p>
-        <p class="preamble-quote">«Ningún jugador, independientemente de su antigüedad, su racha de victorias o su vehemencia a la hora de argumentar, podrá invocar norma alguna que no esté contemplada en La Maltesa.»</p>
-        <p class="preamble-text" style="margin-top:8px">El documento podrá ampliarse mediante consenso unánime de los jugadores habituales, según lo dispuesto en el Artículo 9.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 1</div>
-        <div class="article-title">Del Juramento Fundacional</div>
-        <p class="article-text"><span class="num">1.1</span> · Antes de cualquier partida, todos los jugadores deberán reunirse y prestar el juramento fundacional.</p>
-        <p class="article-text"><span class="num">1.2</span> · Cada jugador extenderá una mano al centro de la mesa. Las manos se apilarán como símbolo de pacto colectivo. Todos pronunciarán al unísono: <span class="latin">«HIC LUDUS ERROREM PUNIT»</span> — «Este juego castiga el error».</p>
-        <p class="article-text"><span class="num">1.3</span> · El jugador que rehúse participar, pronuncie el juramento de forma inaudible o se mofe del acto recibirá una carta de penalización antes de comenzar a jugar.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 2</div>
-        <div class="article-title">Del Orden de Juego</div>
-        <p class="article-text"><span class="num">2.1</span> · El jugador que abre la primera ronda se determinará mediante un aleatorizador de dispositivo móvil.</p>
-        <p class="article-text"><span class="num">2.2</span> · Alternativamente, se repartirá una carta boca abajo a cada jugador. La carta más alta determina quién abre.</p>
-        <p class="article-text"><span class="num">2.3</span> · A partir de la segunda ronda, abre el ganador de la ronda anterior.</p>
-        <p class="article-text"><span class="num">2.4</span> · El orden de turno sigue la rotación en sentido horario desde el jugador que abre.</p>
-        <p class="article-text"><span class="num">2.5</span> · El jugador con la puntuación más alta de la ronda anterior baraja y reparte.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 3</div>
-        <div class="article-title">Del Reparto y la Observación Inicial</div>
-        <p class="article-text"><span class="num">3.1</span> · El repartidor baraja la baraja completa. Otro jugador la corta. Se reparten cuatro cartas boca abajo a cada jugador.</p>
-        <p class="article-text"><span class="num">3.2</span> · Los jugadores colocan sus cartas según su preferencia personal antes de la observación inicial.</p>
-        <p class="article-text"><span class="num">3.3</span> · Tras una cuenta atrás colectiva (<span class="latin">«3… 2… 1…»</span>), cada jugador levanta simultáneamente dos de sus cuatro cartas para observarlas. Tiempo máximo: dos segundos.</p>
-        <p class="article-text"><span class="num">3.4</span> · Queda estrictamente prohibido volver a mirar las cartas propias salvo que una carta especial lo permita. Infracción: una carta de penalización.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 4</div>
-        <div class="article-title">Del Turno de Juego</div>
-        <p class="article-text"><span class="num">4.1</span> · El jugador activo roba la carta superior del mazo y elige:</p>
-        <p class="article-text" style="padding-left:12px"><span class="opt">Opción A:</span> Quedarse la carta robada, descartando una de sus cuatro cartas boca abajo.</p>
-        <p class="article-text" style="padding-left:12px"><span class="opt">Opción B:</span> Rechazar la carta robada, colocándola boca arriba en el montón de descarte.</p>
-        <p class="article-text"><span class="num">4.2</span> · <span class="term">El Descarte Cruzado:</span> Cuando se descarta una carta, cualquier jugador que posea cartas del mismo valor podrá descartarlas inmediatamente. <span class="latin">«La velocidad es ley»</span> cuando se producen descartes simultáneos.</p>
-        <p class="article-text"><span class="num">4.3</span> · Ejecutar un Descarte Cruzado con cartas de valor no coincidente acarrea una carta de penalización.</p>
-        <p class="article-text"><span class="num">4.4</span> · <span class="term">La Ley de la Tortilla:</span> Cuando un jugador roba una carta que coincide con una propia y ejecuta un Descarte Cruzado contra sí mismo, deberá manipular ambas cartas con la misma mano en un movimiento continuo. Usar manos diferentes: penalización.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 5</div>
-        <div class="article-title">De las Cartas Especiales</div>
-        <p class="article-text"><span class="num">5.1</span> · Las cartas especiales se activan únicamente cuando se descartan directamente del robo, boca arriba. Incorporarlas a la mano anula sus efectos.</p>
-        <p class="article-text"><span class="num">5.2</span> · <span class="term">El DIEZ (10):</span> Mirar en secreto una carta propia boca abajo.</p>
-        <p class="article-text"><span class="num">5.3</span> · <span class="term">La JOTA (J):</span> Mirar en secreto una carta de un oponente. Tradición: pronunciar <span class="latin">«a…JJJJJ…jena»</span>.</p>
-        <p class="article-text"><span class="num">5.4</span> · <span class="term">La REINA (Q):</span> Dos modos de intercambio ciego:</p>
-        <p class="article-text" style="padding-left:12px"><span class="opt">Modo 1:</span> Intercambiar una carta propia por una de un oponente, sin ver ninguna.</p>
-        <p class="article-text" style="padding-left:12px"><span class="opt">Modo 2:</span> Intercambiar una carta de un jugador por la de otro jugador distinto.</p>
-        <p class="article-text"><span class="num">5.5</span> · <span class="term">El REY (K):</span> Dos modos:</p>
-        <p class="article-text" style="padding-left:12px"><span class="opt">Modo 1:</span> Mirar una carta de un oponente e intercambiarla por una propia si lo desea.</p>
-        <p class="article-text" style="padding-left:12px"><span class="opt">Modo 2:</span> Mirar una carta de un oponente y transferirla a un tercer jugador.</p>
-        <p class="article-text"><span class="num">5.6</span> · <span class="term">El JOKER:</span> Si el portador gana la ronda: <span style="color:var(--green);font-weight:600">−1 punto</span>. Si no gana: <span style="color:var(--red);font-weight:600">+50 puntos</span>.</p>
-        <p class="article-text"><span class="num">5.7</span> · <span class="term">Excepción del Joker ganador:</span> El ganador con JOKER puntúa −1, no cero.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 6</div>
-        <div class="article-title">Del Talmut</div>
-        <p class="article-text"><span class="num">6.1</span> · Un jugador declarará TALMUT cuando crea que la suma de sus cuatro cartas es igual o inferior a cinco puntos.</p>
-        <p class="article-text"><span class="num">6.2</span> · La declaración es voluntaria.</p>
-        <p class="article-text"><span class="num">6.3</span> · Tras la declaración, cada jugador restante dispone de exactamente un turno adicional.</p>
-        <p class="article-text"><span class="num">6.4</span> · El declarante conserva sus derechos de Descarte Cruzado durante el turno final.</p>
-        <p class="article-text"><span class="num">6.5</span> · <span class="term">El TALMUT erróneo:</span> Si la suma supera los cinco puntos, el declarante acumulará la suma de puntos de todos los demás jugadores.</p>
-        <p class="article-text"><span class="num">6.6</span> · <span class="term">El TALMUT automático:</span> Si un jugador descarta su última carta boca abajo, el TALMUT se declara automáticamente.</p>
-        <p class="article-text"><span class="num">6.7</span> · <span class="term">El Intocable de Elliot Ness:</span> El declarante obtiene inmunidad completa. Ninguna carta especial podrá dirigirse a él.</p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 7</div>
-        <div class="article-title">De la Puntuación</div>
-        <p class="article-text"><span class="num">7.1</span> · Valores de las cartas:</p>
-        <div class="values-grid">
-          <span>A</span><span class="right">1 punto</span>
-          <span>2 – 10</span><span class="right">Valor facial</span>
-          <span>J</span><span class="right">20 puntos</span>
-          <span>Q</span><span class="right">30 puntos</span>
-          <span>K</span><span class="right">40 puntos</span>
-          <span class="pos">JOKER (ganador)</span><span class="right pos">−1 punto</span>
-          <span class="neg">JOKER (no ganador)</span><span class="right neg">+50 puntos</span>
-        </div>
-        <p class="article-text"><span class="num">7.2</span> · El jugador con la puntuación más baja gana la ronda y puntúa cero (excepto Art. 5.7).</p>
-        <p class="article-text"><span class="num">7.3</span> · En caso de empate con el declarante de TALMUT, gana el no declarante.</p>
-        <p class="article-text"><span class="num">7.4</span> · Una partida consta de diez rondas. Partidas incompletas se denominan <span style="color:var(--blue);font-weight:500">«Blue Lagoon»</span>. <span class="latin">«El Blue Lagoon no existe para la historia. Solo para el ganador.»</span></p>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 8</div>
-        <div class="article-title">De las Penalizaciones</div>
-        <p class="article-text"><span class="num">8.1</span> · Penalización estándar: una carta adicional del mazo que el infractor no puede ver.</p>
-        <p class="article-text"><span class="num">8.2</span> · Tabla de infracciones:</p>
-        <div class="infractions-grid">
-          <div class="infraction-row"><span class="desc">Juramento irrespetuoso / inaudible</span><span class="pen">1 carta</span></div>
-          <div class="infraction-row"><span class="desc">Mirar carta propia sin permiso</span><span class="pen">1 carta</span></div>
-          <div class="infraction-row"><span class="desc">Violación Ley de la Tortilla</span><span class="pen">1 carta</span></div>
-          <div class="infraction-row"><span class="desc">Descarte Cruzado incorrecto</span><span class="pen">1 carta</span></div>
-          <div class="infraction-row"><span class="desc">Robar carta fuera de turno</span><span class="pen">1 carta</span></div>
-          <div class="infraction-row"><span class="desc">TALMUT erróneo (más de 5 pts)</span><span class="pen">Suma de todos</span></div>
-        </div>
-      </div>
-
-      <div class="article-block">
-        <div class="article-num">ARTÍCULO 9</div>
-        <div class="article-title">De las Enmiendas</div>
-        <p class="article-text"><span class="num">9.1</span> · La Maltesa es un documento vivo. Las leyes acordadas se añadirán como enmiendas numeradas.</p>
-        <p class="article-text"><span class="num">9.2</span> · Cada enmienda requiere: número, fecha, descripción clara y firmas de todos los jugadores presentes.</p>
-        <p class="article-text"><span class="num">9.3</span> · Las disputas no contempladas se resolverán por votación. En caso de empate, prevalecerá <span class="latin">«la interpretación más perjudicial para el jugador que haya cometido el error»</span>.</p>
-      </div>
-
-      <div style="text-align:center;padding:16px 8px">
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(255,255,255,0.2);line-height:1.6">«El presente documento ha sido redactado con plena autoridad y rigor para que jamás pueda alegarse ignorancia ante el error cometido en la mesa.»</p>
-      </div>
-
-      <div class="maltesa-seal">
-        <div class="seal-box">
-          <div class="seal-text">HIC LUDUS ERROREM PUNIT</div>
-          <div class="seal-edition">Primera edición · MMXXIV</div>
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-// ===== CONFIRM MODAL =====
-let confirmCallback = null;
-function showConfirm(title, msg, cb) {
-  $('confirmTitle').textContent = title;
-  $('confirmMsg').textContent = msg;
-  confirmCallback = cb;
-  $('confirmBtn').onclick = () => { closeConfirm(); if (confirmCallback) confirmCallback(); };
-  $('confirmModal').classList.add('active');
-}
-function closeConfirm() { $('confirmModal').classList.remove('active'); }
-
-// ===== CHECK UNFINISHED =====
-async function checkUnfinished() {
-  const { data } = await sb.from('matches').select('*, match_players(player_id), round_scores(round_number)').eq('is_finished', false).order('created_at', { ascending: false }).limit(1);
-  if (data && data.length > 0) {
-    const m = data[0];
-    const playerIds = m.match_players.map(mp => mp.player_id);
-    const roundNums = [...new Set(m.round_scores.map(rs => rs.round_number))];
-    const currentRound = roundNums.length > 0 ? Math.max(...roundNums) + 1 : 1;
-    state.unfinishedMatch = { ...m, playerIds, currentRound };
-  } else {
-    state.unfinishedMatch = null;
-  }
-}
-
-// ===== INIT =====
-async function init() {
-  const { data: players } = await sb.from('players').select('*').order('id');
-  state.players = players || [];
-  await checkUnfinished();
-  render();
-}
-
-document.addEventListener('DOMContentLoaded', init);
+// ==================== INIT ====================
+init();
 </script>
 </body>
 </html>
