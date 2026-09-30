@@ -1024,7 +1024,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   <!-- Album cover player -->
   <div id="albumPlayer" style="display: flex; flex-direction: column; align-items: center; padding: 0 16px 24px; gap: 16px">
     <div id="albumCoverWrap" style="width: 200px; height: 200px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(160,100,200,0.15); box-shadow: 0 4px 32px rgba(0,0,0,0.5); background: rgba(160,100,200,0.05); position: relative; flex-shrink: 0">
-      <img id="albumCoverImg" src="Canciones/portada.jpg" alt="portada" style="width: 100%; height: 100%; object-fit: cover; display: block" onerror="this.style.display='none';document.getElementById('albumCoverFallback').style.display='flex'">
+      <img id="albumCoverImg" src="" alt="portada" style="width: 100%; height: 100%; object-fit: cover; display: none" onerror="this.style.display='none';document.getElementById('albumCoverFallback').style.display='flex'">
       <div id="albumCoverFallback" style="display: none; position: absolute; inset: 0; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(90,50,120,0.3), rgba(30,10,60,0.8))">
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
           <circle cx="32" cy="32" r="30" stroke="rgba(160,100,200,0.3)" stroke-width="1"/>
@@ -2051,11 +2051,11 @@ function handleLogoClick(){
 
 // ==================== CANCIONES PLAYER ====================
 const SONGS=[
-  {title:'Este juego penaliza el fallo.',   file:'Canciones/1.mp3', cover:'Canciones/Este juego penaliza el fallo.jpg'},
-  {title:'Talmutaje en Malta.',             file:'Canciones/2.mp3', cover:'Canciones/Talmutaje en Malta.jpg'},
-  {title:"Surfin' USA a veces es el KKK.", file:'Canciones/3.mp3', cover:"Canciones/Surfin' USA a veces es el KKK.jpg"},
-  {title:'Te va a machacar.',              file:'Canciones/4.mp3', cover:'Canciones/Te va a machacar.jpg'},
-  {title:'Velada de Talmut.',              file:'Canciones/5.mp3', cover:'Canciones/Velada de Talmut.jpg'}
+  {title:'Este juego penaliza el fallo.',   file:'Canciones/1.mp3', cover:'Canciones/Este juego penaliza el fallo'},
+  {title:'Talmutaje en Malta.',             file:'Canciones/2.mp3', cover:'Canciones/Talmutaje en Malta'},
+  {title:"Surfin' USA a veces es el KKK.", file:'Canciones/3.mp3', cover:"Canciones/Surfin' USA a veces es el KKK"},
+  {title:'Te va a machacar.',              file:'Canciones/4.mp3', cover:'Canciones/Te va a machacar'},
+  {title:'Velada de Talmut.',              file:'Canciones/5.mp3', cover:'Canciones/Velada de Talmut'}
 ];
 let currentSongIdx=-1;
 let songAudio=null;
@@ -2071,7 +2071,25 @@ function updateAlbumPlayer(){
     numEl.textContent='CANCIÓN '+(currentSongIdx+1)+' / '+SONGS.length;
     overlay.style.display='flex';
     const coverImg=document.getElementById('albumCoverImg');
-    if(coverImg){coverImg.src=SONGS[currentSongIdx].cover||'Canciones/portada.jpg';}
+    const coverFallback=document.getElementById('albumCoverFallback');
+    if(coverImg){
+      coverImg.style.display='block';
+      if(coverFallback)coverFallback.style.display='none';
+      const base=SONGS[currentSongIdx].cover||'';
+      if(base){
+        const exts=['.jpg','.jpeg','.png','.webp'];
+        let tried=0;
+        function tryExt(i){
+          coverImg.onerror=function(){
+            tried++;
+            if(tried<exts.length){tryExt(tried);}
+            else{coverImg.style.display='none';if(coverFallback)coverFallback.style.display='flex';}
+          };
+          coverImg.src=base+exts[i];
+        }
+        tryExt(0);
+      }else{coverImg.style.display='none';if(coverFallback)coverFallback.style.display='flex';}
+    }
     if(songPlaying){
       icon.innerHTML='<rect x="1" y="1" width="4" height="14" rx="1.5" fill="rgba(160,100,200,0.9)"/><rect x="9" y="1" width="4" height="14" rx="1.5" fill="rgba(160,100,200,0.9)"/>';
     }else{
