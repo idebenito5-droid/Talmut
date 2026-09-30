@@ -881,7 +881,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
   <!-- Album cover player -->
   <div id="albumPlayer" style="display: flex; flex-direction: column; align-items: center; padding: 0 16px 24px; gap: 16px">
     <div id="albumCoverWrap" style="width: 200px; height: 200px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(160,100,200,0.15); box-shadow: 0 4px 32px rgba(0,0,0,0.5); background: rgba(160,100,200,0.05); position: relative; flex-shrink: 0">
-      <img id="albumCoverImg" src="canciones/portada.jpg" alt="portada" style="width: 100%; height: 100%; object-fit: cover; display: block" onerror="this.style.display='none';document.getElementById('albumCoverFallback').style.display='flex'">
+      <img id="albumCoverImg" src="Canciones/portada.jpg" alt="portada" style="width: 100%; height: 100%; object-fit: cover; display: block" onerror="this.style.display='none';document.getElementById('albumCoverFallback').style.display='flex'">
       <div id="albumCoverFallback" style="display: none; position: absolute; inset: 0; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(90,50,120,0.3), rgba(30,10,60,0.8))">
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
           <circle cx="32" cy="32" r="30" stroke="rgba(160,100,200,0.3)" stroke-width="1"/>
@@ -1824,7 +1824,7 @@ function playPlayerAudio(playerName){
   if(available.length===0)return;
   const file=available[Math.floor(Math.random()*available.length)];
   if(currentPlayerAudio){currentPlayerAudio.pause();currentPlayerAudio=null;}
-  const audio=new Audio('audios/'+file);
+  const audio=new Audio('Audios/'+encodeURIComponent(file));
   audio.onerror=function(){audioFailedSet.add(file);};
   audio.play().catch(()=>{});
   currentPlayerAudio=audio;
@@ -1863,10 +1863,10 @@ function handleLogoClick(){
 
 // ==================== CANCIONES PLAYER ====================
 const SONGS=[
-  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/1.mp3'},
-  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/2.mp3'},
-  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/3.mp3'},
-  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/4.mp3'}
+  {title:'Talmut. Este juego penaliza el fallo.',file:'Canciones/1.mp3'},
+  {title:'Talmut. Este juego penaliza el fallo.',file:'Canciones/2.mp3'},
+  {title:'Talmut. Este juego penaliza el fallo.',file:'Canciones/3.mp3'},
+  {title:'Talmut. Este juego penaliza el fallo.',file:'Canciones/4.mp3'}
 ];
 let currentSongIdx=-1;
 let songAudio=null;
