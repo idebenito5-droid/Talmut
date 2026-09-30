@@ -1,19 +1,28 @@
 {
   "name": "Talmut",
   "short_name": "Talmut",
-  "description": "El marcador oficial del juego de cartas Talmut",
+  "description": "El marcador del juego Talmut",
   "start_url": "/Talmut/",
   "scope": "/Talmut/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#0B1F3A",
   "theme_color": "#0B1F3A",
+  "lang": "es",
   "icons": [
     {
       "src": "Logo_Talmut.png",
       "sizes": "1024x1024",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "Logo_Talmut.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["games", "entertainment"],
+  "prefer_related_applications": false
 }

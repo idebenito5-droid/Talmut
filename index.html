@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TALMUT</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1F3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Talmut">
+<link rel="apple-touch-icon" href="Logo_Talmut.png">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -113,6 +119,74 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 @keyframes selectedPulse {
   0%,100% { box-shadow: 0 0 30px rgba(184,134,11,0.35), 0 0 60px rgba(184,134,11,0.12), 0 0 90px rgba(184,134,11,0.05); }
   50% { box-shadow: 0 0 40px rgba(184,134,11,0.5), 0 0 70px rgba(184,134,11,0.2), 0 0 100px rgba(184,134,11,0.08); }
+}
+
+/* ==================== RESPONSIVE / PWA ==================== */
+
+/* Tablet portrait (600px+): centrar panel con sombra */
+@media (min-width: 600px) {
+  body {
+    background: #050E1B;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .screen {
+    max-width: 480px;
+  }
+  .screen.active {
+    box-shadow: 0 0 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(184,134,11,0.06);
+  }
+}
+
+/* Desktop / tablet landscape (900px+): panel redondeado flotante */
+@media (min-width: 900px) {
+  body {
+    align-items: center;
+    padding: 32px 0;
+  }
+  .screen {
+    max-width: 520px;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .screen.active {
+    min-height: min(calc(100dvh - 64px), 900px);
+    box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(184,134,11,0.1);
+  }
+}
+
+/* Landscape en teléfono (horizontal, pantalla corta) */
+@media (orientation: landscape) and (max-height: 520px) {
+  body {
+    align-items: flex-start;
+  }
+  .screen {
+    max-width: 100%;
+    border-radius: 0;
+  }
+  .screen.active {
+    min-height: 100dvh;
+    box-shadow: none;
+  }
+}
+
+/* Landscape amplio (tablet/pc en horizontal, 900px+ wide) */
+@media (orientation: landscape) and (min-width: 900px) {
+  body {
+    align-items: center;
+    padding: 24px 0;
+  }
+  .screen {
+    max-width: 520px;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .screen.active {
+    min-height: min(calc(100dvh - 48px), 860px);
+    box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(184,134,11,0.1);
+  }
 }
 </style>
 </head>
@@ -1962,6 +2036,15 @@ showScreen=function(id){
 
 // ==================== INIT ====================
 init();
+
+// ==================== SERVICE WORKER (PWA) ====================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js', { scope: './' })
+      .then(function(reg) { console.log('SW registrado:', reg.scope); })
+      .catch(function(err) { console.log('SW error:', err); });
+  });
+}
 </script>
 </body>
 </html>
