@@ -866,7 +866,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 
   <!-- Back bar -->
   <div style="display: flex; align-items: center; padding: 52px 16px 12px; gap: 10px">
-    <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+    <button onclick="leaveCanciones()" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
       <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="rgba(160,100,200,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
     </button>
     <div style="flex-grow: 1; text-align: center">
@@ -877,6 +877,33 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
   </div>
 
   <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,100,200,0.2), transparent); margin: 0 0 16px"></div>
+
+  <!-- Album cover player -->
+  <div id="albumPlayer" style="display: flex; flex-direction: column; align-items: center; padding: 0 16px 24px; gap: 16px">
+    <div id="albumCoverWrap" style="width: 200px; height: 200px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(160,100,200,0.15); box-shadow: 0 4px 32px rgba(0,0,0,0.5); background: rgba(160,100,200,0.05); position: relative; flex-shrink: 0">
+      <img id="albumCoverImg" src="canciones/portada.jpg" alt="portada" style="width: 100%; height: 100%; object-fit: cover; display: block" onerror="this.style.display='none';document.getElementById('albumCoverFallback').style.display='flex'">
+      <div id="albumCoverFallback" style="display: none; position: absolute; inset: 0; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(90,50,120,0.3), rgba(30,10,60,0.8))">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="30" stroke="rgba(160,100,200,0.3)" stroke-width="1"/>
+          <circle cx="32" cy="32" r="10" stroke="rgba(160,100,200,0.4)" stroke-width="1"/>
+          <circle cx="32" cy="32" r="3" fill="rgba(160,100,200,0.5)"/>
+          <polygon id="albumFallbackIcon" points="26,22 46,32 26,42" fill="rgba(160,100,200,0.5)"/>
+        </svg>
+      </div>
+      <!-- Playing overlay with vinyl spin -->
+      <div id="albumPlayingOverlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.25); align-items: center; justify-content: center">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 1px solid rgba(160,100,200,0.4); display: flex; align-items: center; justify-content: center">
+          <svg id="albumPlayIcon" width="14" height="16" viewBox="0 0 14 16" fill="none"><rect x="1" y="1" width="4" height="14" rx="1.5" fill="rgba(160,100,200,0.9)"/><rect x="9" y="1" width="4" height="14" rx="1.5" fill="rgba(160,100,200,0.9)"/></svg>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center; padding: 0 8px">
+      <p id="albumSongTitle" style="margin: 0; font-family: 'Cinzel', serif; font-weight: 600; font-size: 13px; color: rgba(160,100,200,0.7); letter-spacing: 1px; line-height: 1.5">—</p>
+      <p id="albumSongNum" style="margin: 6px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 1px"></p>
+    </div>
+  </div>
+
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,100,200,0.12), transparent); margin: 0 0 16px"></div>
 
   <!-- Song list -->
   <div id="songList" style="padding: 0 16px 32px; display: flex; flex-direction: column; gap: 8px"></div>
@@ -1832,25 +1859,42 @@ function handleLogoClick(){
     const logo=document.getElementById('logoEasterEgg');
     logo.style.boxShadow='0 0 30px rgba(184,134,11,0.6), 0 0 60px rgba(184,134,11,0.3)';
     setTimeout(()=>{logo.style.boxShadow='0 3px 24px rgba(184,134,11,0.18), 0 0 0 1px rgba(184,134,11,0.2)';},1500);
-    try{localStorage.setItem('talmut_canciones','1');}catch(e){}
   }
 }
-try{if(localStorage.getItem('talmut_canciones')==='1'){cancionesUnlocked=true;document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('cancionesBtn');if(b)b.style.display='flex';});}}catch(e){}
 
 // ==================== CANCIONES PLAYER ====================
 const SONGS=[
-  {title:'Cancion 1',file:'canciones/1.mp3'},
-  {title:'Cancion 2',file:'canciones/2.mp3'},
-  {title:'Cancion 3',file:'canciones/3.mp3'},
-  {title:'Cancion 4',file:'canciones/4.mp3'},
-  {title:'Cancion 5',file:'canciones/5.mp3'},
-  {title:'Cancion 6',file:'canciones/6.mp3'},
-  {title:'Cancion 7',file:'canciones/7.mp3'},
-  {title:'Cancion 8',file:'canciones/8.mp3'}
+  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/1.mp3'},
+  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/2.mp3'},
+  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/3.mp3'},
+  {title:'Talmut. Este juego penaliza el fallo.',file:'canciones/4.mp3'}
 ];
 let currentSongIdx=-1;
 let songAudio=null;
 let songPlaying=false;
+
+function updateAlbumPlayer(){
+  const titleEl=document.getElementById('albumSongTitle');
+  const numEl=document.getElementById('albumSongNum');
+  const overlay=document.getElementById('albumPlayingOverlay');
+  const icon=document.getElementById('albumPlayIcon');
+  if(currentSongIdx>=0&&currentSongIdx<SONGS.length){
+    titleEl.textContent=SONGS[currentSongIdx].title;
+    numEl.textContent='CANCIÓN '+(currentSongIdx+1)+' / '+SONGS.length;
+    overlay.style.display='flex';
+    if(songPlaying){
+      icon.innerHTML='<rect x="1" y="1" width="4" height="14" rx="1.5" fill="rgba(160,100,200,0.9)"/><rect x="9" y="1" width="4" height="14" rx="1.5" fill="rgba(160,100,200,0.9)"/>';
+    }else{
+      icon.innerHTML='<polygon points="2,1 13,8 2,15" fill="rgba(160,100,200,0.9)"/>';
+    }
+    document.getElementById('albumCoverWrap').style.boxShadow=songPlaying?'0 4px 48px rgba(160,100,200,0.35), 0 0 0 1px rgba(160,100,200,0.2)':'0 4px 32px rgba(0,0,0,0.5)';
+  }else{
+    titleEl.textContent='—';
+    numEl.textContent='';
+    overlay.style.display='none';
+    document.getElementById('albumCoverWrap').style.boxShadow='0 4px 32px rgba(0,0,0,0.5)';
+  }
+}
 
 function renderSongList(){
   const list=document.getElementById('songList');
@@ -1869,7 +1913,7 @@ function renderSongList(){
     }
     const info=document.createElement('div');
     info.style.cssText='flex-grow:1;display:flex;flex-direction:column;gap:2px';
-    info.innerHTML='<span style="font-family:\'Inter\',sans-serif;font-weight:'+(isActive?'600':'500')+';font-size:14px;color:'+(isActive?'#E8DCC8':'rgba(255,255,255,0.5)')+'">'+s.title+'</span>';
+    info.innerHTML='<span style="font-family:\'Inter\',sans-serif;font-weight:'+(isActive?'600':'500')+';font-size:13px;line-height:1.4;color:'+(isActive?'#E8DCC8':'rgba(255,255,255,0.5)')+'">'+s.title+'</span>';
     const num=document.createElement('span');
     num.style.cssText='font-family:\'Cinzel\',serif;font-weight:700;font-size:12px;color:'+(isActive?'rgba(160,100,200,0.6)':'rgba(255,255,255,0.15)')+';flex-shrink:0';
     num.textContent=String(i+1).padStart(2,'0');
@@ -1878,6 +1922,7 @@ function renderSongList(){
     div.appendChild(num);
     list.appendChild(div);
   });
+  updateAlbumPlayer();
 }
 
 function playSong(idx){
@@ -1894,9 +1939,19 @@ function playSong(idx){
     if(currentSongIdx<SONGS.length-1){playSong(currentSongIdx+1);}
     else{songPlaying=false;currentSongIdx=-1;renderSongList();}
   };
-  songAudio.onerror=function(){songPlaying=false;renderSongList();};
-  songAudio.play().then(()=>{songPlaying=true;renderSongList();}).catch(()=>{songPlaying=false;renderSongList();});
+  songAudio.onerror=function(){songPlaying=false;renderSongList();updateAlbumPlayer();};
+  songAudio.play().then(()=>{songPlaying=true;renderSongList();updateAlbumPlayer();}).catch(()=>{songPlaying=false;renderSongList();updateAlbumPlayer();});
   renderSongList();
+}
+
+function leaveCanciones(){
+  if(songAudio){songAudio.pause();songAudio=null;}
+  songPlaying=false;currentSongIdx=-1;
+  cancionesUnlocked=false;
+  const btn=document.getElementById('cancionesBtn');
+  if(btn)btn.style.display='none';
+  logoClickCount=0;
+  showScreen('screen-menu');
 }
 
 // Override showScreen to render songs when entering Canciones
