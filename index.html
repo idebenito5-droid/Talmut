@@ -123,69 +123,100 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 
 /* ==================== RESPONSIVE / PWA ==================== */
 
-/* Tablet portrait (600px+): centrar panel con sombra */
-@media (min-width: 600px) {
+/* === TABLET PORTRAIT (600px – 1099px): pantalla completa, estilo app nativa === */
+@media (min-width: 600px) and (max-width: 1099px) and (orientation: portrait) {
   body {
-    background: #050E1B;
+    background: #081729;   /* casi igual al menú, sin franjas laterales visibles */
     min-height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
   }
+  /* El panel llena toda la tablet en vertical */
   .screen {
-    max-width: 480px;
+    max-width: 100%;
+    width: 100%;
   }
-  .screen.active {
-    box-shadow: 0 0 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(184,134,11,0.06);
+  /* Botones del menú más generosos en tablet */
+  #screen-menu button {
+    padding: 18px 20px !important;
+    border-radius: 14px !important;
+  }
+  #screen-menu button span:first-of-type {
+    font-size: 17px !important;
+  }
+  #screen-menu button span:last-of-type {
+    font-size: 13px !important;
+  }
+  /* Logo más grande */
+  #logoEasterEgg {
+    width: 108px !important;
+    height: 108px !important;
+    border-radius: 22px !important;
+  }
+  /* Título más grande */
+  #screen-menu h1 {
+    font-size: 34px !important;
+    letter-spacing: 10px !important;
+  }
+  /* Padding horizontal proporcional para tablets medianas/grandes */
+  #screen-menu {
+    padding-left: clamp(32px, 10%, 80px) !important;
+    padding-right: clamp(32px, 10%, 80px) !important;
+    padding-top: 72px !important;
+    gap: 16px !important;
+  }
+  /* Más espacio entre items del menú */
+  #screen-menu > div[style*="flex-direction: column"] {
+    gap: 12px !important;
+  }
+  /* Icono de la chevron de los botones también más grande */
+  #screen-menu button svg[width="7"] {
+    width: 9px !important;
+    height: 14px !important;
   }
 }
 
-/* Desktop / tablet landscape (900px+): panel redondeado flotante */
-@media (min-width: 900px) {
+/* === TABLET LANDSCAPE / PC (1100px+) o landscape ≥ 800px: panel flotante centrado === */
+@media (min-width: 1100px),
+       (orientation: landscape) and (min-width: 800px) {
   body {
+    background: #040C17;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
     align-items: center;
     padding: 32px 0;
   }
   .screen {
-    max-width: 520px;
-    border-radius: 24px;
+    max-width: 540px;
+    border-radius: 26px;
     overflow: hidden;
   }
   .screen.active {
     min-height: min(calc(100dvh - 64px), 900px);
-    box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(184,134,11,0.1);
+    box-shadow:
+      0 24px 80px rgba(0,0,0,0.85),
+      0 0 0 1px rgba(184,134,11,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.04);
   }
 }
 
-/* Landscape en teléfono (horizontal, pantalla corta) */
+/* === PHONE LANDSCAPE (horizontal, pantalla corta ≤ 520px de alto) === */
 @media (orientation: landscape) and (max-height: 520px) {
   body {
+    background: #0B1F3A;
     align-items: flex-start;
+    padding: 0;
   }
   .screen {
     max-width: 100%;
     border-radius: 0;
+    width: 100%;
   }
   .screen.active {
     min-height: 100dvh;
     box-shadow: none;
-  }
-}
-
-/* Landscape amplio (tablet/pc en horizontal, 900px+ wide) */
-@media (orientation: landscape) and (min-width: 900px) {
-  body {
-    align-items: center;
-    padding: 24px 0;
-  }
-  .screen {
-    max-width: 520px;
-    border-radius: 24px;
-    overflow: hidden;
-  }
-  .screen.active {
-    min-height: min(calc(100dvh - 48px), 860px);
-    box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(184,134,11,0.1);
   }
 }
 </style>
@@ -457,7 +488,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
     <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; color: #FFFFFF; letter-spacing: 2.5px; text-transform: uppercase">Hemos Jurado</span>
   </button>
 
-  <p id="dealerInfo" style="position: relative; z-index: 1; margin: 16px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.15); text-align: center">Empieza: <span style="color: rgba(184,134,11,0.5); font-weight: 600">---</span></p>
+  <p id="dealerInfo" style="display:none"></p>
 </div>
 
 <!-- ==================== FINGER GAME ==================== -->
@@ -1894,8 +1925,20 @@ const AUDIO_POOL=[
   'siuuu.mp3','Stelio_Kontos.mp3','tiki_taka.mp3','Vodka.mp3'
 ];
 let currentPlayerAudio=null;
+let _audioQueue=[];
+function _nextAudio(){
+  if(_audioQueue.length===0){
+    // Recarga y baraja el pool completo (Fisher-Yates)
+    _audioQueue=[...AUDIO_POOL];
+    for(let i=_audioQueue.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [_audioQueue[i],_audioQueue[j]]=[_audioQueue[j],_audioQueue[i]];
+    }
+  }
+  return _audioQueue.pop();
+}
 function playPlayerAudio(playerName){
-  const file=AUDIO_POOL[Math.floor(Math.random()*AUDIO_POOL.length)];
+  const file=_nextAudio();
   if(currentPlayerAudio){try{currentPlayerAudio.pause();}catch(e){} currentPlayerAudio=null;}
   const audio=new Audio('Audios/'+file);
   audio.volume=1;
@@ -2033,6 +2076,30 @@ showScreen=function(id){
   _origShowScreen(id);
   if(id==='screen-canciones')renderSongList();
 };
+
+// ==================== HARDWARE BACK BUTTON (Android / PWA) ====================
+// Siempre mantenemos una entrada en el historial para poder interceptar el botón atrás
+history.pushState({talmut:true},'');
+
+window.addEventListener('popstate',function(){
+  const active=document.querySelector('.screen.active');
+  if(active){
+    const id=active.id;
+    if(id==='screen-menu'){
+      // En el menú: no hacemos nada (quedan en la app)
+    } else if(id==='screen-canciones'){
+      leaveCanciones();
+    } else if(id==='screen-score'||id==='screen-finger'||id==='screen-juramento'){
+      // En partida: abre el modal de confirmación de salida
+      confirmExit();
+    } else {
+      showScreen('screen-menu');
+      if(typeof checkActiveMatch==='function')checkActiveMatch();
+    }
+  }
+  // Restaura la entrada del historial para que el siguiente atrás también funcione
+  history.pushState({talmut:true},'');
+});
 
 // ==================== INIT ====================
 init();
