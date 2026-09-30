@@ -128,12 +128,12 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 input[type=range].vol-slider {
   -webkit-appearance: none; appearance: none;
   height: 3px; border-radius: 2px;
-  background: rgba(160,100,200,0.25); outline: none; cursor: pointer;
+  background: rgba(184,134,11,0.2); outline: none; cursor: pointer;
 }
 input[type=range].vol-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 14px; height: 14px;
-  border-radius: 50%; background: rgba(160,100,200,0.85);
-  box-shadow: 0 0 6px rgba(160,100,200,0.4);
+  -webkit-appearance: none; width: 13px; height: 13px;
+  border-radius: 50%; background: #B8860B;
+  box-shadow: 0 0 6px rgba(184,134,11,0.4);
 }
 
 /* ==================== RESPONSIVE / PWA ==================== */
@@ -577,30 +577,39 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 4px 0 0"></div>
 
   <!-- Mini-reproductor de música -->
-  <div id="scoreMiniPlayer" style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(160,100,200,0.05);border-bottom:1px solid rgba(160,100,200,0.1)">
-    <!-- Anterior -->
-    <button onclick="scoreMinPrev()" style="width:28px;height:28px;border:none;background:rgba(255,255,255,0.05);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="2" height="12" rx="1" fill="rgba(160,100,200,0.7)"/><polygon points="12,1 4,7 12,13" fill="rgba(160,100,200,0.7)"/></svg>
-    </button>
-    <!-- Play / Pause -->
-    <button id="scorePpBtn" onclick="scoreMinToggle()" style="width:34px;height:34px;border:none;background:rgba(160,100,200,0.15);border:1px solid rgba(160,100,200,0.25);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
-      <svg id="scorePpIcon" width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="2,1 12,7 2,13" fill="rgba(160,100,200,0.9)"/></svg>
-    </button>
-    <!-- Siguiente -->
-    <button onclick="scoreMinNext()" style="width:28px;height:28px;border:none;background:rgba(255,255,255,0.05);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="11" y="1" width="2" height="12" rx="1" fill="rgba(160,100,200,0.7)"/><polygon points="2,1 10,7 2,13" fill="rgba(160,100,200,0.7)"/></svg>
-    </button>
-    <!-- Título -->
-    <div style="flex:1;min-width:0;overflow:hidden">
-      <p id="scoreMiniTitle" style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:11px;color:rgba(160,100,200,0.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">—</p>
+  <div id="scoreMiniPlayer" style="display:flex;align-items:center;gap:8px;padding:8px 12px 10px;background:rgba(184,134,11,0.04);border-bottom:1px solid rgba(184,134,11,0.12)">
+    <!-- Carátula miniatura -->
+    <img id="scoreMiniCover" src="" alt="" style="width:38px;height:38px;border-radius:7px;object-fit:cover;flex-shrink:0;display:none;border:1px solid rgba(184,134,11,0.2)">
+    <div id="scoreMiniCoverFallback" style="width:38px;height:38px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(184,134,11,0.06);border:1px solid rgba(184,134,11,0.15)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><circle cx="8" cy="8" r="2.5" fill="rgba(184,134,11,0.25)"/></svg>
     </div>
-    <!-- Volumen -->
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0"><path d="M1 4.5h2l3-2.5v9L3 8.5H1z" fill="rgba(255,255,255,0.25)"/><path d="M8 4c.8.7 1.5 1.7 1.5 2.5S8.8 8.3 8 9" stroke="rgba(255,255,255,0.25)" stroke-width="1.1" stroke-linecap="round"/></svg>
-    <input type="range" class="vol-slider" id="scoreMiniVol" min="0" max="1" step="0.05" value="1" oninput="scoreMinVol(this.value)" style="width:60px">
+    <!-- Controles -->
+    <div style="display:flex;flex-direction:column;flex:1;min-width:0;gap:5px">
+      <!-- Título -->
+      <p id="scoreMiniTitle" style="margin:0;font-family:'Cinzel',serif;font-weight:600;font-size:10px;color:rgba(184,134,11,0.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.5px">—</p>
+      <!-- Botones + volumen -->
+      <div style="display:flex;align-items:center;gap:6px">
+        <!-- Anterior -->
+        <button onclick="scoreMinPrev()" style="width:26px;height:26px;border:none;background:rgba(184,134,11,0.08);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="2" height="10" rx="1" fill="rgba(184,134,11,0.8)"/><polygon points="10,1 4,6 10,11" fill="rgba(184,134,11,0.8)"/></svg>
+        </button>
+        <!-- Play / Pause -->
+        <button id="scorePpBtn" onclick="scoreMinToggle()" style="width:32px;height:32px;background:rgba(184,134,11,0.18);border:1.5px solid rgba(184,134,11,0.45);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
+          <svg id="scorePpIcon" width="13" height="13" viewBox="0 0 14 14" fill="none"><polygon points="3,1 13,7 3,13" fill="#B8860B"/></svg>
+        </button>
+        <!-- Siguiente -->
+        <button onclick="scoreMinNext()" style="width:26px;height:26px;border:none;background:rgba(184,134,11,0.08);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="9" y="1" width="2" height="10" rx="1" fill="rgba(184,134,11,0.8)"/><polygon points="2,1 8,6 2,11" fill="rgba(184,134,11,0.8)"/></svg>
+        </button>
+        <!-- Volumen -->
+        <svg width="11" height="11" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-left:4px"><path d="M1 4.5h2l3-2.5v9L3 8.5H1z" fill="rgba(184,134,11,0.4)"/><path d="M8 4c.8.7 1.5 1.7 1.5 2.5S8.8 8.3 8 9" stroke="rgba(184,134,11,0.4)" stroke-width="1.1" stroke-linecap="round"/></svg>
+        <input type="range" class="vol-slider" id="scoreMiniVol" min="0" max="1" step="0.05" value="1" oninput="scoreMinVol(this.value)" style="flex:1;min-width:40px;max-width:80px">
+      </div>
+    </div>
   </div>
 
   <!-- Score grid -->
-  <div id="scoreGrid" style="flex-grow: 1; overflow-y: auto; padding: 0"></div>
+  <div id="scoreGrid" style="flex-grow: 1; overflow-y: auto; padding: 12px 14px 8px"></div>
 
   <!-- Numpad -->
   <div style="background: #070F1D; border-top: 1px solid rgba(184,134,11,0.15); padding: 10px 12px 32px">
@@ -1480,10 +1489,10 @@ function renderScoreScreen(){
   });
   const minTotal=Math.min(...Object.values(playerTotals));
 
-  let html='';
+  let html='<div style="border:1px solid rgba(184,134,11,0.22);border-radius:12px;overflow:hidden;background:rgba(10,27,51,0.8)">';
 
   // Header
-  html+=`<div style="display:grid;grid-template-columns:${colTemplate};position:sticky;top:0;background:#0A1B33;z-index:3;border-bottom:1px solid rgba(184,134,11,0.12)">`;
+  html+=`<div style="display:grid;grid-template-columns:${colTemplate};position:sticky;top:0;background:#0A1B33;z-index:3;border-bottom:1px solid rgba(184,134,11,0.15)">`;
   html+=`<div style="padding:10px 4px;text-align:center"><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(255,255,255,0.15);text-transform:uppercase;letter-spacing:0.5px">R</span></div>`;
   matchPlayers.forEach(p=>{
     const name=p.name.length>6?p.name.substring(0,5)+'.':p.name;
@@ -1546,6 +1555,7 @@ function renderScoreScreen(){
     html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(184,134,11,0.08)"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:16px;color:${isMin?'#6BBF7A':'#B8860B'}">${total}</span></div>`;
   });
   html+=`</div>`;
+  html+='</div>'; // cierre wrapper con borde
 
   grid.innerHTML=html;
   updateNumpadContext();
@@ -2158,12 +2168,39 @@ function updateScoreMiniPlayer(){
   const titleEl=document.getElementById('scoreMiniTitle');
   const icon=document.getElementById('scorePpIcon');
   const vol=document.getElementById('scoreMiniVol');
-  if(titleEl) titleEl.textContent=(currentSongIdx>=0&&currentSongIdx<SONGS.length)?SONGS[currentSongIdx].title:'—';
+  const coverImg=document.getElementById('scoreMiniCover');
+  const coverFb=document.getElementById('scoreMiniCoverFallback');
+  const hasSong=currentSongIdx>=0&&currentSongIdx<SONGS.length;
+
+  if(titleEl) titleEl.textContent=hasSong?SONGS[currentSongIdx].title:'—';
+
   if(icon){
     icon.innerHTML=songPlaying
-      ?'<rect x="1" y="1" width="4" height="12" rx="1.5" fill="rgba(160,100,200,0.9)"/><rect x="9" y="1" width="4" height="12" rx="1.5" fill="rgba(160,100,200,0.9)"/>'
-      :'<polygon points="2,1 12,7 2,13" fill="rgba(160,100,200,0.9)"/>';
+      ?'<rect x="1" y="1" width="4" height="12" rx="1.5" fill="#B8860B"/><rect x="9" y="1" width="4" height="12" rx="1.5" fill="#B8860B"/>'
+      :'<polygon points="3,1 13,7 3,13" fill="#B8860B"/>';
   }
+
+  // Carátula miniatura
+  if(coverImg&&coverFb){
+    if(hasSong){
+      const base=SONGS[currentSongIdx].cover||'';
+      if(base){
+        const exts=['.jpg','.jpeg','.png','.webp'];
+        let tried=0;
+        function tryExtMini(i){
+          coverImg.onerror=function(){
+            tried++;
+            if(tried<exts.length){tryExtMini(tried);}
+            else{coverImg.style.display='none';coverFb.style.display='flex';}
+          };
+          coverImg.onload=function(){coverImg.style.display='block';coverFb.style.display='none';};
+          coverImg.src=base+exts[i];
+        }
+        tryExtMini(0);
+      }else{coverImg.style.display='none';coverFb.style.display='flex';}
+    }else{coverImg.style.display='none';coverFb.style.display='flex';}
+  }
+
   if(vol&&songAudio) vol.value=songAudio.volume;
 }
 function scoreMinPrev(){
