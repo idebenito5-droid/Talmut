@@ -39,14 +39,14 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 }
 .player-card .avatar span {
   font-family: 'Cinzel', serif; font-weight: 700; font-size: 13px;
-  color: rgba(255,255,255,0.25); line-height: 1;
+  color: rgba(255,255,255,0.5); line-height: 1;
 }
 .player-card .pname {
   font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px;
-  color: rgba(255,255,255,0.3); flex-grow: 1;
+  color: rgba(255,255,255,0.55); flex-grow: 1;
 }
 .player-card.selected {
-  background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(18,40,68,0.4) 100%);
+  background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(10,26,56,0.4) 100%);
   border: 1px solid rgba(184,134,11,0.35);
 }
 .player-card.selected .avatar {
@@ -59,7 +59,7 @@ body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B1F
 /* Guest cards */
 .guest-card {
   padding: 10px 12px;
-  background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(18,40,68,0.4) 100%);
+  background: linear-gradient(135deg, rgba(184,134,11,0.08) 0%, rgba(10,26,56,0.4) 100%);
   border: 1px solid rgba(184,134,11,0.35);
   border-radius: 10px;
   display: flex; align-items: center; gap: 10px; position: relative;
@@ -239,7 +239,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 <body>
 
 <!-- ==================== MENU ==================== -->
-<div id="screen-menu" class="screen active" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); align-items: center; padding: 52px 24px 32px; gap: 0">
+<div id="screen-menu" class="screen active" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0A1C38 100%); align-items: center; padding: 52px 24px 32px; gap: 0">
 
   <!-- Logo emblem -->
   <div id="logoEasterEgg" onclick="handleLogoClick()" style="width: 80px; height: 80px; border-radius: 14px; overflow: hidden; box-shadow: 0 3px 24px rgba(184,134,11,0.18), 0 0 0 1px rgba(184,134,11,0.2); background: rgba(184,134,11,0.08); cursor: pointer; -webkit-tap-highlight-color: transparent">
@@ -265,67 +265,67 @@ input[type=range].vol-slider::-webkit-slider-thumb {
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Continuar partida</span>
-        <span id="continueDesc" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Retomar la partida en curso</span>
+        <span id="continueDesc" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Retomar la partida en curso</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#4CAF65" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"></polyline></svg>
     </button>
 
     <!-- Talmut -->
-    <button onclick="startNewGame('talmut')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(5,14,32,0.88) 0%, rgba(3,9,22,0.72) 100%); border: 1px solid rgba(184,134,11,0.45); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left; box-shadow: 0 0 18px rgba(184,134,11,0.07), inset 0 1px 0 rgba(184,134,11,0.08)">
+    <button onclick="startNewGame('talmut')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(8,22,55,0.82) 0%, rgba(5,15,40,0.68) 100%); border: 1px solid rgba(184,134,11,0.45); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left; box-shadow: 0 0 18px rgba(184,134,11,0.07), inset 0 1px 0 rgba(184,134,11,0.08)">
       <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
         <img src="Logo_Talmut.png" style="width: 32px; height: 32px; object-fit: contain; display: block" onerror="this.outerHTML='<svg width=&quot;28&quot; height=&quot;28&quot; viewBox=&quot;0 0 28 28&quot; fill=&quot;none&quot;><rect x=&quot;4&quot; y=&quot;2&quot; width=&quot;16&quot; height=&quot;22&quot; rx=&quot;2&quot; stroke=&quot;#B8860B&quot; stroke-width=&quot;1.2&quot; fill=&quot;rgba(184,134,11,0.08)&quot;/><rect x=&quot;8&quot; y=&quot;4&quot; width=&quot;16&quot; height=&quot;22&quot; rx=&quot;2&quot; stroke=&quot;#B8860B&quot; stroke-width=&quot;1.2&quot; fill=&quot;rgba(184,134,11,0.05)&quot;/></svg>'">
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Talmut</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Partida oficial &middot; 10 rondas</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Partida oficial &middot; 10 rondas</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
     </button>
 
     <!-- Blue Lagoon -->
-    <button onclick="startNewGame('blue_lagoon')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(18,40,68,0.5) 0%, rgba(12,30,55,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+    <button onclick="startNewGame('blue_lagoon')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(10,26,56,0.5) 0%, rgba(8,20,46,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
       <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
         <img src="Blue_Lagoon.png" style="width: 34px; height: 34px; object-fit: contain; display: block" onerror="this.outerHTML='<svg width=&quot;28&quot; height=&quot;28&quot; viewBox=&quot;0 0 28 28&quot; fill=&quot;none&quot;><path d=&quot;M14 4c-2 0-4 6-4 10s2 10 4 10 4-6 4-10-2-10-4-10z&quot; stroke=&quot;#B8860B&quot; stroke-width=&quot;1.2&quot; fill=&quot;rgba(184,134,11,0.08)&quot;/><circle cx=&quot;14&quot; cy=&quot;8&quot; r=&quot;2&quot; fill=&quot;rgba(184,134,11,0.3)&quot;/></svg>'">
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Blue Lagoon</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Partida r&aacute;pida &middot; rondas libres</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Partida r&aacute;pida &middot; rondas libres</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
     </button>
 
     <!-- Historico -->
-    <button onclick="loadHistorico();showScreen('screen-historico')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(18,40,68,0.5) 0%, rgba(12,30,55,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+    <button onclick="loadHistorico();showScreen('screen-historico')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(10,26,56,0.5) 0%, rgba(8,20,46,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
       <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
         <img src="data:image/png;base64,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" width="36" height="36" style="border-radius:50%;object-fit:cover;display:block">
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Hist&oacute;rico</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Partidas jugadas y estad&iacute;sticas</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Partidas jugadas y estad&iacute;sticas</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
     </button>
 
     <!-- Hall of Fame -->
-    <button onclick="loadHallOfFame();showScreen('screen-hof')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(20,48,85,0.5) 0%, rgba(15,38,70,0.3) 100%); border: 1px solid rgba(100,160,220,0.15); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+    <button onclick="loadHallOfFame();showScreen('screen-hof')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(10,26,56,0.5) 0%, rgba(8,20,46,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
       <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
         <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(184,134,11,0.35); border-radius: 6px; background: rgba(184,134,11,0.05)"><span style="font-family: 'Cinzel', serif; font-weight: 900; font-size: 22px; color: #B8860B; line-height: 1; letter-spacing: -0.5px">42</span></div>
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Hall of Fame</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Estad&iacute;sticas y clasificaci&oacute;n general</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Estad&iacute;sticas y clasificaci&oacute;n general</span>
       </div>
-      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#64A0DC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"></polyline></svg>
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
     </button>
 
     <!-- La Maltesa -->
-    <button onclick="showScreen('screen-maltesa')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(18,40,68,0.5) 0%, rgba(12,30,55,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
+    <button onclick="showScreen('screen-maltesa')" style="width: 100%; padding: 10px 14px; background: linear-gradient(135deg, rgba(10,26,56,0.5) 0%, rgba(8,20,46,0.3) 100%); border: 1px solid rgba(184,134,11,0.18); border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; text-align: left">
       <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABYCAYAAABWO7HcAAAp00lEQVR4nLW8WbNlx5Xf91uZuYdzzj13qltVqEKhQMwEyCYJ9kA22d0MqhXqkOS2Qw8KhR0Khf2s0IM+gb6LHmy9OBxyhO1wS7Zalkyxm2ITTRAkAAKoAmq8ded77pn2zszlh8x9hltVbLYkb/Kgzt1nT7n2Gv7/tVam7L38OwoA+R9AMQDI2j7J+yLP29J56cjuv911BUn7NAKS/6/PvdZyk8W907UEyNdYeSbVxWWfOp9f6z7P3tzlk3XlFpqHtT7ov+qG3ZF66bhuBJLv8Os+tF76d10E3QsTkUvH/ZfZ3PIxzDMPuCykX7UJmh/v2Q/5q7TvV1939RXpc7T5eYJZtwJB/1pK5dYFc/ktXb7K8vdVwS3v+FcL8fmbsKqnl7VPVrT3P/0eT3mTv3IzyZ6frb4shPCsG102n//0Tdf8zPOGf/mef92tG8tfT4sdGrL9mvwYnTZ0F3y2PnaC+89zgd211nXzv7QfgW5cZuWFL0f3q+7nELu2o7uAPqXy60d1HicoGFm67yRsXb/lr63Z//8IBy4Lfjk2feb4lpu7/P7SY3Zmp6z7m3RMUAhRqU2k75QmQItFFZomINIJSjCmE9zyDpK/LI1q1e88Xyf/cw35Wfv+Kn/mlhqzdNararf+6ELE0Dczbg7mvLZb8PbtbT4/mvF//GLCZs/y1pf6jObKdB7wKkzbwNxHggo+go8QYiRqumd3X9VlBFxGqaUZLwQsgnlOrFyL9CvfnxbN8rrrBz9DQCxut34nRRFdiXAqeFW25YQv77RIDNw/gjde2mI+m7IT9vneq7d4980t/vQn96GAsjT4oDReiQo+KpN5ZOqViNBGiCqIGBTBxxS4gxqiQoiCitBGwYdkzkGFVg2qipWYnlXJH8VHMGKymAVrBSeXTF5AdOWP1a+XhOGelm5Md1s5VgGNgRvFKVeLC7540mLEEsXy4GjKRRNQjdTO8G/eu88HXxxTlY4QQcSCCEaSmYaoNCFiRDCAESESQRQrhkLAGkNVGqwIhRXEGNqg2KJgu1/zZOQ5nUVeuT7gfOLxMRJVMMaxWQcOz6YEWzBrPIcXMA0FtnvXnX3/mgbrVn3N0vmuiieiark5mNNvzjmfKiEoVSVEhLOpz8jf8OhkwtwLb31pEzFwPGqxRihckXCMwHjm8UExmTE0baQJSgzJr7UAbct4GlFNocIawYihcI7pxZh+admRyP7DU0TSyI2AGsHheHOnYG+3pF/BuFX+5/caRo3Fmu7dP8fXPUNmbolM5akDBfAxsjssGRZw76BFYmSn79ItjDCeB2pjMAKTuacsS8RYDo4bRvOAEcP2Bgx6lsncY4zBEhnWBiOWNkQg4IzBWoM1UBihcJmviRBVsJJGN288o2lLbQ1WShRHjDCbzVFV9i8a9i/mfHYwZadf8JtvbPHituH9Ryy1qBuikqnPrwjza8JZnJXhOOktDnqO8VSxxlHYFmMMRoQAOGMonSb7D4p6RQQGfcvulmPSCKrCk+MJg16BNULTGs7GHiUQo+IMOKuIBATFWYOzUBUOMYoVAWcQA64QtsSxtVVROMPJ2RwRodgZYogcnU3AWIyB3eGAo1GkVwiqEVnxt4KivwYkd085qbUvERHFe48Tg3EObRsUMMYSVfAhEq1gJGNUFeazlotJw5df3qQqlZNRy9Wtkuk8srNRsTMUHh+O0RAYjRqsSURCM55yViicwRmPsek3I5Lgg03+zLqCWRuYzALOGqoy4pwwDxY/V67v1qhRxjOlX5YoDZfNSn4NX+SSUSpIp3+GJRxPIMYHpbIOjCEoRFWsFUIQgioiBmsMPkSQSOuVwhUcnjZcv1IzP0lC2NkqiVG5c/8EVUGjUliziECSXUOMMG8CLRFjzNLPGMFai3MwmQcQ4dUXN2nawMUsmemNvQEvXas5OJ5x58mIvi1AzSKydds6rHk+/nJLYVzCA6JJQApiHK4s0YQACTHS+oiaEoxJodQZZj4yb1r6tbBRFjTec+fRBXubPU5HDZPZlPNRC5LCr7GCDwFIGiimE0R6u0aScIxNL8qKUBQWDXB42hJCoGk8b35pDzFTpvNAYS27Q8enDzyFS8I3mjRw6UIMq6j9eUy0U5f8y4r0unMzwFARxDqMdKAuAciESzSBNxHaoDRBCTEmcwB6peP0ouHW1ZqLccRYg4hkwKhJQ0wK5WIM1lqstRhjs7ZYnE0f62x6SgPOGXp1wcUk8Nn9U05HLU8ORhRO+PEvzxFjqZzF+0hdWIwoMXNOZTm2DtI8DzCaJS54nsdKpmAkvVGTKUSIKTtYl8n0BNCoOGuJUZg1gaos6FeO1kc+/HyEtekezqaoF6MSYwr51kj6W9M+kIy284OKIcbsi2yiMM4JVV1yeNpw//EFf/jt2xyeNUQVqqpie1ijwKC0OCPPQNWr45YV/rnc55ISrYb4S4RR0kMbY3DO0ZAGc22nRxTY3SqprEXFEILPb9fibMJJg37J8dmc8TTgnKEsDGUpvLQ7YDb3GAOnZ3PK0tHvOUbjlqowzJvI1rAkRGh9ekG9uuB0NGejn1xnCIEQNLlPI/zZBweoGna3S6aNYVgXiEDUiLPK3K9kHmUl5l9WCJaZp6d5RhbgUoZCVIXgIQSqwlJVlkFP+OqbV/j+d1/i1RcrtvqWtg2EEBj0HP1eiRHlYtJyNvIZ4wjeR6rSMp56hoOSECJXdmq8DxRWcFbYGpZYaygLy81rfayFrY2Cfs9yZbvi2k5NXVo2+gW3X+gx7BdMm8Dnj6eUhaEoHBoDkyZQlI629Tizmot8zqYxfVhyUCOirKcuL5ubEKLi25atvmPQL7l1vc/f+NaL/N7X9xA/pld4rm6XSDYVJfkXgAcHE3w20aiJapSFpSwc5xcNbRuJMYFOJEXIENJn/3DKfO4xIgyHFY8PJ+xsVtSV4fxijjWGwlmsEbYGfYb9kqPTBqJSVgbrHFVhaXxgaV9pvN1nnVB1/y7l4ZZiiGuhb8GoDXjv2RiUhGi4slVydbvk3/3oDkcjTxsMW5t9/NRTF5Zer2A6C2wNFCsOKwZjIs5lnG9hNg/UQ0uIgiscF1PPcFAxmgb6vQJrDYOepQ3ZXJ2lqgzWwoMnF1y70uPm1QHOGYJqBoFKVVpm88gXjy/Yu9InRGFj0OP4bESMZoXuXzaZLBhZNadUOXG6yLJd9j3ZDjNeUZTKNAjKz+6c0QTD9uaA27d3ubk35Gcf3MWHyPnFmCvbA2JUqlqIGrHWsEhaqlCUltOLltbHRCWiotPE0RBh2szZGdbopGXWRE7O51y7UrO3Uy+yA6jS+oSFhgOHj8nH2VYZTRrKynJ9r08z84zGLfNQJr5GuoeorijEMtCv11wkkdUuIbaESkqHwzVGqqpmUCij2YzDM9jqV9QlTKYtd+6d48cBi03OXKEshI2e48H+BBDKIplp8CCiHJ/OUZK/8d4TgzJGsdYwmia6cXbeUhWW8wuPs4aP75zjsr5Xlc04KeEy78MiChpr8F7p10XSMBEGdYWeZ7+sifo8Dz+vZoqgQ4JrGCD7oIwPfIhc26lpJueczgRjhOOzCfuHY1SFXq+mLAucNcQYMUZofWTQM/R7DlBCiDjrGNRVuoOYhNdDxACFtQx6FUpi7GXhcM6BCC6DxKRpKRXifUL3MUT8vEkZmiiEoBiTaMrR6YzD4wlF6RjUDivZGtbG2ZnSs+p4CwFxCSx19pUuYF3B8eEx0zayu3eNs3FLG7JPQdEYmfuIFYNG5dpOP3GljJZDiFSFwxpDBMqygJzG0JhohXHC+WROYS12ka6FImMlYiLD1gjz6Zx+YSgMCYXHSDOfEULAh4BvG6xRmnlLDIGgSq82bPUNPj4vv86akFb1y6weszhdl6DKGjidghvsMW4s1hZYEUSEpvXM25bGB6w1GAOTmc+3UZomUBWOEJW59zQ+4H0AjRmhKmIMMcz5o++9SQwtGlNU6ztZ+AwVoXTC6emIl25usjmsEQWjStRkWq33BB+wsSX4sMAw86ZlMpuzXZsk7KckJJf+Wi1+LrzUquqFpHbSSRNUHOczg0rK2XSbbxqa+ZwQUopClZzQh8YndW9DIGY/FzViBRCDcQmvFIXl+GzOi1vCP/unf0hZO4iRKIZ5FIJYjDGcnFzwzms7/N67N9k/HuPbQPD5WYkETT7MWYMJAR9S+jVpqeDMKsVYDe+XxUMO/3FFgxbY4LIv0uyOBMVgjFmgh6iRGCPBe8TmZJc1+BhoWk8I6QHq0i3SGc6mwRojFNYSQsoH9euaf/3/fkIzm/Pf/fHb3L61ycGoJZoCFcPB6Tlff3uXb7x5hY8+eczZ+RSRlKvSmOCJqlKYZQojhsh01lLYiLOJgaXkvyLS+ZuQP0ud6c7vpGCWoW1Fixb8zCykqghiksqHmNITxqQHa3xyzulj8CGdlXI5if13/soYg/cNXmMin6r0+z0eH0356O4x577kH/zx1/j2129wcjrmYnTOt9/Z4dXXXqCtNzibtPmeYRFLAolUNo3nfNoy8Yn8xpj8WekMTvzScGTV72RVyPkmZL1zxC1z0KuaFkFXOJpmKGAcXeBL9pw0rK4t1mawEMHYlB8CaENAY6SNSukczhk23IC2Y/05x3MeCh48eMx3/+C3ePLkkN/9jSts1oqLDYNBhagwrByHJ1MKZ2iDB2wKBqTUMJJekgrE6InR0EbFh4io0HWWqK7qSRe1SePRpTQE7ZD0ekZEVBb9Nt0WoyaZkSOTNQwHJYONip2dAWVocdYQQmLxJpuTZryS8jFK23ramCKYMQZnUrWt1+vz4SdH/N63xly/OkTqmjeawMwrL926wpP7+xwenDEaB4xYQkzRZnEtKwRJqZcYEgANwdC0IY99WW1bHXE37iWIXiXv2Ukv5bCKibK30RRiY1RUIcbIzkbJ3lafsjDcvrXFd755nZ0tSW+xu6VJ7yhEwRpDbZMKt0HRmN5USqMajCh1WbB/6vn87gMC8L2/9Ue8/Z3v8s3vfYff/6O/SXA1hwdnnE9DTuOYnPJNyDj5vESGlVSDm7dKjCkoG5sHrkutkUXM6mjGEiB3InTrHHdJOWSRREscxmcCuD0ooGl54VrFN79ynRvXt9kcGh7YhiubJY/PPWWdhJDqppHCGDySIk+IVFUJJEIbNKV7rVHU1vzo/fu88soN9h8f8+433iF6z8lojnOGB0/OCWKTW13DNAkcNm3AdeRULE1QCmeZtw0xhEXCb6kOnTattNfIum65dfPqMm5LsJTRPDFGBhW4Em7d2GB3u89Hd0/51z98wMFZwws7A6ZtihAxpiqotYbCLCnL9tCxsVHzyd0TyrKmrAqESIgpMxlVeHw4o5mMeXjvE27cvIYpBnz26Yc0FxeMpy3Tec5NiUE04pxjMmuZzua88aVtDI7jkWc89zlFDE3GVlaeld2JrCbKLnvkbGKrULuLXqtOGjR6Cidc37RcTDz/z08e8d5HpzjX4/vfeZvfeOsWJud6fUwlIGOEKPnKYji7mPD3/sZb/MP/+ivsblmOTkcpiWUcPrS89XKfd79yk7ufH/Dx+x9w7959hMgnH33E4ZNjvvraVd798lXKwqAiRDE8OjjDlso//u9/i3/yD3+Tk7MJc5/Sq4npJ2x2KS1IN24W++PK+Fe5mJocsbo8SProQo+EGCMbGz1Kafj88QX3jwMbdcn2wHE+nvGTXzzhi4cXGOOSb9FMIYwyb2ZM53OsFaYz4U/+9H0qZnz/d27w3/6dLzOsI8dnY07Px/zRN2/w9Vev8id/dhfBcDaZcXFxTmwbPr53wtwrf/9vvoVGz8ODEWfjC/7+f/Ub/NP/4dvsbRT8L//nL3h82uJjzH7K4n1I1MekQKErhrWa9xGS9q9X8WWZD0JNAl9c3hQxwpVNy8HROW0xoJKGyXjO6WiOFCV79QbO2aUe5sSXMYZATi14z/bWkJ/dOeHKTh+7NeTqtuMf/N13+PCTA/afnPDLu0e8fusK169s8eCLQ67e/xxpRvjJlPE8srcz5BcfPuT1a31ee2mTv/OHb6PW8smhp76Y8uOfH7IxHKAxpIRdxjtVYQmtYkQJ+qzekCUXvVwrc6xuajLKjMvTNFUhxpOGjf4WrT/jycE5pQTqsgCB4AOCpLRmTK0u8ybnZ0wBmurvzkSk6PPRpwd8/zvbtPM5jy8mXLtS8rVXXuSnnx7zP/1fP+Od23s8eXzK47v3+eLRGWf7x1zb6vOjDx4wD5F/9Mdfo7dZ89m9E+bBcvPGHr+8e8rZDIYbECQ9S+tzzlpIcEKWGOgZpOyZ7GMpIIkLIalYOlbb5YoeHkx5/YWasylUZUFFx8tM6uBgiayNQAgAHkNcREF8oFfXPDhr+ODnX/Dlr9zmj/+bv8XnD/d58HCfV27D21/a5c69Uw72x8xOzohXBlycjQDhN9++wc2rNaNg2bv9Ln/7axU/+dGf8/jxPj98f5+6VzNv2kU2wLeKj9mgNOCMZRZWTGyFpK/74GcJ6JJUV7GRiNK0kVYrer0aH8YpfDuL94r3LZBQbFermbWRXiI/i3KNycktU/b4+MEFL784Yv/knN//g9+lt7HFj374Hn/5H/+cvWuwUyp7ZeTk+AEvXx2wO4yUWxsMX3+H3//938HZPlGU4Z0v+NP/+z2OLiJVJZC1OFV/C+ZtpA0RHxLcQBMf0wWdWk9vrDvqDkkLdBRCF1LtAt8CSi2Ket5Ygo/EqFltE21Iya10xrxpqZwlKjRNQ1VVtCESiThnOZkYHjw85sO/eI8vvXKTHUq++dvv8tbbL3F8PuNP/vd/yycffsB3vn6bn302YbpznW99/7f57W9+g7YJTEZHHBydcu8XH/LocIySUDwmcT9rE9pumobCGlpjcDk9uK4k61XWhXpkObnu+2KKwAqPXSAkSS1zUUGsXWQMNKNhVSGQOBVA27YU1uKMJQKucKgGVFMmwCRsSNnvU/T7+LbheP8LngRDlMinH9+hCjOuX93ii4cn9OuS2rX87C8/4O7DJ7xx4wVee/U61rRMI7x0dYMPHx9TFH10Bc2ragKPZgk7tDMt7YSzwsMW2rM0P7eyi1Wav557k0Q3NKb6uUmO25rE2SKRNmhOh6QUR6TTrEAMMCgNM5+40mTWcG3LsXN1i63tDeLkjHv7p/z4/c/ZdMLs8JjP7j7m9s1ddGOL+fEB9+5/ymuv3aBopvzg8JzR6Jg3X73JV3/zHWZnF9x6OObxWUvpTO4pirntz2KM0oaIyX42jdew1v+ikoXyFJK+FPB0lWYsNUrRnD5IAtLFXqENCY2ajJp3hzVH4xk+ZlanMGmUSMBax3w25ctfu0VAOHn4iJ8S+fzOATqecWf/iI8fHLN3ZYipa974nW/wkz/9AaY34T9++ITBp4d84ys3+fnBQx7cf8KL14cUww3eujlk/+wYkZRCMQhBI20IlM7Qth5jIl1Diyz4l6z4FWFFQ7KJsXKcLn976tsaIjWL9Fp3jg+RUkyKB5oS9ZBq4vOsfdYYZvOGa7s9dq/t4jZ6PDw55c7DT/GnpxydTfjpvQv+4N3bHB2fUwx6vPn26xw8eMTR4yNuXt/lk0fn/OAvPuedl7dopxOOHg+Zuz4vvfoSrxxM+OSgoVe5RF5VCD4iVfKRZkHFuvis3Z9ZONnNLEwu9YAv8jqradYVncqOOPGx5IRzF2pQVJPvmTcpbQXCbN4mp54TaKguniEEzyu3dtl/coSocnZ0xns/+YR/9ZPHqCn5R3/7K1yMZ1zMAtdvXOXWzVtcuXaFjY2aj+484e9992VeurnDv/i3D/gf/7cP+OC9j9lozkFbvv7aLgZPDEs/lCJoyoAajSvWcWmTuPJ9+XWRckUT/e8whKwJKqc8UhKPEGJuHtAE62NkZ7OmqlKzwHTeJJkLy+tJYvN7Wz2+9c3X2dnd4j/88AP+/Y/vMmZIvbnHJ48nlJWj8crVnR79rW0K6+jXJeVwk6ubFfcenzJpFdfbwFRb/OijEf/iX/4FH7z/Cdd3e3z3qzeYzprchZLHa3KniHYl57BuH7p0JVmsi7/dwti6+LemPh30ThrkY6Qy5PxQxDioqoKiZ+nVQowpis2aFlNUCAaTW17EGNrJlFffuc5Hnz3kz/78I6YN1BtXmPpIiC1RDf/8f32fr7+xx8s3dxh75fzsmDffeYOff/aIL0/O+fcf7LN/7ulVPTQE+r2KWYj8+NML7h/+krdfu86w5/Cd7Utq1EoqrKxnUFcFs0pWl+Jza8c+Z+t+CjFxNbGpulkX8PKLQ958/QW+9Vtv8IP/8HN+agI+Jl4vkju7crqkX5d89NE9Zo3iqhpbGyazeWqOMoJIwdFF4M7DU7769otcv77D+fFjDJ6r232OEKbRokWJakQ1EDT1XPf6NeeN8OcfPGG40edoNEdMwmFOupmQccVClkqwDPGXR6wJBy0EJt3BibN0+RFFEEmOrnTCRiU4a3n3nau8eHXAydkZ/+rf/ITpeM5Gr+DoQqklaY9zSeNUFWMd0RQUfcOkmRM1UBib+6GFQGqN2Rk6tKzZ3Sw52r+HivDarR0e7O1xffOcw4cNZWkJpN4lEELjU6LGGg5H03S94NFYoDHQFSvNuoKsbBYkJG+ThSSAe6oXNgtqlXR0UxJi9FgCGzZwbafi0ZMz/uy9e0xboT8csj0cMGkFI5HWp9So7SIbig+BNqRbWzHEPBXLiCVq6lWsLGz1HU09YPz4C376YIQPnt99+xa9zSF72z3Kx/OUkzaGGJQQwiIZ1uY6Pbm/sclZTGO61Ngy8j418JX9HTdbMbEVJKkdo++SZ2QBaVJXbfj0wYzZzLO10WO4s8lLL72A08Do7JzZ3BM04jWXfnIlNsa4sPoYY+oaMYCk/W0IDIznhRevEqZj/t0P7nF0GjDNjH/52SOqqmZ7d5MbWxc8HKUykgDWCjGzdslTBInp+X1Q5j5kzUnHL11wpxE5tfwUzzcrTvqpbem8VAwxeq5duYbM73PnyZjCOa5sVMx8YDryTO6ccGNY0obkc0QMXeZERBZ1NB9CYj8xNYjHGLEmNW1KiGz0HVW/x5ODEacPjpAYOTmf8sJFQ//WTbavXeXa/Sc8uWhTrkCTWVhzacaAdPW45A7KomDWdDmhVeF0Y70shxS43DJJrZdOWJVzKutu9SKH+yNsURGC59HxlKqwuF7qKyxLu+hR6ioWQiTGZD7WWISAcw5VpfUtIQYKXJ7sArubFYejBus9Op/zo8/HzBrl4GzOb1WOaeGwVYmTGe3KIztjE85ShZg6cFVTv3bhLIXLTKBJAPZpJ3RJOGtsfo2JrdePFkYrhvuPDhnUG2gD48mc2nTaknGGaNIEsp+xgvct86bNZZd07da3i8yAhoAPnqgWIbKzvUE8O+PxwRk/ezjBFDV9B0/GDT/8YJ93RlM2N3v0K2Xa5J6AGJNJh055BDJXbHxgOvc4K4xjmoIlpnMjqx77MllPX82S/svif52wFFlm4GLkeCyYehNsTVHYhZYkpq75oZbgMEYlkhykxpibxlN3quZuWpunJIYYKArh6u4mT07G/PThDFyVfKcqVVUQ3ID3Ph+zf3jO11/dBfWJ/wm5I1+wXcsT5I4Tw8W0pTRQVTWtPnOGXBbI09bkFiBRV2j+ois9Hy4pzEcsaiqsXVZejUkTRUIMiKYGpy4gTOapqmlEUGMgKm3TIkYIISycN6Ta+kbP8fHnB3zycIorykW46a4xmTfUZcXPvpgwmUUGlWXSptgUQyKoUVKTRNDUi1RY6NcFvdrhLPRLofHP6BO63L8oaRC5gWrFnC4ft3KBqCm0JhC4MtNUJXe1pjYTSKE3xQZL4dKsoE4gxqRutK5aq1EQa5lMW+4+HIGrcmFQFtypwzvzeUtd1zw8g6qssAZKmzS9jREjBmtsatiKys6wZHezBiNcTCcMXOJl3XIWa6haV7Qna7iRyzkR7TRqhelm00tmYTKvya2+ueenaVom0zZzoHRu8JGNQcGLe4PUt2NSxlFkOf8rxqRJwSteKoJUiYEbwcel6WZ1T61+IUGIs0lLYYTSpB5sZ+wiYgoJg82bRIu8DxSFw4ou2nmWCiBZ65OGqApoelazQM8rbL7TmMtVxphLKcbaxVudNam/Zqvv2NrpUZYuHaeR8aRhPvNM5zFNZhPBOZsfJs/TyBFTJNI2niYoYiyQ5m4gBoNkjV8+n6Gb3knqHLHJKadOlOX0qX6v4PSi5WLisWLoFYl+dBXjNbPJhcYFX9OciE4zjlengndmt+7RNUczYyw+45gr2302eo7aejb7jqK0BI2Zf8F0rtSloXSpK8RImtLQOV9jbdbMmOZsqBITZ8DaIgmxo0HEXCVJZu2EPM8DrMsBomtIjzCohBu7JTF3z8/b9MxPo75VkNz9nf7rVo9ROlDHQuVk4dllcSNyN9dmv0KAqzsV3/v2K2xv1IwOHlFYCzFiTEHpEgTYGVbM2qRxXaeZzcXGpHA5V6MR0TQRWLKgxQiS+wsj6VgngrVJq5xN2jZvfXrrmt7v1obhbDRjUBWM557Wd62FsqIAl4hqRuNddmNZ1dDF2POB6ULJBeTKkabO0qqAUFvq0vD2y9u89tIm97/Y5y/P52j0lNbQKGlul0QaD4WNXNsquLsfMM6ATS+gjRFRXXReiIHSRNqYTCbRBnAieTJfetbUkyiUNpkMUZMvjIrrIjFp2pUzybQ0RJzGbF+6IqQskWVEWkRy1zH2BQVbSIxMWtOFuvJP8BNqJ+xd2+L6puXgeMJPPz0G43jh6ia+dczayKBvko9oQ/JZkrs9LNSlMJrFFL261jdASSZojFAbZda2KI7SkueY5OfQDC8QjE2oprCGurAcnrfc3Ku5slXz8HjGtY2K0/MZg9owniqiMeWtOyHE5DZYzFnJAtPVMN/58k4uJmYCuQKcFsHNsFVByZwP7x7z4b1zZl4ZDHpsDDfpbwwpCosPidFv9B3BRypnOT5v+cqXhhSFMm/zpLuudASgHUVIM58HzmBiQwyergphkaUZCKln26YmrdYrvdJwPvH0K4MVOLtIU9PnbQZ+pnPLmglt522ehXEklX2S11/al0bDWo52haNt1AVxdMqHT0aIQlUIk1mLP2mIMmNrUJCalwKljVgp2egXHJzN2ewbLqaRs4uWzVoYN7mpKaaHUREsaRb03EeGdYmxhmnj8TGFZxGhsEnbuvVBYoBpm4756hs7zGbKX/zyhK++uoNBeHQ4IWQ6MShtHqdhPYOxdCtJITKAjXm/xhz/O4GsfE/9foF+XXFl0/HwtAFT0oTI+aRBNdXpKwc9l82G9IJmjWfWtLy4V7I5KHh8OuflawNeujLg1m5vgXNidi6qMPOpx3k8T/V0Z10yL+naKiQ7Y0kOGdgYVLx6a8jR6RxjhFdubjMat7x0taZwiW7UVYHkHFRHdZafkO04fVL7YcCshKynNGZZBhI09xDt7x9TbezS+sCsiUnYqsQQcDatp6GAlTS9uwmR1rfcuNJj5pXtQVqUYOyFrY2C12/02dss2dlwC2QdYgIdU6+Mmm7ZCaHIpW0jsFEXlIXFupRF6JWWwhhUhf3jCefnM0QNH987xxhlc9BPiD/EhJfyyNaR3kqY14VJdip1Kdx1J0DK3VjDeDzjuLJs9Xq0UXLDERiN9ApLiGRTSJfqlxZrlH5V8OnDEecXHmsd45niY+DIp8GnCkmkcmkRg9TMn9TdmAz61OSeHyitoS7S35O5xxAYT2fMm9RpP6wTsj6fzLDOUZcVe1uGzx+O2N4cgib+tkrOlwrRBSTtcFDkuZt08DsJUIziqVCTJvbHZpqaywV88LQhstEr0jyOkMhrWcDJaE7r07yxrcrRrxzHo4ZBv8QZYdgvmMxamkxkheQTRdKUqSJHwY7vdV23LiobgwIDzHzkYtJSO0NVOqbzAF0pvK7ZPz7HGMPeZokyAyzLtpd159z5YBHJSfvLisPKOYtAlnYEVcqyj7E575ObtyeNZ0eVKq9IZPM8DdMIm72Ci5lHNS1mMps3NCEwaQyDqmA0gXkjjCYRH3WZml2Zhg6pa63DraloCWIMdenolcLDoxliWgZVmisWSctbnI9PcQJv3dyiP6gIcUrm1ClTsRjvqrPukHTMce8youw8fXdCNssQIkrSjtTpkeCAM0qZb7rZrzg/n/H6jSEf3j+hcmntD4ylCZIGVNUYMbStwQM+FEQiPrY5TWsWS+qkyXKR2gr9qsxrC8XUMG7STKCDkwuubffTXHtrCDFSWMOwl6ZfbQ9KeqXy/t0TolosOUWryRNdznZ0m+OZP1xSK82T2shlZ++BVHJu5oGX9/oM+j1ORxf84OCEzUFFXZYcnU7Y7lf4ENntWWYxW3f0hDY94CwmHigohQjWCQSIsU3tc5lAeh/wwPnFhLS4Ui5eiuHwfERZ1qCKNbroo7YoB5rSG22EJgrnZg+b62qr41XtHHOnRUkKz+wwW4onw2/tKEdOsrsCV9VoO2Zvs4dzJZ89OmE8n1M64WwkVGXB0elFogQmTbDrLmwM1EVB4QxRcz/tokSdlqCwIimPJCYXIG0u58ScY05ZgRgjb9/eyI0RabIfkpJm3YoQIsJ7+xVH8wprLaJ6SQdW8M8KfE4m1oW11Q5z6bx7jkjdbxE0hFSDtylBXzrHh/cPGdTC117epCqTw229p1/3KZxNSTaT7uvy/HlrzCJSCIrNS1CIEaywmD3kUhjDGqF0lqIsFh5ABAqXiO9g0CPESNP6lOr1LUXhaOYz/uSnI57Me5QugcVFdF7wsY6druNABdxqS8yqFl22NhFFbDopKpSFo+5VPDw8pVcb3rm9Rb8s6G0M2BWDb1OivnCWedMSQ6QoLBv9irp0GNstaNJNo0pv3eYydFrpxeQmrbRMT93vEaPQzFpCjAkvhZDq/j6tR4QGiF3qK3I2mnL3uMuVdw6/c/D5KL1UqNCl8ThEF21xTwln7e9FaovgA8NSODiYYEzg7dtXKJxlsLlBVddpCYv5jKZpiBopncFmoThrsDkUG+nyOLJYtKn1gbZNUwystVR1mkffti2zWZsmCBsYDsrsZFNW0vuIDwZXJtPyPnIxmXL/yYjpzGGqPpqrtykKmKwlSzfyLErmOua/ql7JoFZXrWQh0hDTRLjxxYiziwu+8eZ1CqOUVUFVubRmR2jT0hJVRWFtEpBLzVTOZb9g0muKQZlN54lOCPT6FWWV/IsYctnY4Moim0KgKAytWgJpInH0ENVgC0cMSuNbxFiaYPji0SmlvcKk05KVcK4ZPyz252ie5jAmtu8WwhGWnl27dIh0eYYMqlJ7bdtGLkbn9HuOQWXZ2hiwvbtJ1Lwwm6QkfoyReQiEYDBNioTWJArSq4u0BJeFjY1BWoMoz4e1LmEs1UBsPWIhRIMxBXVdojHg2zYvoyNoaQlBmU6mafJeSL2UNvcY2NwPtODjslSGRbhaKdivzglan1C3NNKUhs0RZAGRcrZxcnHObDbhylaVqgjOMb6Ypkt0dh0j1qZl/ozJtXm69jxlOvM0bV4OJ7fsddgmcT8IPi2i1GEwyR0jMQRCTL3PPqQVGDTmUQi0Pv02m3uaNlLaXMHo5NJF+LXy1mVGn/6+tFTp5a3jLCvS1jQ3NOZE18lozr3DyWKySIyKMVAWaXWEpTYpbfB4H1IaRiMpo7pcbE3zgiiSCamI5HJRBqkxaWgy0TQIQfJKN8tWwdSBm9Yo6pUOnTQYm4SwZPHLeSXrbic3/OQI51aGviaqRfWHxFqWmzKep2aoh0cX3H9ywc5wwKBX0Xqfi4pKe+7zjORuoCkq1YWjV6aEfNdgtZgfrywWV7KL5Hvqog2q2M4ikvRyr3YK16qyWF8txtQuCCnlOtHByvOvkNOFv034CmRJPfJ1n1qyXWSVvj2tXUZg1CibdsjGsCTaPjMcMbZYG5mni0CxinKERpPgzhshrSa5NLkE98n1quyd8xOkY9JE3dX0y3Kid2c6ZjnYxVMLKgasYxl8uhi+5PKLpIcsz+zk6NZluhBtmudJV4laQwkojlO5irHL6UWGjkjm2+WE+CpGXX1TC4cBHca4/Ahr9/yV2zKpvRTA8se0nHP2n7qgTMvrS3YdyV+vOmu5TDWWZ8nKBXQBBZajTfnuTAOyUOIKAl/VwQ5qLLzj4k1dHszaIzy946lDLwEXyRhHVw7Ovmz1Qrp2/lrkX9mbtmcKaKV6nFU/d2+Rlg3tLrqomWXvaDSuaEp3tcv5ps5WnhcYFo+8fswzD5fl6OjEZRa/aS5XRV07Ix/bpcy6MWiaDr+m78r/B8eZLVmWjD4cAAAAAElFTkSuQmCC" width="36" height="44" style="object-fit:contain;display:block">
+        <svg width="28" height="34" viewBox="0 0 28 34" fill="none"><rect x="2" y="1" width="24" height="32" rx="3" stroke="rgba(184,134,11,0.6)" stroke-width="1.5" fill="rgba(184,134,11,0.08)"/><line x1="7" y1="10" x2="21" y2="10" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><line x1="7" y1="14" x2="21" y2="14" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><line x1="7" y1="18" x2="18" y2="18" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><line x1="7" y1="22" x2="21" y2="22" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><text x="14" y="7" text-anchor="middle" font-family="Cinzel" font-size="5" font-weight="700" fill="rgba(184,134,11,0.5)">LM</text></svg>
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">La Maltesa</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Constituci&oacute;n oficial del juego</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Constituci&oacute;n oficial del juego</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"></polyline></svg>
     </button>
@@ -337,7 +337,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
       </div>
       <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #FFFFFF">Canciones</span>
-        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.35)">Banda sonora del TALMUT</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.55)">Banda sonora del TALMUT</span>
       </div>
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style="flex-shrink: 0"><polyline points="1,1 6,6 1,11" stroke="rgba(160,100,200,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
     </button>
@@ -351,7 +351,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== TALMUT PLAYER SELECTION ==================== -->
-<div id="screen-select-talmut" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+<div id="screen-select-talmut" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0A1C38 100%); padding: 0">
 
   <!-- Top bar — left aligned -->
   <div style="display: flex; align-items: center; padding: 52px 20px 10px; gap: 12px">
@@ -360,7 +360,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
     </button>
     <div style="flex-grow: 1">
       <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; color: #E8DCC8; letter-spacing: 2.5px">TALMUT</h1>
-      <p style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.3)">Partida oficial &middot; 10 rondas</p>
+      <p style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.5)">Partida oficial &middot; 10 rondas</p>
     </div>
   </div>
 
@@ -368,7 +368,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
   <div style="padding: 22px 24px 6px">
     <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 14px; color: #B8860B; letter-spacing: 1px">Seleccionar jugadores</p>
-    <p style="margin: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.25)">M&iacute;nimo 2 jugadores para empezar</p>
+    <p style="margin: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.5)">M&iacute;nimo 2 jugadores para empezar</p>
   </div>
 
   <div id="talmutPlayerGrid" style="padding: 14px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px"></div>
@@ -383,7 +383,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
   <div style="padding: 0 24px 44px; display: flex; flex-direction: column; gap: 10px">
     <div style="text-align: center">
-      <span id="talmutPlayerCount" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3)">0 de 6 seleccionados</span>
+      <span id="talmutPlayerCount" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.5)">0 de 6 seleccionados</span>
     </div>
     <button id="talmutStartBtn" onclick="startMatch('talmut')" disabled style="width: 100%; padding: 14px; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 16px rgba(184,134,11,0.25); opacity: 1">
       <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; color: #FFFFFF; letter-spacing: 2.5px; text-transform: uppercase">Empezar Partida</span>
@@ -392,7 +392,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== BLUE LAGOON PLAYER SELECTION ==================== -->
-<div id="screen-select-bl" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+<div id="screen-select-bl" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0A1C38 100%); padding: 0">
 
   <!-- Top bar — left aligned -->
   <div style="display: flex; align-items: center; padding: 52px 20px 10px; gap: 12px">
@@ -404,7 +404,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
         <img src="Blue_Lagoon.png" style="width: 22px; height: 22px; object-fit: contain" alt="" onerror="this.style.display='none'">
         <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; color: #E8DCC8; letter-spacing: 2.5px">BLUE LAGOON</h1>
       </div>
-      <p style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.3)">Partida r&aacute;pida</p>
+      <p style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.5)">Partida r&aacute;pida</p>
     </div>
   </div>
 
@@ -444,7 +444,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   <!-- Rounds selector -->
   <div style="padding: 0 24px 12px">
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px">
-      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; color: rgba(255,255,255,0.35)">N&uacute;mero de rondas</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; color: rgba(255,255,255,0.55)">N&uacute;mero de rondas</span>
       <div style="display: flex; align-items: center; gap: 12px">
         <button onclick="changeRounds(-1)" style="width: 26px; height: 26px; border-radius: 6px; background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0">
           <svg width="10" height="2" viewBox="0 0 10 2" fill="none"><line x1="1" y1="1" x2="9" y2="1" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round"></line></svg>
@@ -459,7 +459,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
   <div style="padding: 0 24px 44px; display: flex; flex-direction: column; gap: 10px">
     <div style="text-align: center">
-      <span id="blPlayerCount" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3)">0 jugadores seleccionados</span>
+      <span id="blPlayerCount" style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.5)">0 jugadores seleccionados</span>
     </div>
     <button id="blStartBtn" onclick="startMatch('blue_lagoon')" disabled style="width: 100%; padding: 14px; background: linear-gradient(135deg, #B8860B 0%, #9A7209 100%); border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 16px rgba(184,134,11,0.25)">
       <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 14px; color: #FFFFFF; letter-spacing: 2.5px; text-transform: uppercase">Empezar Partida</span>
@@ -468,7 +468,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== OATH SCREEN ==================== -->
-<div id="screen-juramento" class="screen" style="background: linear-gradient(180deg, #060E1A 0%, #0B1F3A 40%, #0E2545 100%); align-items: center; justify-content: center; padding: 48px 32px; position: relative; overflow: hidden">
+<div id="screen-juramento" class="screen" style="background: linear-gradient(180deg, #060E1A 0%, #0B1F3A 40%, #0A1C38 100%); align-items: center; justify-content: center; padding: 48px 32px; position: relative; overflow: hidden">
 
   <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%); width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 70%); pointer-events: none"></div>
 
@@ -480,7 +480,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   </div>
 
   <p style="position: relative; z-index: 1; margin: 0 0 6px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(184,134,11,0.35); letter-spacing: 3px; text-transform: uppercase">Art&iacute;culo I &middot; La Maltesa</p>
-  <p style="position: relative; z-index: 1; margin: 0 0 28px; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 15px; color: rgba(255,255,255,0.3); letter-spacing: 1px">El Juramento</p>
+  <p style="position: relative; z-index: 1; margin: 0 0 28px; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 15px; color: rgba(255,255,255,0.55); letter-spacing: 1px">El Juramento</p>
 
   <div style="position: relative; z-index: 1; text-align: center; padding: 0 8px">
     <p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 28px; color: #B8860B; letter-spacing: 5px; line-height: 1.35; text-shadow: 0 0 40px rgba(184,134,11,0.15)">HIC LUDUS</p>
@@ -540,7 +540,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== SCORE TABLE ==================== -->
-<div id="screen-score" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+<div id="screen-score" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0A1C38 100%); padding: 0">
 
   <!-- Top bar -->
   <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
@@ -549,7 +549,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
     </button>
     <div style="flex-grow: 1">
       <h1 id="scoreTitle" style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 15px; color: #E8DCC8; letter-spacing: 2px">TALMUT</h1>
-      <p id="scoreSubtitle" style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.25)">Ronda 1 de 10</p>
+      <p id="scoreSubtitle" style="margin: 1px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5)">Ronda 1 de 10</p>
     </div>
     <div style="position: relative">
       <button onclick="toggleScoreMenu()" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
@@ -560,10 +560,10 @@ input[type=range].vol-slider::-webkit-slider-thumb {
         </svg>
       </button>
       <!-- Dropdown menu -->
-      <div id="scoreDropdown" style="display: none; position: absolute; top: 38px; right: 0; min-width: 200px; background: linear-gradient(180deg, #162D50, #0E2545); border: 1px solid rgba(184,134,11,0.25); border-radius: 12px; padding: 6px; z-index: 50; box-shadow: 0 8px 32px rgba(0,0,0,0.5)">
+      <div id="scoreDropdown" style="display: none; position: absolute; top: 38px; right: 0; min-width: 200px; background: linear-gradient(180deg, #0D1F3A, #0A1C38); border: 1px solid rgba(184,134,11,0.25); border-radius: 12px; padding: 6px; z-index: 50; box-shadow: 0 8px 32px rgba(0,0,0,0.5)">
         <button onclick="confirmExit();closeScoreMenu()" style="width: 100%; padding: 10px 12px; background: none; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='none'">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M8 4v8" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-linecap="round" transform="rotate(45 8 8)"/></svg>
-          <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.6)">Salir y guardar</span>
+          <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.8)">Salir y guardar</span>
         </button>
         <div style="height: 1px; background: rgba(255,255,255,0.06); margin: 2px 8px"></div>
         <button onclick="confirmAbandon();closeScoreMenu()" style="width: 100%; padding: 10px 12px; background: none; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left" onmouseover="this.style.background='rgba(220,80,80,0.08)'" onmouseout="this.style.background='none'">
@@ -575,38 +575,6 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   </div>
 
   <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 4px 0 0"></div>
-
-  <!-- Mini-reproductor de música -->
-  <div id="scoreMiniPlayer" style="display:flex;align-items:center;gap:8px;padding:8px 12px 10px;background:rgba(184,134,11,0.04);border-bottom:1px solid rgba(184,134,11,0.12)">
-    <!-- Carátula miniatura -->
-    <img id="scoreMiniCover" src="" alt="" style="width:38px;height:38px;border-radius:7px;object-fit:cover;flex-shrink:0;display:none;border:1px solid rgba(184,134,11,0.2)">
-    <div id="scoreMiniCoverFallback" style="width:38px;height:38px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(184,134,11,0.06);border:1px solid rgba(184,134,11,0.15)">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><circle cx="8" cy="8" r="2.5" fill="rgba(184,134,11,0.25)"/></svg>
-    </div>
-    <!-- Controles -->
-    <div style="display:flex;flex-direction:column;flex:1;min-width:0;gap:5px">
-      <!-- Título -->
-      <p id="scoreMiniTitle" style="margin:0;font-family:'Cinzel',serif;font-weight:600;font-size:10px;color:rgba(184,134,11,0.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.5px">—</p>
-      <!-- Botones + volumen -->
-      <div style="display:flex;align-items:center;gap:6px">
-        <!-- Anterior -->
-        <button onclick="scoreMinPrev()" style="width:26px;height:26px;border:none;background:rgba(184,134,11,0.08);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="2" height="10" rx="1" fill="rgba(184,134,11,0.8)"/><polygon points="10,1 4,6 10,11" fill="rgba(184,134,11,0.8)"/></svg>
-        </button>
-        <!-- Play / Pause -->
-        <button id="scorePpBtn" onclick="scoreMinToggle()" style="width:32px;height:32px;background:rgba(184,134,11,0.18);border:1.5px solid rgba(184,134,11,0.45);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
-          <svg id="scorePpIcon" width="13" height="13" viewBox="0 0 14 14" fill="none"><polygon points="3,1 13,7 3,13" fill="#B8860B"/></svg>
-        </button>
-        <!-- Siguiente -->
-        <button onclick="scoreMinNext()" style="width:26px;height:26px;border:none;background:rgba(184,134,11,0.08);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="9" y="1" width="2" height="10" rx="1" fill="rgba(184,134,11,0.8)"/><polygon points="2,1 8,6 2,11" fill="rgba(184,134,11,0.8)"/></svg>
-        </button>
-        <!-- Volumen -->
-        <svg width="11" height="11" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-left:4px"><path d="M1 4.5h2l3-2.5v9L3 8.5H1z" fill="rgba(184,134,11,0.4)"/><path d="M8 4c.8.7 1.5 1.7 1.5 2.5S8.8 8.3 8 9" stroke="rgba(184,134,11,0.4)" stroke-width="1.1" stroke-linecap="round"/></svg>
-        <input type="range" class="vol-slider" id="scoreMiniVol" min="0" max="1" step="0.05" value="1" oninput="scoreMinVol(this.value)" style="flex:1;min-width:40px;max-width:80px">
-      </div>
-    </div>
-  </div>
 
   <!-- Score grid -->
   <div id="scoreGrid" style="flex-grow: 1; overflow-y: auto; padding: 20px 14px 8px"></div>
@@ -640,7 +608,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== WINNER SCREEN ==================== -->
-<div id="screen-winner" class="screen" style="background: linear-gradient(180deg, #060E1A 0%, #0B1F3A 35%, #0E2545 100%); align-items: center; padding: 0; position: relative; overflow: hidden">
+<div id="screen-winner" class="screen" style="background: linear-gradient(180deg, #060E1A 0%, #0B1F3A 35%, #0A1C38 100%); align-items: center; padding: 0; position: relative; overflow: hidden">
 
   <div id="confettiContainer" style="position: absolute; inset: 0; pointer-events: none; z-index: 1"></div>
 
@@ -661,7 +629,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
       </svg>
     </div>
 
-    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: normal; font-size: 14px; color: rgba(255,255,255,0.25); letter-spacing: 2px; text-transform: uppercase">El ganador es</p>
+    <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: normal; font-size: 14px; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase">El ganador es</p>
     <h1 id="winnerName" style="margin: 10px 0 0; font-family: Poppins, sans-serif; font-weight: 900; font-size: 38px; color: #B8860B; letter-spacing: 4px; text-shadow: 0 0 30px rgba(184,134,11,0.2)">---</h1>
 
     <div style="margin: 16px 0 0; display: flex; align-items: baseline; gap: 6px">
@@ -682,17 +650,17 @@ input[type=range].vol-slider::-webkit-slider-thumb {
     </button>
     <div style="display: flex; gap: 8px">
       <button onclick="showScreen('screen-menu');checkActiveMatch()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.15); border-radius: 10px; cursor: pointer; text-align: center">
-        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: rgba(255,255,255,0.35)">Nueva partida</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: rgba(255,255,255,0.8)">Nueva partida</span>
       </button>
       <button onclick="showScreen('screen-menu');checkActiveMatch()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.15); border-radius: 10px; cursor: pointer; text-align: center">
-        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: rgba(255,255,255,0.35)">Men&uacute; principal</span>
+        <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: rgba(255,255,255,0.8)">Men&uacute; principal</span>
       </button>
     </div>
   </div>
 </div>
 
 <!-- ==================== HISTORICO ==================== -->
-<div id="screen-historico" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+<div id="screen-historico" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0A1C38 100%); padding: 0">
 
   <!-- Top bar — centered -->
   <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
@@ -715,9 +683,9 @@ input[type=range].vol-slider::-webkit-slider-thumb {
     </div>
     <div style="display: flex; align-items: baseline; gap: 6px">
       <span id="totalMatches" style="font-family: 'Cinzel', serif; font-weight: 900; font-size: 42px; color: #B8860B; line-height: 1">0</span>
-      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.25)">partidas jugadas</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.5)">partidas jugadas</span>
     </div>
-    <p id="historicoSince" style="margin: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.15)"></p>
+    <p id="historicoSince" style="margin: 4px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.45)"></p>
   </div>
 
   <!-- Victorias divider -->
@@ -732,11 +700,11 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   <!-- Last match -->
   <div style="padding: 16px 16px 40px">
     <div id="lastMatchCard" style="display:none; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 14px 16px">
-      <p style="margin: 0 0 6px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(255,255,255,0.15); text-transform: uppercase; letter-spacing: 1px">&Uacute;ltima partida</p>
+      <p style="margin: 0 0 6px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px">&Uacute;ltima partida</p>
       <div style="display: flex; align-items: center; justify-content: space-between">
         <div>
           <p style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.5)">Ganador: <span id="lmWinner" style="color: #B8860B; font-weight: 700">---</span></p>
-          <p id="lmDate" style="margin: 2px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.15)"></p>
+          <p id="lmDate" style="margin: 2px 0 0; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 11px; color: rgba(255,255,255,0.45)"></p>
         </div>
         <span id="lmScore" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 20px; color: rgba(184,134,11,0.3)">0</span>
       </div>
@@ -745,7 +713,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== HALL OF FAME ==================== -->
-<div id="screen-hof" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0E2545 100%); padding: 0">
+<div id="screen-hof" class="screen" style="background: linear-gradient(180deg, #081729 0%, #0B1F3A 30%, #0A1C38 100%); padding: 0">
 
   <!-- Top bar — centered -->
   <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
@@ -784,11 +752,11 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
     <!-- Legend -->
     <div style="display: flex; gap: 10px; justify-content: center; padding: 12px 0 4px; flex-wrap: wrap">
-      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">PJ = Partidas jugadas</span>
-      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">PT = Puntos totales</span>
-      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">W = Victorias</span>
-      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">Mejor = Mejor puntuaci&oacute;n</span>
-      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.15)">Media = Media por partida</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.4)">PJ = Partidas jugadas</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.4)">PT = Puntos totales</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.4)">W = Victorias</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.4)">Mejor = Mejor puntuaci&oacute;n</span>
+      <span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 8px; color: rgba(255,255,255,0.4)">Media = Media por partida</span>
     </div>
 
     <!-- Records -->
@@ -806,46 +774,46 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 </div>
 
 <!-- ==================== LA MALTESA ==================== -->
-<div id="screen-maltesa" class="screen" style="background: linear-gradient(180deg, #1A0A10 0%, #140E1E 30%, #120D1A 100%); padding: 0; overflow-y: auto">
+<div id="screen-maltesa" class="screen" style="background: linear-gradient(180deg, #0B1F3A 0%, #0A1830 30%, #081428 100%); padding: 0; overflow-y: auto">
 
   <!-- Top bar — centered -->
   <div style="display: flex; align-items: center; padding: 52px 16px 8px; gap: 10px">
     <button onclick="showScreen('screen-menu')" style="width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
-      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="rgba(160,55,65,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="rgba(184,134,11,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <div style="flex-grow: 1; text-align: center">
       <h1 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px; color: #E8DCC8; letter-spacing: 3px">LA MALTESA</h1>
-      <p style="margin: 2px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 11px; color: rgba(160,55,65,0.5)">Constituci&oacute;n oficial</p>
+      <p style="margin: 2px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic; font-size: 11px; color: rgba(184,134,11,0.5)">Constituci&oacute;n oficial</p>
     </div>
     <div style="width: 32px; height: 32px; flex-shrink: 0"></div>
   </div>
 
-  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,55,65,0.2), transparent); margin: 4px 0 0"></div>
+  <div style="width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.2), transparent); margin: 4px 0 0"></div>
 
   <!-- Header -->
   <div style="display: flex; flex-direction: column; align-items: center; padding: 24px 24px 16px">
     <div style="width: 60px; height: 60px; margin-bottom: 14px">
-      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="6" width="40" height="48" rx="4" stroke="rgba(160,55,65,0.5)" stroke-width="1.5" fill="rgba(160,55,65,0.05)"/><line x1="18" y1="18" x2="42" y2="18" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="24" x2="42" y2="24" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="30" x2="38" y2="30" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="36" x2="42" y2="36" stroke="rgba(160,55,65,0.25)" stroke-width="1"/><line x1="18" y1="42" x2="34" y2="42" stroke="rgba(160,55,65,0.25)" stroke-width="1"/></svg>
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="6" width="40" height="48" rx="4" stroke="rgba(184,134,11,0.5)" stroke-width="1.5" fill="rgba(184,134,11,0.05)"/><line x1="18" y1="18" x2="42" y2="18" stroke="rgba(184,134,11,0.25)" stroke-width="1"/><line x1="18" y1="24" x2="42" y2="24" stroke="rgba(184,134,11,0.25)" stroke-width="1"/><line x1="18" y1="30" x2="38" y2="30" stroke="rgba(184,134,11,0.25)" stroke-width="1"/><line x1="18" y1="36" x2="42" y2="36" stroke="rgba(184,134,11,0.25)" stroke-width="1"/><line x1="18" y1="42" x2="34" y2="42" stroke="rgba(184,134,11,0.25)" stroke-width="1"/></svg>
     </div>
     <h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 900; font-size: 20px; color: #E8DCC8; letter-spacing: 5px; text-align: center">LA MALTESA</h2>
-    <p style="margin: 6px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 13px; color: rgba(160,55,65,0.65); letter-spacing: 1.5px; text-align: center">Ley Suprema del TALMUT</p>
+    <p style="margin: 6px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 13px; color: rgba(184,134,11,0.65); letter-spacing: 1.5px; text-align: center">Ley Suprema del TALMUT</p>
     <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-style: italic; font-size: 11px; color: rgba(184,134,11,0.4); letter-spacing: 2px; text-align: center; text-transform: uppercase">Hic Ludus Errorem Punit</p>
   </div>
 
   <!-- Ornament -->
   <div style="display: flex; align-items: center; gap: 12px; padding: 0 24px; margin: 0 0 12px">
-    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,55,65,0.12))"></div>
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3 3.5 0.5-2.5 2.5 0.5 3.5L7 9l-3 1.5 0.5-3.5L2 4.5 5.5 4z" fill="rgba(160,55,65,0.25)"/></svg>
-    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(160,55,65,0.12), transparent)"></div>
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(184,134,11,0.15))"></div>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3 3.5 0.5-2.5 2.5 0.5 3.5L7 9l-3 1.5 0.5-3.5L2 4.5 5.5 4z" fill="rgba(184,134,11,0.3)"/></svg>
+    <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,0.15), transparent)"></div>
   </div>
 
   <!-- Preambulo -->
   <div style="padding: 0 16px; margin-bottom: 12px">
-    <div style="background: rgba(160,55,65,0.06); border: 1px solid rgba(160,55,65,0.15); border-radius: 10px; padding: 16px">
-      <p style="margin: 0 0 4px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1.5px; text-transform: uppercase; text-align: center">Pre&aacute;mbulo</p>
-      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.55; text-align: justify">El presente documento constituye la norma suprema e irrefutable que rige el juego conocido como TALMUT. Nace de la necesidad hist&oacute;rica de codificar las reglas, tradiciones, leyes y sanciones que han surgido de forma org&aacute;nica a lo largo de incontables partidas.</p>
+    <div style="background: rgba(184,134,11,0.06); border: 1px solid rgba(184,134,11,0.15); border-radius: 10px; padding: 16px">
+      <p style="margin: 0 0 4px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1.5px; text-transform: uppercase; text-align: center">Pre&aacute;mbulo</p>
+      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.55; text-align: justify">El presente documento constituye la norma suprema e irrefutable que rige el juego conocido como TALMUT. Nace de la necesidad hist&oacute;rica de codificar las reglas, tradiciones, leyes y sanciones que han surgido de forma org&aacute;nica a lo largo de incontables partidas.</p>
       <p style="margin: 10px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 12px; color: rgba(184,134,11,0.5); line-height: 1.5; text-align: center">&laquo;Ning&uacute;n jugador, independientemente de su antig&uuml;edad, su racha de victorias o su vehemencia a la hora de argumentar, podr&aacute; invocar norma alguna que no est&eacute; contemplada en La Maltesa.&raquo;</p>
-      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.55; text-align: justify">El documento podr&aacute; ampliarse mediante consenso un&aacute;nime de los jugadores habituales, seg&uacute;n lo dispuesto en el Art&iacute;culo 9.</p>
+      <p style="margin: 8px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.55; text-align: justify">El documento podr&aacute; ampliarse mediante consenso un&aacute;nime de los jugadores habituales, seg&uacute;n lo dispuesto en el Art&iacute;culo 9.</p>
     </div>
   </div>
 
@@ -853,104 +821,104 @@ input[type=range].vol-slider::-webkit-slider-thumb {
   <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px">
 
     <!-- ARTICULO 1 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 1</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 1</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Juramento Fundacional</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">1.1</span> &middot; Antes de cualquier partida, todos los jugadores deber&aacute;n reunirse y prestar el juramento fundacional.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">1.2</span> &middot; Cada jugador extender&aacute; una mano al centro de la mesa. Las manos se apilar&aacute;n como s&iacute;mbolo de pacto colectivo. Todos pronunciar&aacute;n al un&iacute;sono: <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;HIC LUDUS ERROREM PUNIT&raquo;</span> &mdash; &laquo;Este juego castiga el error&raquo;.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">1.3</span> &middot; El jugador que reh&uacute;se participar, pronuncie el juramento de forma inaudible o se mofe del acto recibir&aacute; una carta de penalizaci&oacute;n antes de comenzar a jugar.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">1.1</span> &middot; Antes de cualquier partida, todos los jugadores deber&aacute;n reunirse y prestar el juramento fundacional.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">1.2</span> &middot; Cada jugador extender&aacute; una mano al centro de la mesa. Las manos se apilar&aacute;n como s&iacute;mbolo de pacto colectivo. Todos pronunciar&aacute;n al un&iacute;sono: <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;HIC LUDUS ERROREM PUNIT&raquo;</span> &mdash; &laquo;Este juego castiga el error&raquo;.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">1.3</span> &middot; El jugador que reh&uacute;se participar, pronuncie el juramento de forma inaudible o se mofe del acto recibir&aacute; una carta de penalizaci&oacute;n antes de comenzar a jugar.</p>
     </div>
 
     <!-- ARTICULO 2 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 2</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 2</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Orden de Juego</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.1</span> &middot; El jugador que abre la primera ronda se determinar&aacute; mediante un aleatorizador de dispositivo m&oacute;vil, en el cual cada jugador coloca simult&aacute;neamente su dedo &iacute;ndice sobre la pantalla.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.2</span> &middot; Alternativamente, se repartir&aacute; una carta boca abajo a cada jugador. Los jugadores la voltean simult&aacute;neamente; la carta m&aacute;s alta determina qui&eacute;n abre.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.3</span> &middot; A partir de la segunda ronda, abre el ganador de la ronda anterior. El sorteo inicial solo se aplica a la primera ronda.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.4</span> &middot; El orden de turno sigue la rotaci&oacute;n en sentido horario desde el jugador que abre.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">2.5</span> &middot; El jugador con la puntuaci&oacute;n m&aacute;s alta de la ronda anterior baraja y reparte las cartas de la siguiente ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">2.1</span> &middot; El jugador que abre la primera ronda se determinar&aacute; mediante un aleatorizador de dispositivo m&oacute;vil, en el cual cada jugador coloca simult&aacute;neamente su dedo &iacute;ndice sobre la pantalla.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">2.2</span> &middot; Alternativamente, se repartir&aacute; una carta boca abajo a cada jugador. Los jugadores la voltean simult&aacute;neamente; la carta m&aacute;s alta determina qui&eacute;n abre.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">2.3</span> &middot; A partir de la segunda ronda, abre el ganador de la ronda anterior. El sorteo inicial solo se aplica a la primera ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">2.4</span> &middot; El orden de turno sigue la rotaci&oacute;n en sentido horario desde el jugador que abre.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">2.5</span> &middot; El jugador con la puntuaci&oacute;n m&aacute;s alta de la ronda anterior baraja y reparte las cartas de la siguiente ronda.</p>
     </div>
 
     <!-- ARTICULO 3 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 3</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 3</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Reparto y la Observaci&oacute;n Inicial</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.1</span> &middot; El repartidor baraja la baraja completa. Otro jugador la corta. Se reparten cuatro cartas boca abajo a cada jugador en orden.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.2</span> &middot; Los jugadores colocan sus cartas seg&uacute;n su preferencia personal antes de la observaci&oacute;n inicial.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.3</span> &middot; Tras una cuenta atr&aacute;s colectiva (<span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;3&hellip; 2&hellip; 1&hellip;&raquo;</span>), cada jugador se echa hacia atr&aacute;s y levanta simult&aacute;neamente dos de sus cuatro cartas para observarlas. El tiempo m&aacute;ximo de observaci&oacute;n es de dos segundos. Las cartas deber&aacute;n devolverse boca abajo.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">3.4</span> &middot; Queda estrictamente prohibido volver a mirar las cartas propias durante el transcurso del juego, salvo que una carta especial lo permita. La infracci&oacute;n acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">3.1</span> &middot; El repartidor baraja la baraja completa. Otro jugador la corta. Se reparten cuatro cartas boca abajo a cada jugador en orden.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">3.2</span> &middot; Los jugadores colocan sus cartas seg&uacute;n su preferencia personal antes de la observaci&oacute;n inicial.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">3.3</span> &middot; Tras una cuenta atr&aacute;s colectiva (<span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;3&hellip; 2&hellip; 1&hellip;&raquo;</span>), cada jugador se echa hacia atr&aacute;s y levanta simult&aacute;neamente dos de sus cuatro cartas para observarlas. El tiempo m&aacute;ximo de observaci&oacute;n es de dos segundos. Las cartas deber&aacute;n devolverse boca abajo.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">3.4</span> &middot; Queda estrictamente prohibido volver a mirar las cartas propias durante el transcurso del juego, salvo que una carta especial lo permita. La infracci&oacute;n acarrea una carta de penalizaci&oacute;n.</p>
     </div>
 
     <!-- ARTICULO 4 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 4</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 4</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Turno de Juego</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.1</span> &middot; El jugador activo roba la carta superior del mazo y elige:</p>
-      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Opci&oacute;n A:</span> Quedarse la carta robada, descartando una de sus cuatro cartas boca abajo al mont&oacute;n de descarte.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Opci&oacute;n B:</span> Rechazar la carta robada, coloc&aacute;ndola boca arriba en el mont&oacute;n de descarte. Se aplican los efectos de cartas especiales si corresponde.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Descarte Cruzado:</span> Cuando se descarta una carta, cualquier jugador que posea cartas del mismo valor podr&aacute; descartarlas inmediatamente. Se pueden descartar dos cartas coincidentes juntas. <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;La velocidad es ley&raquo;</span> cuando se producen descartes simult&aacute;neos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.3</span> &middot; Ejecutar un Descarte Cruzado con cartas de valor no coincidente acarrea una carta de penalizaci&oacute;n.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">4.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La Ley de la Tortilla:</span> Cuando un jugador roba una carta que coincide con una propia boca abajo y ejecuta un Descarte Cruzado contra s&iacute; mismo, deber&aacute; manipular ambas cartas con la misma mano en un movimiento continuo. Usar manos diferentes viola esta ley y acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">4.1</span> &middot; El jugador activo roba la carta superior del mazo y elige:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Opci&oacute;n A:</span> Quedarse la carta robada, descartando una de sus cuatro cartas boca abajo al mont&oacute;n de descarte.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Opci&oacute;n B:</span> Rechazar la carta robada, coloc&aacute;ndola boca arriba en el mont&oacute;n de descarte. Se aplican los efectos de cartas especiales si corresponde.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">4.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Descarte Cruzado:</span> Cuando se descarta una carta, cualquier jugador que posea cartas del mismo valor podr&aacute; descartarlas inmediatamente. Se pueden descartar dos cartas coincidentes juntas. <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;La velocidad es ley&raquo;</span> cuando se producen descartes simult&aacute;neos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">4.3</span> &middot; Ejecutar un Descarte Cruzado con cartas de valor no coincidente acarrea una carta de penalizaci&oacute;n.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">4.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La Ley de la Tortilla:</span> Cuando un jugador roba una carta que coincide con una propia boca abajo y ejecuta un Descarte Cruzado contra s&iacute; mismo, deber&aacute; manipular ambas cartas con la misma mano en un movimiento continuo. Usar manos diferentes viola esta ley y acarrea una carta de penalizaci&oacute;n.</p>
     </div>
 
     <!-- ARTICULO 5 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 5</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 5</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Cartas Especiales</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.1</span> &middot; Las cartas especiales se activan &uacute;nicamente cuando se descartan directamente del robo, boca arriba. Incorporarlas a la mano anula sus efectos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El DIEZ (10):</span> El jugador podr&aacute; mirar en secreto una de sus propias cartas boca abajo.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.3</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La JOTA (J):</span> El jugador podr&aacute; mirar en secreto una carta boca abajo de cualquier oponente. La tradici&oacute;n dicta pronunciar <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;puedes mirar una a&hellip;JJJJJ&hellip;jena&raquo;</span> &mdash; sin penalizaci&oacute;n por omisi&oacute;n, pero mal visto por la comunidad.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La REINA (Q):</span> El jugador elige entre dos modos de intercambio ciego:</p>
-      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 1:</span> Intercambiar una carta propia boca abajo por una carta boca abajo de un oponente, sin ver ninguna.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 2:</span> Intercambiar una carta boca abajo de un jugador por una carta boca abajo de otro jugador distinto.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El REY (K):</span> El jugador elige entre dos modos:</p>
-      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 1:</span> Mirar una carta boca abajo de un oponente e intercambiarla por una propia si lo desea.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 2:</span> Mirar una carta boca abajo de un oponente y transferirla a un tercer jugador sin qued&aacute;rsela.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El JOKER:</span> El valor del JOKER depende del resultado de la ronda: si el jugador que porta el JOKER gana la ronda, vale <span style="color: #6BBF7A; font-weight: 600">&minus;1 punto</span>. Si no gana: <span style="color: rgba(220,80,80,0.7); font-weight: 600">+50 puntos</span>.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">5.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">Excepci&oacute;n del Joker ganador:</span> El ganador de una ronda que posea un JOKER no punt&uacute;a cero seg&uacute;n el Art. 7.2, sino que punt&uacute;a &minus;1 punto, que se resta de su total acumulado.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.1</span> &middot; Las cartas especiales se activan &uacute;nicamente cuando se descartan directamente del robo, boca arriba. Incorporarlas a la mano anula sus efectos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.2</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El DIEZ (10):</span> El jugador podr&aacute; mirar en secreto una de sus propias cartas boca abajo.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.3</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La JOTA (J):</span> El jugador podr&aacute; mirar en secreto una carta boca abajo de cualquier oponente. La tradici&oacute;n dicta pronunciar <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;puedes mirar una a&hellip;JJJJJ&hellip;jena&raquo;</span> &mdash; sin penalizaci&oacute;n por omisi&oacute;n, pero mal visto por la comunidad.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.4</span> &middot; <span style="color: #E8DCC8; font-weight: 500">La REINA (Q):</span> El jugador elige entre dos modos de intercambio ciego:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 1:</span> Intercambiar una carta propia boca abajo por una carta boca abajo de un oponente, sin ver ninguna.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 2:</span> Intercambiar una carta boca abajo de un jugador por una carta boca abajo de otro jugador distinto.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El REY (K):</span> El jugador elige entre dos modos:</p>
+      <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 1:</span> Mirar una carta boca abajo de un oponente e intercambiarla por una propia si lo desea.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; padding-left: 12px"><span style="color: rgba(184,134,11,0.55); font-weight: 600">Modo 2:</span> Mirar una carta boca abajo de un oponente y transferirla a un tercer jugador sin qued&aacute;rsela.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El JOKER:</span> El valor del JOKER depende del resultado de la ronda: si el jugador que porta el JOKER gana la ronda, vale <span style="color: #6BBF7A; font-weight: 600">&minus;1 punto</span>. Si no gana: <span style="color: rgba(220,80,80,0.7); font-weight: 600">+50 puntos</span>.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">5.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">Excepci&oacute;n del Joker ganador:</span> El ganador de una ronda que posea un JOKER no punt&uacute;a cero seg&uacute;n el Art. 7.2, sino que punt&uacute;a &minus;1 punto, que se resta de su total acumulado.</p>
     </div>
 
     <!-- ARTICULO 6 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 6</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 6</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">Del Talmut</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.1</span> &middot; Un jugador declarar&aacute; TALMUT cuando crea que la suma de sus cuatro cartas es igual o inferior a cinco puntos. La declaraci&oacute;n se realiza durante su turno, antes de robar o inmediatamente despu&eacute;s de descartar.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.2</span> &middot; La declaraci&oacute;n de TALMUT es voluntaria; los jugadores pueden abstenerse aunque cumplan los requisitos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.3</span> &middot; Tras la declaraci&oacute;n de TALMUT, cada jugador restante dispone de exactamente un turno adicional. Todos los jugadores revelan entonces sus cartas y suman los puntos.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.4</span> &middot; Durante el turno final tras la declaraci&oacute;n, el declarante conserva sus derechos de Descarte Cruzado.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT err&oacute;neo:</span> Si el jugador que declara TALMUT voltea sus cartas y la suma supera los cinco puntos, incurrir&aacute; en la sanci&oacute;n m&aacute;s severa: acumular&aacute; la suma de puntos de todos los dem&aacute;s jugadores en esa ronda.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT autom&aacute;tico:</span> Si un jugador descarta su &uacute;ltima carta boca abajo durante su turno, el TALMUT se declara autom&aacute;ticamente. El juego contin&uacute;a; cuando llegue el turno de este jugador, robar&aacute; una carta y la descartar&aacute; inmediatamente sin qued&aacute;rsela.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">6.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Intocable de Elliot Ness:</span> Tras la declaraci&oacute;n, el declarante de TALMUT obtiene inmunidad completa. Ninguna carta especial podr&aacute; dirigirse a &eacute;l: no podr&aacute; ser mirado, intercambiado ni transferido.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.1</span> &middot; Un jugador declarar&aacute; TALMUT cuando crea que la suma de sus cuatro cartas es igual o inferior a cinco puntos. La declaraci&oacute;n se realiza durante su turno, antes de robar o inmediatamente despu&eacute;s de descartar.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.2</span> &middot; La declaraci&oacute;n de TALMUT es voluntaria; los jugadores pueden abstenerse aunque cumplan los requisitos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.3</span> &middot; Tras la declaraci&oacute;n de TALMUT, cada jugador restante dispone de exactamente un turno adicional. Todos los jugadores revelan entonces sus cartas y suman los puntos.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.4</span> &middot; Durante el turno final tras la declaraci&oacute;n, el declarante conserva sus derechos de Descarte Cruzado.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.5</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT err&oacute;neo:</span> Si el jugador que declara TALMUT voltea sus cartas y la suma supera los cinco puntos, incurrir&aacute; en la sanci&oacute;n m&aacute;s severa: acumular&aacute; la suma de puntos de todos los dem&aacute;s jugadores en esa ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.6</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El TALMUT autom&aacute;tico:</span> Si un jugador descarta su &uacute;ltima carta boca abajo durante su turno, el TALMUT se declara autom&aacute;ticamente. El juego contin&uacute;a; cuando llegue el turno de este jugador, robar&aacute; una carta y la descartar&aacute; inmediatamente sin qued&aacute;rsela.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">6.7</span> &middot; <span style="color: #E8DCC8; font-weight: 500">El Intocable de Elliot Ness:</span> Tras la declaraci&oacute;n, el declarante de TALMUT obtiene inmunidad completa. Ninguna carta especial podr&aacute; dirigirse a &eacute;l: no podr&aacute; ser mirado, intercambiado ni transferido.</p>
     </div>
 
     <!-- ARTICULO 7 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 7</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 7</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De la Puntuaci&oacute;n</p>
-      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.1</span> &middot; Valores de las cartas:</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding: 8px 12px; background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px; margin-bottom: 8px">
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">7.1</span> &middot; Valores de las cartas:</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding: 8px 12px; background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.06); border-radius: 8px; margin-bottom: 8px">
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">A</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">1 punto</span>
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">2 &ndash; 10</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">Valor facial</span>
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5)">J</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right">20 puntos</span>
@@ -959,21 +927,21 @@ input[type=range].vol-slider::-webkit-slider-thumb {
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #6BBF7A">JOKER (ganador)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #6BBF7A; text-align: right">&minus;1 punto</span>
         <span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(220,80,80,0.7)">JOKER (no ganador)</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: rgba(220,80,80,0.7); text-align: right">+50 puntos</span>
       </div>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.2</span> &middot; El jugador con la puntuaci&oacute;n total m&aacute;s baja gana la ronda y punt&uacute;a cero puntos en el global (excepto seg&uacute;n el Art. 5.7). Los dem&aacute;s punt&uacute;an sus totales reales de la ronda.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.3</span> &middot; En caso de empate con el declarante de TALMUT, gana el no declarante. El declarante punt&uacute;a sus puntos reales.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">7.4</span> &middot; Una partida completa consta de diez rondas. Gana el jugador con la puntuaci&oacute;n acumulada m&aacute;s baja tras la d&eacute;cima ronda. Un empate en la puntuaci&oacute;n final desencadena una ronda de desempate. Solo las partidas de diez rondas completas cuentan como oficiales. Las partidas que no lleguen a diez rondas se denominan <span style="color: #64A0DC; font-weight: 500">&laquo;Blue Lagoon&raquo;</span> y no afectan al ranking. <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;El Blue Lagoon no existe para la historia. Solo para el ganador.&raquo;</span></p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">7.2</span> &middot; El jugador con la puntuaci&oacute;n total m&aacute;s baja gana la ronda y punt&uacute;a cero puntos en el global (excepto seg&uacute;n el Art. 5.7). Los dem&aacute;s punt&uacute;an sus totales reales de la ronda.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">7.3</span> &middot; En caso de empate con el declarante de TALMUT, gana el no declarante. El declarante punt&uacute;a sus puntos reales.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">7.4</span> &middot; Una partida completa consta de diez rondas. Gana el jugador con la puntuaci&oacute;n acumulada m&aacute;s baja tras la d&eacute;cima ronda. Un empate en la puntuaci&oacute;n final desencadena una ronda de desempate. Solo las partidas de diez rondas completas cuentan como oficiales. Las partidas que no lleguen a diez rondas se denominan <span style="color: #64A0DC; font-weight: 500">&laquo;Blue Lagoon&raquo;</span> y no afectan al ranking. <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;El Blue Lagoon no existe para la historia. Solo para el ganador.&raquo;</span></p>
     </div>
 
     <!-- ARTICULO 8 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 8</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 8</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Penalizaciones</p>
-      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">8.1</span> &middot; Seg&uacute;n el juramento fundacional, todos los errores reciben penalizaci&oacute;n. Penalizaci&oacute;n est&aacute;ndar: una carta adicional del mazo que el infractor no puede ver. Cualquier jugador de la mesa puede denunciar infracciones; no existe &aacute;rbitro designado.</p>
-      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">8.2</span> &middot; Tabla de infracciones:</p>
-      <div style="display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.06); border-radius: 8px">
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">8.1</span> &middot; Seg&uacute;n el juramento fundacional, todos los errores reciben penalizaci&oacute;n. Penalizaci&oacute;n est&aacute;ndar: una carta adicional del mazo que el infractor no puede ver. Cualquier jugador de la mesa puede denunciar infracciones; no existe &aacute;rbitro designado.</p>
+      <p style="margin: 0 0 8px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">8.2</span> &middot; Tabla de infracciones:</p>
+      <div style="display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.06); border-radius: 8px">
         <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Juramento irrespetuoso / inaudible</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
         <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Mirar carta propia sin permiso</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
         <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: 10px; color: rgba(255,255,255,0.5); flex: 1">Violaci&oacute;n Ley de la Tortilla</span><span style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 10px; color: rgba(220,80,80,0.7); white-space: nowrap">1 carta</span></div>
@@ -984,15 +952,15 @@ input[type=range].vol-slider::-webkit-slider-thumb {
     </div>
 
     <!-- ARTICULO 9 -->
-    <div style="background: rgba(160,55,65,0.05); border: 1px solid rgba(160,55,65,0.12); border-radius: 10px; padding: 14px 16px">
+    <div style="background: rgba(184,134,11,0.05); border: 1px solid rgba(184,134,11,0.12); border-radius: 10px; padding: 14px 16px">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
-        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(160,55,65,0.8); letter-spacing: 1px">ART&Iacute;CULO 9</span>
-        <div style="flex-grow: 1; height: 1px; background: rgba(160,55,65,0.06)"></div>
+        <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; color: rgba(184,134,11,0.8); letter-spacing: 1px">ART&Iacute;CULO 9</span>
+        <div style="flex-grow: 1; height: 1px; background: rgba(184,134,11,0.06)"></div>
       </div>
       <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 600; font-size: 12px; color: #E8DCC8; letter-spacing: 0.5px">De las Enmiendas</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">9.1</span> &middot; La Maltesa es un documento vivo. Las leyes acordadas por la comunidad se a&ntilde;adir&aacute;n aqu&iacute; como enmiendas numeradas.</p>
-      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">9.2</span> &middot; Cada enmienda requiere: n&uacute;mero, fecha de aprobaci&oacute;n, descripci&oacute;n clara de la norma y firmas de todos los jugadores presentes. Ninguna enmienda podr&aacute; contradecir los principios del Art&iacute;culo 1.</p>
-      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5"><span style="color: rgba(160,55,65,0.7); font-weight: 600">9.3</span> &middot; Las disputas no contempladas en La Maltesa se resolver&aacute;n por votaci&oacute;n comunitaria. En caso de empate, prevalecer&aacute; <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;la interpretaci&oacute;n m&aacute;s perjudicial para el jugador que haya cometido el error&raquo;</span>.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">9.1</span> &middot; La Maltesa es un documento vivo. Las leyes acordadas por la comunidad se a&ntilde;adir&aacute;n aqu&iacute; como enmiendas numeradas.</p>
+      <p style="margin: 0 0 6px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">9.2</span> &middot; Cada enmienda requiere: n&uacute;mero, fecha de aprobaci&oacute;n, descripci&oacute;n clara de la norma y firmas de todos los jugadores presentes. Ninguna enmienda podr&aacute; contradecir los principios del Art&iacute;culo 1.</p>
+      <p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5"><span style="color: rgba(184,134,11,0.7); font-weight: 600">9.3</span> &middot; Las disputas no contempladas en La Maltesa se resolver&aacute;n por votaci&oacute;n comunitaria. En caso de empate, prevalecer&aacute; <span style="color: rgba(184,134,11,0.55); font-style: italic">&laquo;la interpretaci&oacute;n m&aacute;s perjudicial para el jugador que haya cometido el error&raquo;</span>.</p>
     </div>
   </div>
 
@@ -1003,18 +971,18 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
   <!-- Seal -->
   <div style="padding: 8px 24px 36px; text-align: center">
-    <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 20px; background: rgba(160,55,65,0.06); border: 1px solid rgba(160,55,65,0.15); border-radius: 12px">
+    <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 20px; background: rgba(184,134,11,0.06); border: 1px solid rgba(184,134,11,0.15); border-radius: 12px">
       <p style="margin: 0; font-family: 'Cinzel', serif; font-weight: 900; font-size: 12px; color: rgba(184,134,11,0.35); letter-spacing: 3px">HIC LUDUS ERROREM PUNIT</p>
       <div style="display: flex; align-items: center; gap: 6px">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(160,55,65,0.3)" stroke-width="1"/><path d="M6 3v3l2 1.5" stroke="rgba(160,55,65,0.3)" stroke-width="0.8" stroke-linecap="round"/></svg>
-        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 10px; color: rgba(160,55,65,0.3); letter-spacing: 1px">Primera edici&oacute;n &middot; MMXXIV</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(184,134,11,0.3)" stroke-width="1"/><path d="M6 3v3l2 1.5" stroke="rgba(184,134,11,0.3)" stroke-width="0.8" stroke-linecap="round"/></svg>
+        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic; font-size: 10px; color: rgba(184,134,11,0.35); letter-spacing: 1px">Primera edici&oacute;n &middot; MMXXIV</span>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ==================== CANCIONES ==================== -->
-<div id="screen-canciones" class="screen" style="background: linear-gradient(180deg, #0D0A18 0%, #0B1F3A 40%, #0E2545 100%); padding: 0; overflow-y: auto">
+<div id="screen-canciones" class="screen" style="background: linear-gradient(180deg, #0D0A18 0%, #0B1F3A 40%, #0A1C38 100%); padding: 0; overflow-y: auto">
 
   <!-- Back bar -->
   <div style="display: flex; align-items: center; padding: 52px 16px 12px; gap: 10px">
@@ -1065,9 +1033,9 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
 <!-- Abandon match confirmation -->
 <div id="abandonMatchModal" class="modal-overlay">
-  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0E2545, #0B1F3A); border: 1px solid rgba(220,80,80,0.25); border-radius: 16px; padding: 28px 24px; text-align: center">
+  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0A1C38, #0B1F3A); border: 1px solid rgba(220,80,80,0.25); border-radius: 16px; padding: 28px 24px; text-align: center">
     <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #E8DCC8; letter-spacing: 1px">Abandonar partida</p>
-    <p style="margin: 0 0 24px; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.5">La partida se eliminar&aacute; permanentemente y no podr&aacute; recuperarse.</p>
+    <p style="margin: 0 0 24px; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5">La partida se eliminar&aacute; permanentemente y no podr&aacute; recuperarse.</p>
     <div style="display: flex; gap: 8px">
       <button onclick="closeAbandonModal()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; cursor: pointer">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.4)">Cancelar</span>
@@ -1081,9 +1049,9 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
 <!-- Exit confirmation -->
 <div id="confirmExitModal" class="modal-overlay">
-  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0E2545, #0B1F3A); border: 1px solid rgba(184,134,11,0.2); border-radius: 16px; padding: 28px 24px; text-align: center">
+  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0A1C38, #0B1F3A); border: 1px solid rgba(184,134,11,0.2); border-radius: 16px; padding: 28px 24px; text-align: center">
     <p style="margin: 0 0 8px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #E8DCC8; letter-spacing: 1px">Salir de la partida</p>
-    <p style="margin: 0 0 24px; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.5">La partida se guardar&aacute; y podr&aacute;s continuarla desde el men&uacute; principal.</p>
+    <p style="margin: 0 0 24px; font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5">La partida se guardar&aacute; y podr&aacute;s continuarla desde el men&uacute; principal.</p>
     <div style="display: flex; gap: 8px">
       <button onclick="closeConfirmExit()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; cursor: pointer">
         <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.4)">Cancelar</span>
@@ -1097,7 +1065,7 @@ input[type=range].vol-slider::-webkit-slider-thumb {
 
 <!-- Name modal -->
 <div id="nameModal" class="modal-overlay">
-  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0E2545, #0B1F3A); border: 1px solid rgba(184,134,11,0.2); border-radius: 16px; padding: 28px 24px; text-align: center">
+  <div style="width: 100%; max-width: 320px; background: linear-gradient(180deg, #0A1C38, #0B1F3A); border: 1px solid rgba(184,134,11,0.2); border-radius: 16px; padding: 28px 24px; text-align: center">
     <p style="margin: 0 0 16px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; color: #E8DCC8; letter-spacing: 1px">Nuevo jugador</p>
     <input id="guestNameInput" type="text" placeholder="Nombre" maxlength="20" onkeydown="if(event.key==='Enter')addGuest()" style="width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,134,11,0.2); border-radius: 10px; color: #E8DCC8; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; box-sizing: border-box; margin-bottom: 16px">
     <div style="display: flex; gap: 8px">
@@ -1127,6 +1095,9 @@ let scores={};
 let currentRound=1;
 let currentPlayerIdx=0;
 let numpadValue='';
+let editMode=false;
+let editRound=0;
+let editPlayerIdx=0;
 let blRounds=5;
 let guests=[];
 let hofSort='pt';
@@ -1469,6 +1440,14 @@ function afterOath(){
 }
 
 // ==================== SCORE SCREEN ====================
+function editCell(round,playerIdx){
+  editMode=true;
+  editRound=round;
+  editPlayerIdx=playerIdx;
+  numpadValue='';
+  renderScoreScreen();
+}
+
 function renderScoreScreen(){
   const isBL=currentMatchType==='blue_lagoon';
   document.getElementById('scoreTitle').textContent=isBL?'BLUE LAGOON':'TALMUT';
@@ -1476,7 +1455,7 @@ function renderScoreScreen(){
 
   const grid=document.getElementById('scoreGrid');
   const nPlayers=matchPlayers.length;
-  const colTemplate=`36px repeat(${nPlayers},1fr)`;
+  const colTemplate=`28px repeat(${nPlayers},1fr)`;
 
   // Calculate totals and find minimum
   const playerTotals={};
@@ -1489,15 +1468,15 @@ function renderScoreScreen(){
   });
   const minTotal=Math.min(...Object.values(playerTotals));
 
-  let html='<div style="border:1px solid rgba(184,134,11,0.22);border-radius:12px;overflow:hidden;background:rgba(10,27,51,0.8)">';
+  let html='<div style="border:2px solid rgba(184,134,11,0.32);border-radius:12px;overflow:hidden;background:rgba(10,27,51,0.8)">';
 
   // Header
-  html+=`<div style="display:grid;grid-template-columns:${colTemplate};position:sticky;top:0;background:#0A1B33;z-index:3;border-bottom:1px solid rgba(184,134,11,0.15)">`;
-  html+=`<div style="padding:10px 4px;text-align:center"><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:9px;color:rgba(255,255,255,0.15);text-transform:uppercase;letter-spacing:0.5px">R</span></div>`;
+  html+=`<div style="display:grid;grid-template-columns:${colTemplate};position:sticky;top:0;background:#08192F;z-index:3;border-bottom:2px solid rgba(184,134,11,0.2)">`;
+  html+=`<div style="padding:8px 2px;text-align:center;background:rgba(184,134,11,0.04)"><span style="font-family:'Cinzel',serif;font-weight:600;font-size:8px;color:rgba(184,134,11,0.4)">#</span></div>`;
   matchPlayers.forEach(p=>{
-    const name=p.name.length>6?p.name.substring(0,5)+'.':p.name;
+    const name=p.name.length>4?p.name.substring(0,3).toUpperCase():p.name.substring(0,3).toUpperCase();
     const isFixed=FIXED_PLAYERS.includes(p.name);
-    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\');"':''}><span style="font-family:'Inter',sans-serif;font-weight:600;font-size:11px;color:#B8860B">${name}</span></div>`;
+    html+=`<div style="padding:8px 2px;text-align:center;border-left:1px solid rgba(184,134,11,0.1);background:rgba(184,134,11,0.04);cursor:${isFixed?'pointer':'default'}" ${isFixed?'onclick="playPlayerAudio(\''+p.name.replace(/'/g,"\\'")+'\');"':''}><span style="font-family:'Cinzel',serif;font-weight:600;font-size:9px;letter-spacing:0.5px;color:rgba(184,134,11,0.7)">${name}</span></div>`;
   });
   html+=`</div>`;
 
@@ -1505,25 +1484,34 @@ function renderScoreScreen(){
   for(let r=1;r<=totalRounds;r++){
     const isActiveRow=r===currentRound;
     const isFutureRow=r>currentRound;
-    const rowBg=isActiveRow?'background:rgba(184,134,11,0.04);':'';
-    const rowBorder=isActiveRow?'border-bottom:1px solid rgba(184,134,11,0.15);':'border-bottom:1px solid rgba(255,255,255,0.03);';
 
-    html+=`<div style="display:grid;grid-template-columns:${colTemplate};${rowBg}${rowBorder}">`;
+    // Determine row winner/loser for completed rows
+    let rowScores=[];
+    let rowComplete=true;
+    matchPlayers.forEach(p=>{
+      if(scores[r]&&scores[r][p.id]!==undefined) rowScores.push(scores[r][p.id]);
+      else rowComplete=false;
+    });
+    const rowMin=rowComplete&&rowScores.length?Math.min(...rowScores):null;
+    const rowMax=rowComplete&&rowScores.length?Math.max(...rowScores):null;
+
+    const rowBg=isActiveRow?'background:rgba(184,134,11,0.04);':'';
+
+    html+=`<div style="display:grid;grid-template-columns:${colTemplate};${rowBg}border-bottom:1px solid rgba(184,134,11,0.1)">`;
 
     // Round number
-    const rnBg=isActiveRow?'background:rgba(184,134,11,0.06)':'background:rgba(184,134,11,0.03)';
-    const rnColor=isActiveRow?'color:#B8860B;font-weight:700':'color:rgba(255,255,255,'+(isFutureRow?'0.12':'0.2')+');font-weight:600';
-    html+=`<div style="padding:9px 4px;text-align:center;${rnBg}"><span style="font-family:'Inter',sans-serif;font-size:10px;${rnColor}">${r}</span></div>`;
+    const rnColor=isActiveRow?'color:#B8860B;font-weight:700':'color:rgba(184,134,11,'+(isFutureRow?'0.2':'0.4')+');font-weight:600';
+    html+=`<div style="padding:0;display:flex;align-items:center;justify-content:center;height:34px;border-right:1px solid rgba(184,134,11,0.08)"><span style="font-family:'Inter',sans-serif;font-size:9px;${rnColor}">${r}</span></div>`;
 
     matchPlayers.forEach((p,pi)=>{
       const hasScore=scores[r]&&scores[r][p.id]!==undefined;
-      const isActive=r===currentRound&&pi===currentPlayerIdx&&!hasScore;
+      const isNormalActive=!editMode&&r===currentRound&&pi===currentPlayerIdx&&!hasScore;
+      const isEditActive=editMode&&r===editRound&&pi===editPlayerIdx;
       const score=hasScore?scores[r][p.id]:null;
-      const borderLeft=isActiveRow?'border-left:1px solid rgba(184,134,11,0.08)':'border-left:1px solid rgba(255,255,255,0.03)';
 
-      if(isActive){
-        // Active cell with cursor
-        html+=`<div style="padding:9px 4px;text-align:center;${borderLeft};border:2px solid rgba(184,134,11,0.4);border-radius:4px;margin:2px">`;
+      if(isNormalActive||isEditActive){
+        // Active cell with cursor (editing)
+        html+=`<div style="display:flex;align-items:center;justify-content:center;height:34px;border-left:1px solid rgba(184,134,11,0.08);box-shadow:inset 0 0 0 1.5px rgba(184,134,11,0.5);background:rgba(184,134,11,0.12)">`;
         if(numpadValue){
           const isNeg=parseInt(numpadValue)<0;
           html+=`<span style="font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:${isNeg?'#6BBF7A':'#B8860B'}">${numpadValue}</span>`;
@@ -1532,42 +1520,103 @@ function renderScoreScreen(){
         }
         html+=`</div>`;
       }else if(hasScore){
-        const isNeg=score<0;
-        const isRoundWinner=score===0&&isActiveRow;
-        const scoreColor=isNeg?'#6BBF7A':(isActiveRow?'#FFFFFF':'rgba(255,255,255,0.6)');
-        const scoreFw=isActiveRow?'700':'600';
-        const cellBg=(score===0&&!isActiveRow)?'background:rgba(184,134,11,0.02)':'';
-        html+=`<div style="padding:9px 4px;text-align:center;${borderLeft};${cellBg}"><span style="font-family:'Inter',sans-serif;font-weight:${scoreFw};font-size:13px;color:${scoreColor}">${score}</span></div>`;
+        // Determine cell coloring
+        let cellBg='';
+        let scoreColor=isActiveRow?'rgba(255,255,255,0.85)':'rgba(255,255,255,0.8)';
+        let scoreFw='500';
+
+        if(rowComplete&&rowMin!==null){
+          if(score===rowMin){
+            cellBg='background:rgba(46,160,67,0.25);';
+            scoreColor='rgba(74,222,128,0.75)';
+            scoreFw='700';
+          }else if(score===rowMax&&rowMax!==rowMin){
+            cellBg='background:rgba(200,50,50,0.2);';
+            scoreColor='rgba(248,113,113,0.7)';
+            scoreFw='700';
+          }
+        }
+        if(score<0){scoreColor='#6BBF7A';scoreFw='700';}
+
+        html+=`<div onclick="editCell(${r},${pi})" style="display:flex;align-items:center;justify-content:center;height:34px;border-left:1px solid rgba(184,134,11,0.08);cursor:pointer;position:relative;${cellBg}transition:background 0.15s" onmouseover="this.style.outline='1px solid rgba(184,134,11,0.3)'" onmouseout="this.style.outline='none'"><span style="font-family:'Inter',sans-serif;font-weight:${scoreFw};font-size:13px;color:${scoreColor}">${score}</span><span style="position:absolute;top:2px;right:3px;font-size:7px;color:rgba(184,134,11,0.3);opacity:0">✎</span></div>`;
       }else{
         // Empty cell
-        html+=`<div style="padding:9px 4px;text-align:center;${borderLeft}"><span style="font-family:'Inter',sans-serif;font-weight:500;font-size:13px;color:rgba(255,255,255,0.08)">—</span></div>`;
+        html+=`<div style="display:flex;align-items:center;justify-content:center;height:34px;border-left:1px solid rgba(184,134,11,0.08)"><span style="font-family:'Inter',sans-serif;font-weight:500;font-size:13px;color:rgba(255,255,255,0.08)">—</span></div>`;
       }
     });
     html+=`</div>`;
   }
 
   // Total row
-  html+=`<div style="display:grid;grid-template-columns:${colTemplate};border-top:1.5px solid rgba(184,134,11,0.25);background:rgba(184,134,11,0.04)">`;
-  html+=`<div style="padding:10px 4px;text-align:center"><span style="font-family:'Inter',sans-serif;font-weight:700;font-size:9px;color:rgba(184,134,11,0.5);text-transform:uppercase;letter-spacing:0.5px">TOT</span></div>`;
+  html+=`<div style="display:grid;grid-template-columns:${colTemplate};border-top:2px solid rgba(184,134,11,0.3);background:rgba(184,134,11,0.06)">`;
+  html+=`<div style="padding:6px 2px;display:flex;align-items:center;justify-content:center"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:8px;color:rgba(184,134,11,0.6);letter-spacing:1px">TOT</span></div>`;
   matchPlayers.forEach(p=>{
     const total=playerTotals[p.id];
     const isMin=total===minTotal;
-    html+=`<div style="padding:10px 4px;text-align:center;border-left:1px solid rgba(184,134,11,0.08)"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:16px;color:${isMin?'#6BBF7A':'#B8860B'}">${total}</span></div>`;
+    html+=`<div style="padding:6px 2px;text-align:center;border-left:1px solid rgba(184,134,11,0.08)"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:${isMin?'rgba(74,222,128,0.85)':'#E8DCC8'}">${total}</span></div>`;
   });
   html+=`</div>`;
   html+='</div>'; // cierre wrapper con borde
+
+  // ===== CLASIFICACIÓN EN DIRECTO =====
+  const standings=matchPlayers.map(p=>({name:p.name,total:playerTotals[p.id]}));
+  standings.sort((a,b)=>a.total-b.total);
+  const leaderTotal=standings[0]?standings[0].total:0;
+
+  html+=`<div style="padding:14px 0 6px;text-align:center"><span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:rgba(184,134,11,0.45);text-transform:uppercase">Clasificación</span></div>`;
+  html+=`<div style="border:2px solid rgba(184,134,11,0.32);border-radius:12px;overflow:hidden;background:rgba(10,27,51,0.8)">`;
+
+  standings.forEach((s,i)=>{
+    const pos=i+1;
+    const diff=s.total-leaderTotal;
+    let posClass='';
+    let posBg='',posBorder='',posColor='';
+    if(pos===1){posBg='rgba(184,134,11,0.2)';posBorder='1px solid rgba(184,134,11,0.5)';posColor='#B8860B';}
+    else if(pos===2){posBg='rgba(160,170,180,0.12)';posBorder='1px solid rgba(160,170,180,0.3)';posColor='rgba(180,190,200,0.7)';}
+    else if(pos===3){posBg='rgba(160,100,60,0.12)';posBorder='1px solid rgba(160,100,60,0.25)';posColor='rgba(180,120,70,0.7)';}
+    else{posBg='rgba(255,255,255,0.03)';posBorder='1px solid rgba(255,255,255,0.06)';posColor='rgba(255,255,255,0.3)';}
+
+    const isLast=i===standings.length-1;
+    const borderBot=isLast?'':'border-bottom:1px solid rgba(255,255,255,0.03);';
+
+    html+=`<div style="display:flex;align-items:center;padding:9px 12px;gap:10px;${borderBot}">`;
+    html+=`<div style="width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:${posBg};border:${posBorder};flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:11px;color:${posColor}">${pos}</span></div>`;
+    html+=`<span style="flex:1;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;color:rgba(255,255,255,0.85)">${s.name}</span>`;
+    html+=`<span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:#E8DCC8;min-width:32px;text-align:right">${s.total}</span>`;
+    if(pos===1){
+      html+=`<span style="font-family:'Inter',sans-serif;font-weight:500;font-size:11px;min-width:38px;text-align:right;padding:2px 6px;border-radius:6px;background:rgba(184,134,11,0.12);color:rgba(184,134,11,0.8)">—</span>`;
+    }else{
+      html+=`<span style="font-family:'Inter',sans-serif;font-weight:500;font-size:11px;min-width:38px;text-align:right;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4)">+${diff}</span>`;
+    }
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+
+  // Legend
+  html+=`<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding:12px 0 20px">`;
+  html+=`<span style="display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(232,220,200,0.45);font-style:italic"><span style="width:14px;height:14px;border-radius:4px;background:rgba(46,160,67,0.25);display:inline-block"></span>Ganador</span>`;
+  html+=`<span style="display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(232,220,200,0.45);font-style:italic"><span style="width:14px;height:14px;border-radius:4px;background:rgba(200,50,50,0.2);display:inline-block"></span>Perdedor</span>`;
+  html+=`<span style="display:flex;align-items:center;gap:6px;font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(232,220,200,0.45);font-style:italic"><span style="font-size:10px;color:rgba(184,134,11,0.3)">✎</span>Toca para editar</span>`;
+  html+=`</div>`;
 
   grid.innerHTML=html;
   updateNumpadContext();
 }
 
 function updateNumpadContext(){
-  if(currentPlayerIdx<matchPlayers.length){
+  if(editMode){
+    const p=matchPlayers[editPlayerIdx];
+    document.getElementById('numpadContext').innerHTML=
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(248,113,113,0.7)">✎ Editando </span>'+
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:700;font-size:11px;color:#B8860B">'+p.name+'</span>'+
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.4)"> · Ronda '+editRound+'</span>'+
+      '<span onclick="editMode=false;editRound=0;editPlayerIdx=0;numpadValue=\'\';renderScoreScreen();" style="margin-left:8px;font-family:\'Inter\',sans-serif;font-weight:600;font-size:10px;color:rgba(248,113,113,0.6);cursor:pointer;padding:2px 8px;border:1px solid rgba(248,113,113,0.2);border-radius:4px">Cancelar</span>';
+  }else if(currentPlayerIdx<matchPlayers.length){
     const p=matchPlayers[currentPlayerIdx];
     document.getElementById('numpadContext').innerHTML=
-      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.2)">Puntuación de </span>'+
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.4)">Puntuación de </span>'+
       '<span style="font-family:\'Inter\',sans-serif;font-weight:700;font-size:11px;color:#B8860B">'+p.name+'</span>'+
-      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.2)"> · Ronda '+currentRound+'</span>';
+      '<span style="font-family:\'Inter\',sans-serif;font-weight:500;font-size:11px;color:rgba(255,255,255,0.4)"> · Ronda '+currentRound+'</span>';
   }
 }
 
@@ -1588,6 +1637,26 @@ async function numpadConfirm(){
   if(numpadValue===''&&numpadValue!=='0')return;
   const val=parseInt(numpadValue,10);
   if(isNaN(val))return;
+
+  if(editMode){
+    // Edit mode: update existing cell
+    const playerId=matchPlayers[editPlayerIdx].id;
+    await sb.from('round_scores').upsert({
+      match_id:currentMatchId,
+      round_number:editRound,
+      player_id:playerId,
+      score:val,
+      is_winner:val<=0
+    },{onConflict:'match_id,round_number,player_id'});
+    if(!scores[editRound])scores[editRound]={};
+    scores[editRound][playerId]=val;
+    numpadValue='';
+    editMode=false;
+    editRound=0;
+    editPlayerIdx=0;
+    renderScoreScreen();
+    return;
+  }
 
   const playerId=matchPlayers[currentPlayerIdx].id;
 
@@ -1651,9 +1720,9 @@ async function finishMatch(){
     }else{
       row.innerHTML=`
         <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.2);width:20px;text-align:center">${i+1}</span>
-        <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.25)">${t.player.name.charAt(0)}</span></div>
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.45)">${t.player.name.charAt(0)}</span></div>
         <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:13px;color:rgba(255,255,255,0.4);flex-grow:1">${t.player.name}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.3)">${t.total}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.55)">${t.total}</span>
       `;
     }
     list.appendChild(row);
@@ -1774,8 +1843,8 @@ async function loadHistorico(){
       row.style.cssText='display:flex;align-items:center;padding:12px 14px;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.05);border-radius:12px;gap:12px';
       row.innerHTML=`
         <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:13px;color:rgba(255,255,255,0.3)">${s.player.name.charAt(0)}</span></div>
-        <div style="flex-grow:1"><p style="margin:0;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.55)">${s.player.name}</p><p style="margin:1px 0 0;font-family:'Inter',sans-serif;font-weight:400;font-size:10px;color:rgba(255,255,255,0.15)">${pct}% winrate</p></div>
-        <div style="width:80px;display:flex;flex-direction:column;align-items:flex-end;gap:3px"><div style="width:100%;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden"><div style="width:${barW}%;height:100%;background:rgba(255,255,255,0.15);border-radius:2px"></div></div></div>
+        <div style="flex-grow:1"><p style="margin:0;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.55)">${s.player.name}</p><p style="margin:1px 0 0;font-family:'Inter',sans-serif;font-weight:400;font-size:10px;color:rgba(255,255,255,0.45)">${pct}% winrate</p></div>
+        <div style="width:80px;display:flex;flex-direction:column;align-items:flex-end;gap:3px"><div style="width:100%;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden"><div style="width:${barW}%;height:100%;background:rgba(255,255,255,0.3);border-radius:2px"></div></div></div>
         <div style="display:flex;align-items:baseline;gap:2px;min-width:28px;justify-content:flex-end"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:18px;color:rgba(255,255,255,0.4)">${s.wins}</span></div>
       `;
     }
@@ -1816,7 +1885,7 @@ async function loadHallOfFame(){
   const stats={};
   FIXED_PLAYERS.forEach(name=>{
     const p=players.find(x=>x.name===name);
-    if(p)stats[p.id]={player:p,pj:0,pt:0,w:0,best:Infinity,scores:[]};
+    if(p)stats[p.id]={player:p,pj:0,pt:0,w:0,best:Infinity,worst:-Infinity,scores:[],roundsPlayed:0,roundWins:0,zeroRounds:0,negRounds:0,winStreak:0,maxWinStreak:0,lastWin:false};
   });
 
   for(const m of matches){
@@ -1826,6 +1895,26 @@ async function loadHallOfFame(){
       if(!playerTotals[s.player_id])playerTotals[s.player_id]=0;
       playerTotals[s.player_id]+=s.score;
     });
+
+    // Count round wins per player in this match
+    const roundMap={};
+    mScores.forEach(s=>{
+      if(!roundMap[s.round_number])roundMap[s.round_number]={};
+      roundMap[s.round_number][s.player_id]=s.score;
+    });
+    for(const[rn,rScores]of Object.entries(roundMap)){
+      const vals=Object.values(rScores);
+      const minR=Math.min(...vals);
+      for(const[pid,sc]of Object.entries(rScores)){
+        const id=parseInt(pid);
+        if(!stats[id])continue;
+        stats[id].roundsPlayed++;
+        if(sc===minR)stats[id].roundWins++;
+        if(sc===0)stats[id].zeroRounds++;
+        if(sc<0)stats[id].negRounds++;
+      }
+    }
+
     let minScore=Infinity,winnerId=null;
     for(const[pid,total]of Object.entries(playerTotals)){
       if(total<minScore){minScore=total;winnerId=parseInt(pid);}
@@ -1837,7 +1926,16 @@ async function loadHallOfFame(){
       stats[id].pt+=total;
       stats[id].scores.push(total);
       if(total<stats[id].best)stats[id].best=total;
-      if(id===winnerId)stats[id].w++;
+      if(total>stats[id].worst)stats[id].worst=total;
+      if(id===winnerId){
+        stats[id].w++;
+        stats[id].winStreak++;
+        if(stats[id].winStreak>stats[id].maxWinStreak)stats[id].maxWinStreak=stats[id].winStreak;
+        stats[id].lastWin=true;
+      }else{
+        stats[id].winStreak=0;
+        stats[id].lastWin=false;
+      }
     }
   }
 
@@ -1856,14 +1954,14 @@ function sortHof(mode){
     ptBtn.querySelector('span').style.color='#64A0DC';
     wBtn.style.background='transparent';
     wBtn.style.border='1px solid rgba(255,255,255,0.06)';
-    wBtn.querySelector('span').style.color='rgba(255,255,255,0.2)';
+    wBtn.querySelector('span').style.color='rgba(255,255,255,0.4)';
   }else{
     wBtn.style.background='rgba(100,160,220,0.12)';
     wBtn.style.border='1px solid rgba(100,160,220,0.25)';
     wBtn.querySelector('span').style.color='#64A0DC';
     ptBtn.style.background='transparent';
     ptBtn.style.border='1px solid rgba(255,255,255,0.06)';
-    ptBtn.querySelector('span').style.color='rgba(255,255,255,0.2)';
+    ptBtn.querySelector('span').style.color='rgba(255,255,255,0.4)';
   }
   renderHofTable();
 }
@@ -1906,22 +2004,22 @@ function renderHofTable(){
         <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.4);text-align:center">${s.pj}</span>
         <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:12px;color:${hofSort==='pt'?'#64A0DC':'rgba(255,255,255,0.5)'};text-align:center">${s.pt}</span>
         <span style="font-family:'Inter',sans-serif;font-weight:${hofSort==='w'?'700':'600'};font-size:12px;color:${hofSort==='w'?'#64A0DC':'rgba(255,255,255,0.4)'};text-align:center">${s.w}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:${hofSort==='w'?'rgba(100,160,220,0.6)':'rgba(255,255,255,0.25)'};text-align:center">${wpct}%</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:${hofSort==='w'?'rgba(100,160,220,0.6)':'rgba(255,255,255,0.45)'};text-align:center">${wpct}%</span>
         <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:#6BBF7A;text-align:center">${best}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.35);text-align:center">${avg}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.55);text-align:center">${avg}</span>
       </div>`;
     }else{
       html+=`<div style="display:grid;grid-template-columns:${cols};border:1px solid rgba(255,255,255,0.04);border-top:none;padding:10px 10px;align-items:center;${borderRadius}">
         <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.25)">${s.player.name.charAt(0)}</span></div>
-          <p style="margin:0;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.5)">${s.player.name}</p>
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Cinzel',serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.45)">${s.player.name.charAt(0)}</span></div>
+          <p style="margin:0;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.6)">${s.player.name}</p>
         </div>
-        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.4);text-align:center">${s.pj}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.5);text-align:center">${s.pt}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.4);text-align:center">${s.w}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25);text-align:center">${wpct}%</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.5);text-align:center">${s.pj}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.6);text-align:center">${s.pt}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.5);text-align:center">${s.w}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);text-align:center">${wpct}%</span>
         <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:#6BBF7A;text-align:center">${best}</span>
-        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.35);text-align:center">${avg}</span>
+        <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:rgba(255,255,255,0.55);text-align:center">${avg}</span>
       </div>`;
     }
   });
@@ -1932,37 +2030,36 @@ function renderRecords(){
   if(!window._hofStats)return;
   const data=window._hofStats;
   let bestScore=Infinity,bestPlayer='',worstScore=-Infinity,worstPlayer='',topWins=0,topWinsPlayer='',bestAvg=Infinity,bestAvgPlayer='';
+  let maxStreak=0,streakPlayer='',mostRounds=0,roundsPlayer='',mostZeros=0,zerosPlayer='',worstAvg=-Infinity,worstAvgPlayer='';
   data.forEach(s=>{
     if(s.best<bestScore){bestScore=s.best;bestPlayer=s.player.name;}
     const maxS=Math.max(...s.scores,0);
     if(maxS>worstScore){worstScore=maxS;worstPlayer=s.player.name;}
     if(s.w>topWins){topWins=s.w;topWinsPlayer=s.player.name;}
     if(s.pj>0){const avg=s.pt/s.pj;if(avg<bestAvg){bestAvg=avg;bestAvgPlayer=s.player.name;}}
+    if(s.maxWinStreak>maxStreak){maxStreak=s.maxWinStreak;streakPlayer=s.player.name;}
+    if(s.roundsPlayed>mostRounds){mostRounds=s.roundsPlayed;roundsPlayer=s.player.name;}
+    if(s.zeroRounds+s.negRounds>mostZeros){mostZeros=s.zeroRounds+s.negRounds;zerosPlayer=s.player.name;}
+    if(s.pj>0){const avg=s.pt/s.pj;if(avg>worstAvg){worstAvg=avg;worstAvgPlayer=s.player.name;}}
   });
 
+  const recCard=(label,value,color,player)=>`
+    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.45);text-transform:uppercase;letter-spacing:0.5px">${label}</p>
+      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:${color};line-height:1">${value}</p>
+      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.5)">${player}</p>
+    </div>`;
+
   const grid=document.getElementById('recordsGrid');
-  grid.innerHTML=`
-    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Mejor partida</p>
-      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:#6BBF7A;line-height:1">${bestScore===Infinity?'-':bestScore}</p>
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${bestPlayer||'-'}</p>
-    </div>
-    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Peor partida</p>
-      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:rgba(220,80,80,0.7);line-height:1">${worstScore===-Infinity?'-':worstScore}</p>
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${worstPlayer||'-'}</p>
-    </div>
-    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Más victorias</p>
-      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:#64A0DC;line-height:1">${topWins}</p>
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${topWinsPlayer||'-'}</p>
-    </div>
-    <div style="background:rgba(100,160,220,0.03);border:1px solid rgba(100,160,220,0.08);border-radius:10px;padding:12px;text-align:center">
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:9px;color:rgba(100,160,220,0.35);text-transform:uppercase;letter-spacing:0.5px">Mejor media</p>
-      <p style="margin:4px 0 2px;font-family:'Cinzel',serif;font-weight:700;font-size:26px;color:#B8860B;line-height:1">${bestAvg===Infinity?'-':Math.round(bestAvg)}</p>
-      <p style="margin:0;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.25)">${bestAvgPlayer||'-'}</p>
-    </div>
-  `;
+  grid.innerHTML=
+    recCard('Mejor partida',bestScore===Infinity?'-':bestScore,'#6BBF7A',bestPlayer||'-')+
+    recCard('Peor partida',worstScore===-Infinity?'-':worstScore,'rgba(220,80,80,0.7)',worstPlayer||'-')+
+    recCard('Más victorias',topWins,'#64A0DC',topWinsPlayer||'-')+
+    recCard('Mejor media',bestAvg===Infinity?'-':Math.round(bestAvg),'#B8860B',bestAvgPlayer||'-')+
+    recCard('Peor media',worstAvg===-Infinity?'-':Math.round(worstAvg),'rgba(248,113,113,0.7)',worstAvgPlayer||'-')+
+    recCard('Racha victorias',maxStreak,'rgba(74,222,128,0.85)',streakPlayer||'-')+
+    recCard('Rondas a 0',mostZeros,'rgba(184,134,11,0.8)',zerosPlayer||'-')+
+    recCard('Rondas jugadas',mostRounds,'rgba(100,160,220,0.7)',roundsPlayer||'-');
 }
 
 // ==================== SCORE DROPDOWN MENU ====================
